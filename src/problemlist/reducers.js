@@ -22,4 +22,4 @@ export default (state = {status: Status.LOADING, page: 101010100}, action) => {
             return state;
         }
     }
-}
+};

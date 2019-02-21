@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
-import OnlineJudgeApp from './OnlineJudgeApp';
+import Routes from './Routes';
 import store from './Store';
 
 ReactDOM.render(
     <Provider store={store}>
-        <OnlineJudgeApp/>
+        <Routes />
     </Provider>,
     document.getElementById('root')
 );
