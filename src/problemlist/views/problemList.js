@@ -52,13 +52,9 @@ class ProblemList extends React.Component {
         this.props.fetchProblemList(this.props.page);
     }
 
-    handleClickRow = (id) => {
-       this.props.history.push(`/problem/${id}`);
-    };
-
     render() {
         console.log('render');
-        const {classes, status, problems} = this.props;
+        const {classes, status, problems, handleClickRow} = this.props;
         switch (status) {
             case Status.LOADING: {
                 console.log('render loading');
@@ -84,7 +80,8 @@ class ProblemList extends React.Component {
                             {problems.map(row => {
                                 let ratio = `${(row.ac * 100.0 / row.all).toFixed(2)}%(${row.ac}/${row.all})`;
                                 return (
-                                    <TableRow className={classes.row} key={row.id} hover={true}  onClick={() => this.handleClickRow(row.id)}>
+                                    <TableRow className={classes.row} key={row.id} hover={true}
+                                              onClick={() => handleClickRow(row.id)}>
                                         <CustomTableCell component="th" scope="row">
                                             {row.id}
                                         </CustomTableCell>
@@ -119,15 +116,18 @@ const mapStateToProps = (state) => {
     return {
         status: problemsData.status,
         page: problemsData.page,
-        problems: problemsData.result
+        problems: problemsData.result,
     }
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     console.log('mapDispatchToProps');
     return {
         fetchProblemList: (page) => {
             dispatch(Actions.fetchProblemList(page));
+        },
+        handleClickRow: (id) => {
+            ownProps.history.push(`/problem/${id}`);
         }
     }
 };
