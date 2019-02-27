@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as Actions from '../actions';
-import {Link} from 'react-router-dom';
+import {withRouter} from "react-router";
 
 const CustomTableCell = withStyles(theme => ({
     head: {
@@ -52,6 +52,10 @@ class ProblemList extends React.Component {
         this.props.fetchProblemList(this.props.page);
     }
 
+    handleClickRow = (id) => {
+       this.props.history.push(`/problem/${id}`);
+    };
+
     render() {
         console.log('render');
         const {classes, status, problems} = this.props;
@@ -80,25 +84,15 @@ class ProblemList extends React.Component {
                             {problems.map(row => {
                                 let ratio = `${(row.ac * 100.0 / row.all).toFixed(2)}%(${row.ac}/${row.all})`;
                                 return (
-                                    <TableRow className={classes.row} key={row.id} hover={true}>
+                                    <TableRow className={classes.row} key={row.id} hover={true}  onClick={() => this.handleClickRow(row.id)}>
                                         <CustomTableCell component="th" scope="row">
-                                            <Link to={`/problem/${row.id}`} className={classes.row} key={row.id}
-                                                  style={{textDecoration: 'none'}}>
-                                                <div className={classes.row_div}>{row.id}</div>
-                                            </Link>
+                                            {row.id}
                                         </CustomTableCell>
                                         <CustomTableCell>
-                                            <Link to={`/problem/${row.id}`} className={classes.row} key={row.id}
-                                                  style={{textDecoration: 'none'}}>
-                                                <div className={classes.row_div}>{row.title}</div>
-                                            </Link>
+                                            {row.title}
                                         </CustomTableCell>
-
                                         <CustomTableCell>
-                                            <Link to={`/problem/${row.id}`} className={classes.row} key={row.id}
-                                                  style={{textDecoration: 'none'}}>
-                                                <div className={classes.row_div}>{ratio}</div>
-                                            </Link>
+                                            {ratio}
                                         </CustomTableCell>
                                     </TableRow>
                                 );
@@ -138,4 +132,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ProblemList));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ProblemList)));
