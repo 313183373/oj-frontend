@@ -9,13 +9,15 @@
     "clsx": "^1.0.3",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
+    "react-markdown-plus": "^0.1.1-a",
     "react-redux": "^6.0.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-router-redux": "^4.0.8",
     "react-scripts": "2.1.5",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "typescript": "^3.3.3333"
   },
   "scripts": {
     "start": "react-scripts start",
