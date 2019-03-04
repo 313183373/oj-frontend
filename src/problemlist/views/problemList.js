@@ -12,10 +12,6 @@ import * as Actions from '../actions';
 import {withRouter} from "react-router";
 
 const CustomTableCell = withStyles(theme => ({
-    head: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
-    },
     body: {
         fontSize: 14,
     },
@@ -28,7 +24,7 @@ const styles = theme => ({
         overflowX: 'auto',
     },
     table: {
-        minWidth: 700,
+        minwidth: 700,
     },
     row: {
         '&:nth-of-type(odd)': {
@@ -68,34 +64,35 @@ class ProblemList extends React.Component {
                 console.log('render success');
                 console.log(problems);
                 return (
-                    <Table className={classes.table}>
-                        <TableHead>
-                            <TableRow>
-                                <CustomTableCell>ID</CustomTableCell>
-                                <CustomTableCell>Title</CustomTableCell>
-                                <CustomTableCell>Ratio(AC/ALL)</CustomTableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {problems.map(row => {
-                                let ratio = `${(row.ac * 100.0 / row.all).toFixed(2)}%(${row.ac}/${row.all})`;
-                                return (
-                                    <TableRow className={classes.row} key={row.id} hover={true}
-                                              onClick={() => handleClickRow(row.id)}>
-                                        <CustomTableCell component="th" scope="row">
-                                            {row.id}
-                                        </CustomTableCell>
-                                        <CustomTableCell>
-                                            {row.title}
-                                        </CustomTableCell>
-                                        <CustomTableCell>
-                                            {ratio}
-                                        </CustomTableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
+                    
+                        <Table className={classes.table}>
+                            <TableHead>
+                                <TableRow>
+                                    <CustomTableCell>ID</CustomTableCell>
+                                    <CustomTableCell>Title</CustomTableCell>
+                                    <CustomTableCell>Ratio(AC/ALL)</CustomTableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {problems.map(row => {
+                                    let ratio = `${(row.ac * 100.0 / row.all).toFixed(2)}%(${row.ac}/${row.all})`;
+                                    return (
+                                        <TableRow className={classes.row} key={row.id} hover={true}
+                                                onClick={() => handleClickRow(row.id)}>
+                                            <CustomTableCell component="th" scope="row">
+                                                {row.id}
+                                            </CustomTableCell>
+                                            <CustomTableCell>
+                                                {row.title}
+                                            </CustomTableCell>
+                                            <CustomTableCell>
+                                                {ratio}
+                                            </CustomTableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
                 );
             }
             case Status.FAILURE: {

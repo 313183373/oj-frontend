@@ -2,10 +2,11 @@ import React from 'react';
 import {view as ProblemDesc} from '../problemdesc/';
 
 
-const Problem = () => {
+const Problem = (props) => {
+    const {id} = props;
     return (
         <div>
-            <ProblemDesc />
+            <ProblemDesc id={id}></ProblemDesc>
         </div>
     );
 };

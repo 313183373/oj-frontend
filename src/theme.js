@@ -8,8 +8,9 @@ export default createMuiTheme({
         main: '#000000',
     },
     secondary: {
-        light: '#FF5252', //#FFFFFF
-        main: '#FFE57F'
+        dark: '#FF5252', 
+        main: '#FFE57F',
+        light: '#FFFFFF',
     } // Indigo is probably a good match with pink
   },
   typography: {

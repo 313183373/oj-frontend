@@ -3,9 +3,8 @@ import React from "react";
 import {connect} from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import * as Actions from '../actions';
+import Typography from './Typography';
 
 const styles = theme => ({
     root: {
@@ -27,36 +26,41 @@ const styles = theme => ({
     },
 });
 
-const ProblemDesc = ({classes, status, problemDesc}) => {
-    switch (status) {
-        case Status.LOADING: {
-            return (
-                <div>
-                    <CircularProgress className={classes.progress}/>
-                </div>
-            );
-        }
-        case Status.SUCCESS: {
-            return (
-                <div className={classes.root}>
-                    <AppBar className={classes.app_bar} position="static">
-                        <Toolbar>
-                            <Typography className={classes.app_bar_text} variant="h6">
-                                `${problemDesc.id}-${problemDesc.title}`
-                            </Typography>
-                        </Toolbar>
-                    </AppBar>
-                </div>
-            );
-        }
-        case Status.FAILURE: {
-            return <div>题目详情获取失败，请刷新重试</div>
-        }
-        default: {
-            throw new Error(`unexpected status ${status}`);
+class ProblemDesc extends React.Component {
+    
+    componentDidMount() {
+        this.props.fetchProblemDesc(this.props.id);
+    }
+
+    render() {
+        const {classes, status, problemDesc} = this.props;
+        switch (status) {
+            case Status.LOADING: {
+                return (
+                    <div>
+                        <CircularProgress className={classes.progress}/>
+                    </div>
+                );
+            }
+            case Status.SUCCESS: {
+                return (
+                    <div className={classes.root}>
+                        <Typography variant="h4" marked="center" align="center" component="h2">
+                            {problemDesc.id}-{problemDesc.title}
+                        </Typography>
+                    
+                    </div>
+                );
+            }
+            case Status.FAILURE: {
+                return <div>题目详情获取失败，请刷新重试</div>
+            }
+            default: {
+                throw new Error(`unexpected status ${status}`);
+            }
         }
     }
-};
+}
 
 const mapStateToProps = (state) => {
     const problemDescData = state.problemDesc;
@@ -66,4 +70,12 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps,null)(withStyles(styles)(ProblemDesc));
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchProblemDesc: (id) => {
+            dispatch(Actions.fetchProblemDesc(id));
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ProblemDesc));

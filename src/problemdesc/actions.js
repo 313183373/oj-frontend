@@ -11,5 +11,6 @@ export const fetchProblemDescFailure = (error) => ({
 });
 
 export const fetchProblemDesc = (id) => {
+    console.log('id');
     return fetchProblemDescSuccess('dsf');
 };
