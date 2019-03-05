@@ -6,10 +6,11 @@
   "dependencies": {
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
+    "@uiw/react-monacoeditor": "^1.0.6",
     "clsx": "^1.0.3",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
-    "react-markdown-plus": "^0.1.1-a",
+    "react-markdown": "^4.0.6",
     "react-redux": "^6.0.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",

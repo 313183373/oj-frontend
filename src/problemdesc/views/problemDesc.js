@@ -11,8 +11,8 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
-import Markdown from 'react-markdown-plus';
-import source from './test.md';
+import ReactMarkdown from 'react-markdown';
+import MonacoEditor from '@uiw/react-monacoeditor';
 
 const ExpansionPanel = withStyles({
     root: {
@@ -51,6 +51,7 @@ const styles = theme => ({
     gridcell: {
         padding: theme.spacing.unit * 2,
         color: theme.palette.text.black,
+        height: 700,
     },
 });
 
@@ -71,7 +72,7 @@ class ProblemDesc extends React.Component {
                 );
             }
             case Status.SUCCESS: {
-                const content = problemDesc.content;
+            
                 return (
                     <div className={classes.root}>
                         <Typography variant="h4" marked="center" align="center" component="h2">
@@ -82,16 +83,50 @@ class ProblemDesc extends React.Component {
                                 <div className={classes.gridcell}>
                                     <ExpansionPanel expanded={true}>
                                         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                                        <Typography className={classes.heading}>Content</Typography>
+                                        <Typography className={classes.heading}>Time Limit: {problemDesc.timeLimit},  Memory Limit: {problemDesc.memLimit}</Typography>
                                         </ExpansionPanelSummary>
                                         <ExpansionPanelDetails>
-                                            <Markdown text={source} style={{maxWidth: 1000}}/>
+                                            <ReactMarkdown source={problemDesc.content}/>
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                    <ExpansionPanel expanded={true}>
+                                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                                        <Typography className={classes.heading}>Input & Output</Typography>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+                                            {problemDesc.inputDesc}
+                                            {problemDesc.outputDesc}
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                    <ExpansionPanel expanded={true}>
+                                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                                        <Typography className={classes.heading}>Samples</Typography>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+                                            <div>{problemDesc.sampleInput}</div>
+                                            <div>{problemDesc.sampleOutput}</div>
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                    <ExpansionPanel expanded={true}>
+                                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                                        <Typography className={classes.heading}>Hint</Typography>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+                                            {problemDesc.hint}
                                         </ExpansionPanelDetails>
                                     </ExpansionPanel>
                                 </div>
                             </Grid>
                             <Grid key={1} item xs={6}>
-                                <div className={classes.gridcell}>sdf</div>
+                                <div className={classes.gridcell}>
+                                <MonacoEditor
+                                    language="html"
+                                    value="<h1>I ♥ react-monacoeditor</h1>"
+                                    options={{
+                                        theme: 'vs-dark',
+                                    }}
+                                />
+                                </div>
                             </Grid>
                         </Grid>
                     </div>
