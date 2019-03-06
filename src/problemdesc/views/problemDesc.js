@@ -15,6 +15,9 @@ import ReactMarkdown from 'react-markdown';
 import MonacoEditor from '@uiw/react-monacoeditor';
 import { Radio, RadioGroup } from "@material-ui/core";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Fab from '@material-ui/core/Fab';
+import DoneIcon from '@material-ui/icons/Done';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const ExpansionPanel = withStyles({
     root: {
@@ -55,7 +58,12 @@ const styles = theme => ({
         color: theme.palette.text.black,
         maxHeight: 550, 
         overflow: 'auto',
-    }
+    },
+    fab: {
+        position: 'absolute',
+        bottom: theme.spacing.unit * 2,
+        right: theme.spacing.unit * 5
+    },
 });
 
 class ProblemDesc extends React.Component {
@@ -63,6 +71,10 @@ class ProblemDesc extends React.Component {
     componentDidMount() {
         this.props.fetchProblemDesc(this.props.id);
         this.props.fetchAllLangages();
+    }
+
+    onChange(newValue, e) {
+        console.log('onChange', newValue, e);
     }
 
     render() {
@@ -76,7 +88,6 @@ class ProblemDesc extends React.Component {
                 );
             }
             case Status.SUCCESS: {
-            
                 return (
                     <div className={classes.root}>
                         <Typography variant="h4" marked="center" align="center" component="h2">
@@ -148,16 +159,22 @@ class ProblemDesc extends React.Component {
                                                         );
                                                     })
                                                 }
-                                                
                                             </RadioGroup>
                                         </div>
                                         <MonacoEditor
                                             language={defaultLanguage}
                                             height={540}
-                                            value=""
+                                            defaultValue=""
                                             options={{
                                                 theme: 'vs-dark',
-                                            }}/>
+                                            }}
+                                            onChange={this.onChange.bind(this)}
+                                        />
+                                        <Tooltip title="Commit" aria-label="Commit" placement="top">
+                                            <Fab className={classes.fab} color="secondary">
+                                                <DoneIcon />
+                                            </Fab>
+                                        </Tooltip>
                                     </div>
                                 </Grid>
                             </Grid>
