@@ -62,10 +62,11 @@ class ProblemDesc extends React.Component {
     
     componentDidMount() {
         this.props.fetchProblemDesc(this.props.id);
+        this.props.fetchAllLangages();
     }
 
     render() {
-        const {classes, status, problemDesc, language, changeLanguage} = this.props;
+        const {classes, status, problemDesc, defaultLanguage, changeLanguage, allLanguages} = this.props;
         switch (status) {
             case Status.LOADING: {
                 return (
@@ -129,44 +130,31 @@ class ProblemDesc extends React.Component {
                                     </div>
                                 </Grid>
                                 <Grid key={1} item xs={6}>
-                                    <div className={classes.gridcell}>
+                                    <div style={{paddingRight: 15}}>
                                         <div>
-                                            <RadioGroup style={{height: 40, align: 'left'}} value={language}>
-                                                <FormControlLabel
-                                                    value="c++"
-                                                    control={<Radio color="secondary" />}
-                                                    label="C++"
-                                                    labelPlacement="end"
-                                                    onChange={changeLanguage}
-                                                    />
-                                                <FormControlLabel
-                                                    value="java"
-                                                    disabled
-                                                    control={<Radio color="secondary" />}
-                                                    label="Java"
-                                                    labelPlacement="end"
-                                                    onChange={changeLanguage}
-                                                    />
-                                                <FormControlLabel
-                                                    value="javascript"
-                                                    disabled
-                                                    control={<Radio color="secondary" />}
-                                                    label="Javascript"
-                                                    labelPlacement="end"
-                                                    />
-                                                <FormControlLabel
-                                                    value="python"
-                                                    disabled
-                                                    control={<Radio color="secondary" />}
-                                                    label="Python"
-                                                    labelPlacement="end"
-                                                    />
+                                            <RadioGroup style={{height: 40, align: 'left'}} value={defaultLanguage}>
+                                                {
+                                                    allLanguages.map((each) => {
+                                                        return (
+                                                            <FormControlLabel
+                                                                key={each.value}
+                                                                value={each.value}
+                                                                control={<Radio color="secondary" />}
+                                                                label={each.label}
+                                                                disabled={each.disabled}
+                                                                labelPlacement="end"
+                                                                onChange={changeLanguage}
+                                                            />
+                                                        );
+                                                    })
+                                                }
+                                                
                                             </RadioGroup>
                                         </div>
                                         <MonacoEditor
-                                            language="html"
+                                            language={defaultLanguage}
                                             height={540}
-                                            value="<h1>I ♥ react-monacoeditor</h1>"
+                                            value=""
                                             options={{
                                                 theme: 'vs-dark',
                                             }}/>
@@ -189,11 +177,13 @@ class ProblemDesc extends React.Component {
 const mapStateToProps = (state) => {
     const problemDescData = state.problemDesc.loadData;
     const language = state.problemDesc.language;
-    console.log(problemDescData);
+    const allLanguages = state.problemDesc.allLanguages;
+    
     return {
         status: problemDescData.status,
         problemDesc: problemDescData.result,
-        language: language
+        defaultLanguage: language,
+        allLanguages: allLanguages
     }
 };
 
@@ -201,6 +191,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchProblemDesc: (id) => {
             dispatch(Actions.fetchProblemDesc(id));
+        },
+        fetchAllLangages: () => {
+            dispatch(Actions.fetchAllLanguages());
         },
         changeLanguage: (event) => {
             dispatch(Actions.changeLanguage(event.target.value));
