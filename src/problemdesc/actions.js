@@ -1,4 +1,5 @@
 import {FETCH_PROBLEM_DESC_SUCCESS, FETCH_PROBLEM_DESC_FAILURE} from "./actionTypes";
+import {CHANGE_LANGUAGE} from "./actionTypes";
 
 export const fetchProblemDescSuccess = (result) => ({
     type: FETCH_PROBLEM_DESC_SUCCESS,
@@ -14,3 +15,10 @@ export const fetchProblemDesc = (id) => {
     console.log('id');
     return fetchProblemDescSuccess('dsf');
 };
+
+export const changeLanguage = (language) => {
+    return {
+        type: CHANGE_LANGUAGE,
+        language: language
+    }
+}

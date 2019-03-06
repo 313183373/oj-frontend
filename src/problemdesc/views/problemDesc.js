@@ -13,6 +13,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ReactMarkdown from 'react-markdown';
 import MonacoEditor from '@uiw/react-monacoeditor';
+import { Radio, RadioGroup } from "@material-ui/core";
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const ExpansionPanel = withStyles({
     root: {
@@ -51,8 +53,9 @@ const styles = theme => ({
     gridcell: {
         padding: theme.spacing.unit * 2,
         color: theme.palette.text.black,
-        height: 700,
-    },
+        maxHeight: 550, 
+        overflow: 'auto',
+    }
 });
 
 class ProblemDesc extends React.Component {
@@ -62,7 +65,7 @@ class ProblemDesc extends React.Component {
     }
 
     render() {
-        const {classes, status, problemDesc} = this.props;
+        const {classes, status, problemDesc, language, changeLanguage} = this.props;
         switch (status) {
             case Status.LOADING: {
                 return (
@@ -78,57 +81,98 @@ class ProblemDesc extends React.Component {
                         <Typography variant="h4" marked="center" align="center" component="h2">
                             {problemDesc.id}-{problemDesc.title}
                         </Typography>
-                        <Grid container className={classes.root} spacing={24} justify="center">
-                            <Grid key={0} item xs={6}>
-                                <div className={classes.gridcell}>
-                                    <ExpansionPanel expanded={true}>
-                                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                                        <Typography className={classes.heading}>Time Limit: {problemDesc.timeLimit},  Memory Limit: {problemDesc.memLimit}</Typography>
-                                        </ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
-                                            <ReactMarkdown source={problemDesc.content}/>
-                                        </ExpansionPanelDetails>
-                                    </ExpansionPanel>
-                                    <ExpansionPanel expanded={true}>
-                                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                                        <Typography className={classes.heading}>Input & Output</Typography>
-                                        </ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
-                                            {problemDesc.inputDesc}
-                                            {problemDesc.outputDesc}
-                                        </ExpansionPanelDetails>
-                                    </ExpansionPanel>
-                                    <ExpansionPanel expanded={true}>
-                                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                                        <Typography className={classes.heading}>Samples</Typography>
-                                        </ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
-                                            <div>{problemDesc.sampleInput}</div>
-                                            <div>{problemDesc.sampleOutput}</div>
-                                        </ExpansionPanelDetails>
-                                    </ExpansionPanel>
-                                    <ExpansionPanel expanded={true}>
-                                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                                        <Typography className={classes.heading}>Hint</Typography>
-                                        </ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
-                                            {problemDesc.hint}
-                                        </ExpansionPanelDetails>
-                                    </ExpansionPanel>
-                                </div>
+                            <Grid container className={classes.root} spacing={24} justify="center">
+                                <Grid key={0} item xs={6}>
+                                    <div className={classes.gridcell}>
+                                        <ExpansionPanel expanded={true}>
+                                            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                                            <Typography className={classes.heading}>Time Limit: {problemDesc.timeLimit},  Memory Limit: {problemDesc.memLimit}</Typography>
+                                            </ExpansionPanelSummary>
+                                            <ExpansionPanelDetails>
+                                                <ReactMarkdown source={problemDesc.content}/>
+                                            </ExpansionPanelDetails>
+                                        </ExpansionPanel>
+                                        <ExpansionPanel expanded={true}>
+                                            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                                            <Typography className={classes.heading}>Input & Output</Typography>
+                                            </ExpansionPanelSummary>
+                                            <ExpansionPanelDetails>
+                                                {problemDesc.inputDesc}
+                                                {problemDesc.outputDesc}
+                                            </ExpansionPanelDetails>
+                                        </ExpansionPanel>
+                                        <ExpansionPanel expanded={true}>
+                                            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                                            <Typography className={classes.heading}>Samples</Typography>
+                                            </ExpansionPanelSummary>
+                                            <ExpansionPanelDetails>
+                                                <div>{problemDesc.sampleInput}</div>
+                                                <div>{problemDesc.sampleOutput}</div>
+                                            </ExpansionPanelDetails>
+                                        </ExpansionPanel>
+                                        <ExpansionPanel expanded={true}>
+                                            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                                            <Typography className={classes.heading}>Hint</Typography>
+                                            </ExpansionPanelSummary>
+                                            <ExpansionPanelDetails>
+                                                {problemDesc.hint}
+                                            </ExpansionPanelDetails>
+                                        </ExpansionPanel>
+                                        <ExpansionPanel expanded={true}>
+                                            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                                            <Typography className={classes.heading}>Hint</Typography>
+                                            </ExpansionPanelSummary>
+                                            <ExpansionPanelDetails>
+                                                {problemDesc.hint}
+                                            </ExpansionPanelDetails>
+                                        </ExpansionPanel>
+                                    </div>
+                                </Grid>
+                                <Grid key={1} item xs={6}>
+                                    <div className={classes.gridcell}>
+                                        <div>
+                                            <RadioGroup style={{height: 40, align: 'left'}} value={language}>
+                                                <FormControlLabel
+                                                    value="c++"
+                                                    control={<Radio color="secondary" />}
+                                                    label="C++"
+                                                    labelPlacement="end"
+                                                    onChange={changeLanguage}
+                                                    />
+                                                <FormControlLabel
+                                                    value="java"
+                                                    disabled
+                                                    control={<Radio color="secondary" />}
+                                                    label="Java"
+                                                    labelPlacement="end"
+                                                    onChange={changeLanguage}
+                                                    />
+                                                <FormControlLabel
+                                                    value="javascript"
+                                                    disabled
+                                                    control={<Radio color="secondary" />}
+                                                    label="Javascript"
+                                                    labelPlacement="end"
+                                                    />
+                                                <FormControlLabel
+                                                    value="python"
+                                                    disabled
+                                                    control={<Radio color="secondary" />}
+                                                    label="Python"
+                                                    labelPlacement="end"
+                                                    />
+                                            </RadioGroup>
+                                        </div>
+                                        <MonacoEditor
+                                            language="html"
+                                            height={540}
+                                            value="<h1>I ♥ react-monacoeditor</h1>"
+                                            options={{
+                                                theme: 'vs-dark',
+                                            }}/>
+                                    </div>
+                                </Grid>
                             </Grid>
-                            <Grid key={1} item xs={6}>
-                                <div className={classes.gridcell}>
-                                <MonacoEditor
-                                    language="html"
-                                    value="<h1>I ♥ react-monacoeditor</h1>"
-                                    options={{
-                                        theme: 'vs-dark',
-                                    }}
-                                />
-                                </div>
-                            </Grid>
-                        </Grid>
                     </div>
                 );
             }
@@ -143,10 +187,13 @@ class ProblemDesc extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    const problemDescData = state.problemDesc;
+    const problemDescData = state.problemDesc.loadData;
+    const language = state.problemDesc.language;
+    console.log(problemDescData);
     return {
         status: problemDescData.status,
-        problemDesc: problemDescData.result
+        problemDesc: problemDescData.result,
+        language: language
     }
 };
 
@@ -154,6 +201,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchProblemDesc: (id) => {
             dispatch(Actions.fetchProblemDesc(id));
+        },
+        changeLanguage: (event) => {
+            dispatch(Actions.changeLanguage(event.target.value));
         }
     }
 }
