@@ -18,6 +18,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Fab from '@material-ui/core/Fab';
 import DoneIcon from '@material-ui/icons/Done';
 import Tooltip from '@material-ui/core/Tooltip';
+import DialogContent from '@material-ui/core/DialogContent';
+import CheckIcon from '@material-ui/icons/Check';
+import ReplayIcon from '@material-ui/icons/Replay';
+import classNames from 'classnames';
 
 const ExpansionPanel = withStyles({
     root: {
@@ -62,7 +66,37 @@ const styles = theme => ({
     fab: {
         position: 'absolute',
         bottom: theme.spacing.unit * 2,
-        right: theme.spacing.unit * 5
+        right: theme.spacing.unit * 5,
+        zIndex: 1,
+        '&:focus': {
+            color: '#bab6b6',
+            backgroundColor: '#ededed',
+            cursor: 'not-allowed',
+        }
+    },
+    fabProgress: {
+        color: '#FF5252',
+        position: 'absolute',
+        bottom: theme.spacing.unit * 1.25,
+        right: theme.spacing.unit * 4.25,
+    },
+    fabSuccess: {
+        backgroundColor: '#84d68a',
+        position: 'absolute',
+        bottom: theme.spacing.unit * 2,
+        right: theme.spacing.unit * 5,
+        zIndex: 1,
+        '&:hover': {
+            cursor: 'not-allowed',
+        }
+    },
+    fabFaluare: {
+        backgroundColor: '#FF5252',
+        color: theme.palette.white,
+        position: 'absolute',
+        bottom: theme.spacing.unit * 2,
+        right: theme.spacing.unit * 5,
+        zIndex: 1
     },
 });
 
@@ -73,21 +107,24 @@ class ProblemDesc extends React.Component {
         this.props.fetchAllLangages();
     }
 
-    onChange(newValue, e) {
-        console.log('onChange', newValue, e);
-    }
-
     render() {
-        const {classes, status, problemDesc, defaultLanguage, changeLanguage, allLanguages} = this.props;
-        switch (status) {
+        const {classes, fetchProblemStatus, problemDesc, defaultLanguage, commitCodeStatus, changeLanguage, allLanguages, commitCode, writeCode, userWritingCode} = this.props;
+        switch (fetchProblemStatus) {
             case Status.LOADING: {
                 return (
                     <div>
-                        <CircularProgress className={classes.progress}/>
+                        <DialogContent>
+                            <CircularProgress className={classes.progress}/>
+                        </DialogContent>
                     </div>
                 );
             }
             case Status.SUCCESS: {
+                const fabClassName = classNames({
+                    [classes.fabSuccess]: commitCodeStatus === Status.SUCCESS,
+                    [classes.fabFaluare]: commitCodeStatus === Status.FAILURE,
+                    [classes.fab]: commitCodeStatus !== Status.SUCCESS && commitCodeStatus !== Status.FAILURE
+                  });
                 return (
                     <div className={classes.root}>
                         <Typography variant="h4" marked="center" align="center" component="h2">
@@ -168,13 +205,16 @@ class ProblemDesc extends React.Component {
                                             options={{
                                                 theme: 'vs-dark',
                                             }}
-                                            onChange={this.onChange.bind(this)}
+                                            onChange={()=>writeCode(this)}
                                         />
                                         <Tooltip title="Commit" aria-label="Commit" placement="top">
-                                            <Fab className={classes.fab} color="secondary">
-                                                <DoneIcon />
+                                            <Fab color="secondary" className={fabClassName} onClick={()=>commitCode(userWritingCode, commitCodeStatus)}>
+                                                {
+                                                    commitCodeStatus === Status.SUCCESS || commitCodeStatus === Status.LOADING ? <CheckIcon /> : <ReplayIcon />
+                                                }
                                             </Fab>
                                         </Tooltip>
+                                        {commitCodeStatus === Status.LOADING && <CircularProgress size={68} className={classes.fabProgress} />}
                                     </div>
                                 </Grid>
                             </Grid>
@@ -185,22 +225,26 @@ class ProblemDesc extends React.Component {
                 return <div>题目详情获取失败，请刷新重试</div>
             }
             default: {
-                throw new Error(`unexpected status ${status}`);
+                throw new Error(`unexpected status ${fetchProblemStatus}`);
             }
         }
     }
 }
 
 const mapStateToProps = (state) => {
-    const problemDescData = state.problemDesc.loadData;
+    const problemDescData = state.problemDesc;
     const language = state.problemDesc.language;
     const allLanguages = state.problemDesc.allLanguages;
-    
+    const userWritingCode = state.problemDesc.userWritingCode;
+    const commitCodeStatus = state.problemDesc.commitCode.status;
+
     return {
-        status: problemDescData.status,
-        problemDesc: problemDescData.result,
+        fetchProblemStatus: problemDescData.loadData.status,
+        problemDesc: problemDescData.loadData.result,
         defaultLanguage: language,
-        allLanguages: allLanguages
+        allLanguages: allLanguages,
+        userWritingCode: userWritingCode,
+        commitCodeStatus: commitCodeStatus
     }
 };
 
@@ -213,8 +257,19 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(Actions.fetchAllLanguages());
         },
         changeLanguage: (event) => {
+            console.log('change language');
             dispatch(Actions.changeLanguage(event.target.value));
-        }
+        },
+        writeCode: (newValue) => {
+            console.log('write code');
+            dispatch(Actions.writeCode(newValue));
+        },
+        commitCode: (userWritingCode, curCommitCodeStatus) => {
+            console.log('commit code');
+            if (curCommitCodeStatus !== Status.LOADING && curCommitCodeStatus !== Status.SUCCESS) {
+                dispatch(Actions.commitCode(userWritingCode)); 
+            }
+        },
     }
 }
 

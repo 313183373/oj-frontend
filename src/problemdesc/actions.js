@@ -1,11 +1,7 @@
-import {
-    FETCH_PROBLEM_DESC_SUCCESS,
-    FETCH_PROBLEM_DESC_FAILURE
-} from "./actionTypes";
-import {
-    CHANGE_LANGUAGE,
-    FETCH_ALL_LANGUAGES
-} from "./actionTypes";
+import { FETCH_PROBLEM_DESC_SUCCESS, FETCH_PROBLEM_DESC_FAILURE } from "./actionTypes";
+import { COMMIT_CODE_LOADING, COMMIT_CODE_SUCCESS, COMMIT_CODE_FAILURE } from "./actionTypes";
+import { CHANGE_LANGUAGE, FETCH_ALL_LANGUAGES } from "./actionTypes";
+import { WRITE_CODE} from "./actionTypes";
 
 export const fetchProblemDescSuccess = (result) => ({
     type: FETCH_PROBLEM_DESC_SUCCESS,
@@ -68,4 +64,35 @@ export const fetchAllLanguages = () => {
             disabled: true
         }]
     }
+}
+
+export const writeCode = (newValue) => {
+    return {
+        type: WRITE_CODE,
+        userWritingCode: newValue
+    }
+}
+
+export const commitCodeLoding = () => {
+    return {
+        type: COMMIT_CODE_LOADING
+    }
+}
+
+export const commitCodeSuccess = (result) => {
+    return {
+        type: COMMIT_CODE_SUCCESS,
+        result: result
+    }
+}
+
+export const commitCodeFailure = (error) => {
+    return {
+        type: COMMIT_CODE_FAILURE,
+        error
+    }
+}
+
+export const commitCode = () => {
+    return commitCodeLoding('xx');
 }
