@@ -1,5 +1,5 @@
 import React from 'react';
-import {view as ProblemDesc} from '../problemdesc/';
+import {view as ProblemDesc} from '../components/problemdesc/';
 
 
 const Problem = (props) => {

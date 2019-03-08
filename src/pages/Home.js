@@ -14,6 +14,8 @@ const Home = () => {
             <Switch>
                 <Route exact path='/' component={Problems}/>
                 <Route path='/problem/:id' component={Problem}/>
+                <Route path='/sign-in' component={Problem}/>
+                <Route path='/sign-up' component={Problem}/>
             </Switch>
         </MuiThemeProvider>
     );

@@ -205,7 +205,7 @@ class ProblemDesc extends React.Component {
                                             options={{
                                                 theme: 'vs-dark',
                                             }}
-                                            onChange={()=>writeCode(this)}
+                                            onChange={writeCode}
                                         />
                                         <Tooltip title="Commit" aria-label="Commit" placement="top">
                                             <Fab color="secondary" className={fabClassName} onClick={()=>commitCode(userWritingCode, commitCodeStatus)}>
@@ -257,11 +257,10 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(Actions.fetchAllLanguages());
         },
         changeLanguage: (event) => {
-            console.log('change language');
             dispatch(Actions.changeLanguage(event.target.value));
         },
         writeCode: (newValue) => {
-            console.log('write code');
+            console.log('write code:', newValue);
             dispatch(Actions.writeCode(newValue));
         },
         commitCode: (userWritingCode, curCommitCodeStatus) => {
