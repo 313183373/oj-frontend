@@ -1,5 +1,5 @@
 import React from 'react';
-import {view as ProblemList} from '../components/problemlist/';
+import {view as ProblemList} from '../components/problemlistComponent/';
 
 
 const Problems = () => {

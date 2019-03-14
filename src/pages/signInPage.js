@@ -1,5 +1,5 @@
 import React from 'react';
-import {view as SignIn} from '../signin/';
+import {view as SignIn} from '../signinComponent/';
 
 
 const SignInPage = (props) => {

@@ -1,8 +1,8 @@
 import React from 'react';
-import {view as TopAppBar} from '../home/';
+import {view as TopAppBar} from '../components/homeComponent/';
 import { Switch, Route } from 'react-router-dom';
-import Problem from './problem';
-import Problems from './problems';
+import Problem from './problemPage';
+import Problems from './problemsPage';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import theme from '../theme';
 
@@ -19,5 +19,5 @@ const Home = () => {
             </Switch>
         </MuiThemeProvider>
     );
-}
+};
 export default Home;

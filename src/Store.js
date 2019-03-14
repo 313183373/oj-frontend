@@ -1,7 +1,7 @@
 import {createStore, combineReducers} from 'redux';
 
-import {reducer as problemListReducer} from './components/problemlist';
-import {reducer as problemDescReducer} from './components/problemdesc';
+import {reducer as problemListReducer} from './components/problemlistComponent';
+import {reducer as problemDescReducer} from './components/problemdescComponent';
 
 
 const reducer = combineReducers({

@@ -1,12 +1,12 @@
 import React from 'react';
-import {view as ProblemDesc} from '../components/problemdesc/';
+import {view as ProblemDesc} from '../components/problemdescComponent/';
 
 
 const Problem = (props) => {
     const {id} = props;
     return (
         <div>
-            <ProblemDesc id={id}></ProblemDesc>
+            <ProblemDesc id={id}/>
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import AppForm from './appForm';
-import { Typography } from '../../problemdesc/';
+import { Typography } from '../../problemdescComponent/';
 import Link from '@material-ui/core/Link';
 import { Field, Form, FormSpy } from 'react-final-form';
 import RFTextField from './rfTextField';
