@@ -1,8 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import LayoutBody from '../components/LayoutBody';
-import Paper from '../components/Paper';
+import {withStyles} from '@material-ui/core/styles';
+import LayoutBody from './layoutBody';
+import Paper from './paper';
 
 const styles = theme => ({
   root: {
@@ -11,15 +10,15 @@ const styles = theme => ({
     backgroundRepeat: 'no-repeat',
   },
   paper: {
-    padding: theme.spacing(4, 3),
+    padding: theme.spacing.unit * 4,
     [theme.breakpoints.up('md')]: {
-      padding: theme.spacing(10, 8),
+      padding: theme.spacing.unit * 10,
     },
   },
 });
 
 const AppForm = (props) => {
-  const { children, classes } = props;
+  const {children, classes} = props;
 
   return (
     <div className={classes.root}>
@@ -28,11 +27,6 @@ const AppForm = (props) => {
       </LayoutBody>
     </div>
   );
-}
-
-AppForm.propTypes = {
-  children: PropTypes.node.isRequired,
-  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(AppForm);

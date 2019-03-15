@@ -8,6 +8,7 @@
     "@material-ui/icons": "^3.0.2",
     "@uiw/react-monacoeditor": "^1.0.6",
     "clsx": "^1.0.3",
+    "final-form": "^4.12.0",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-final-form": "^4.1.0",

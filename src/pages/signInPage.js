@@ -1,12 +1,11 @@
 import React from 'react';
-import {view as SignIn} from '../signinComponent/';
+import {view as SignIn} from '../components/signinComponent';
 
 
-const SignInPage = (props) => {
-    const {id} = props;
+const SignInPage = () => {
     return (
         <div>
-            <SignIn id={id}></SignIn>
+            <SignIn />
         </div>
     );
 };

@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import TextField from '../components/TextField';
+import TextField from './textField';
 
 const RFTextField = (props) => {
   const {
@@ -25,16 +24,6 @@ const RFTextField = (props) => {
       helperText={touched ? error || submitError : ''}
     />
   );
-}
-
-RFTextField.propTypes = {
-  autoComplete: PropTypes.string,
-  input: PropTypes.object.isRequired,
-  InputProps: PropTypes.object,
-  meta: PropTypes.shape({
-    error: PropTypes.string,
-    touched: PropTypes.bool.isRequired,
-  }).isRequired,
 };
 
 export default RFTextField;
