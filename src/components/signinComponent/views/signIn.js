@@ -111,12 +111,12 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(Actions.submitSignIn(email, pwd));
     },
     validate: (values) => {
-      const errors = required(['email', 'password'], values, this.props);
+      const errors = required(['email', 'password'], values);
 
       if (!errors.email) {
-        const emailError = email(values.email, values, this.props);
+        const emailError = email(values.email, values);
         if (emailError) {
-          errors.email = email(values.email, values, this.props);
+          errors.email = email(values.email, values);
         }
       }
       return errors;
