@@ -1,23 +1,23 @@
-import {FETCH_PROBLEMS_STARTED, FETCH_PROBLEMS_SUCCESS, FETCH_PROBLEMS_FAILURE} from "./actionTypes";
+import {SIGN_IN_STARTED, SIGN_IN_SUCCESS, SIGN_IN_FAILURE} from "./actionTypes";
 
-export const fetchProblemsStarted = () => ({
-    type: FETCH_PROBLEMS_STARTED
+export const signInStarted = () => ({
+    type: SIGN_IN_STARTED
 });
 
-export const fetchProblemsSuccess = (result) => ({
-    type: FETCH_PROBLEMS_SUCCESS,
-    result: [{id: 1,title: 'test',ac: 20,all: 103},{id: 2,title: 'test2',ac: 30,all: 103}]
+export const signInSuccess = (result) => ({
+    type: SIGN_IN_SUCCESS,
+    result: {email: '131237289@qq.com', username: 'Tim'}
 });
 
-export const fetchProblemsFailure = (error) => ({
-    type: FETCH_PROBLEMS_FAILURE,
+export const signInFailure = (error) => ({
+    type: SIGN_IN_FAILURE,
     error
 });
 
 let nextSeqId = 0;
-export const fetchProblemList = (page) => {
+export const submitSignIn = (email, pwd) => {
     console.log('fetch');
-    return  fetchProblemsSuccess('gh');
+    return  signInSuccess('gh');
     // const apiUrl = `/data/cityinfo/${page}.html`;
         // const seqId = ++nextSeqId;
         // const dispatchIfValid = (action) => {

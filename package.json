@@ -21,7 +21,8 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "rxjs": "^6.4.0",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.3.3333",
+    "validator": "^10.11.0"
   },
   "scripts": {
     "start": "react-scripts start",

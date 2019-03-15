@@ -1,6 +1,7 @@
 import React from "react";
 import AppForm from './appForm';
 import {Typography} from '../../problemdescComponent/';
+import { email, required } from './validation';
 import {Link} from 'react-router-dom';
 import {Field, Form, FormSpy} from 'react-final-form';
 import RFTextField from './rfTextField';
@@ -9,6 +10,7 @@ import FormButton from './formButton';
 import {connect} from 'react-redux';
 import {withStyles} from '@material-ui/core/styles';
 import {withRouter} from "react-router";
+import * as Actions from "../actions";
 
 const styles = theme => ({
   form: {
@@ -24,7 +26,8 @@ const styles = theme => ({
 });
 
 const SignIn = (props) => {
-  const {classes, sent, handleSubmit, submitting, validate} = props;
+  const {classes, isSubmit, status, submitSignIn, validate} = props;
+
   return (
     <AppForm>
       <React.Fragment>
@@ -39,16 +42,14 @@ const SignIn = (props) => {
         </Typography>
       </React.Fragment>
       <Form
-        onSubmit={handleSubmit}
-        subscription={{submitting: true}}
+        onSubmit={submitSignIn}
         validate={validate}>
-        {({handleSubmit, submitting}) => (
-          <form onSubmit={handleSubmit} className={classes.form} noValidate>
+        {({submitSignIn}) => (
+          <form onSubmit={submitSignIn} className={classes.form} noValidate>
             <Field
               autoComplete="email"
               autoFocus
               component={RFTextField}
-              disabled={submitting || sent}
               fullWidth
               label="Email"
               margin="normal"
@@ -60,7 +61,6 @@ const SignIn = (props) => {
               fullWidth
               size="large"
               component={RFTextField}
-              disabled={submitting || sent}
               required
               name="password"
               autoComplete="current-password"
@@ -79,12 +79,11 @@ const SignIn = (props) => {
             </FormSpy>
             <FormButton
               className={classes.button}
-              disabled={submitting || sent}
               size="large"
               color="secondary"
               fullWidth
             >
-              {submitting || sent ? 'In progress…' : 'Sign In'}
+              {isSubmit ? 'In progress…' : 'Sign In'}
             </FormButton>
           </form>
         )}
@@ -98,4 +97,31 @@ const SignIn = (props) => {
   );
 };
 
-export default withRouter(connect(null, null)(withStyles(styles)(SignIn)));
+const mapStateToProps = (state) => {
+  const signInState = state.signIn;
+  return {
+    status: signInState.status,
+    isSubmit: signInState.isSubmit,
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    submitSignIn: (email, pwd) => {
+      dispatch(Actions.submitSignIn(email, pwd));
+    },
+    validate: (values) => {
+      const errors = required(['email', 'password'], values, this.props);
+
+      if (!errors.email) {
+        const emailError = email(values.email, values, this.props);
+        if (emailError) {
+          errors.email = email(values.email, values, this.props);
+        }
+      }
+      return errors;
+    }
+  }
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SignIn)));
