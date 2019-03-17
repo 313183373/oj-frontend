@@ -16,8 +16,8 @@ export const signInFailure = (error) => ({
 
 let nextSeqId = 0;
 export const submitSignIn = (email, pwd) => {
-    console.log('fetch');
-    return  signInSuccess('gh');
+
+    return  signInFailure('gh');
     // const apiUrl = `/data/cityinfo/${page}.html`;
         // const seqId = ++nextSeqId;
         // const dispatchIfValid = (action) => {
