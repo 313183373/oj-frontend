@@ -1,6 +1,6 @@
 import React from 'react';
-import defer from './defer';
-import Button from './button';
+import defer from '../signinComponent/views/defer';
+import Button from '../signinComponent/views/button';
 
 const FormButton = (props) => {
   const {disabled, mounted, ...others} = props;

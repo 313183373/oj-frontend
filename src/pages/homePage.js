@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import Problem from './problemPage';
 import Problems from './problemsPage';
 import SignIn from './signInPage';
+import SignUp from './signUpPage';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import theme from '../theme';
 
@@ -16,7 +17,7 @@ const Home = () => {
                 <Route exact path='/' component={Problems}/>
                 <Route path='/problem/:id' component={Problem}/>
                 <Route path='/sign-in' component={SignIn}/>
-                <Route path='/sign-up' component={Problem}/>
+                <Route path='/sign-up' component={SignUp}/>
             </Switch>
         </MuiThemeProvider>
     );

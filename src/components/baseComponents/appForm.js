@@ -1,7 +1,7 @@
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import LayoutBody from './layoutBody';
-import Paper from './paper';
+import LayoutBody from '../signinComponent/views/layoutBody';
+import Paper from '../signinComponent/views/paper';
 
 const styles = theme => ({
   root: {

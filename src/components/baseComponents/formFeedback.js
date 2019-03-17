@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import {withStyles} from '@material-ui/core/styles';
-import Typography from '../../sharedComponents/Typography';
+import Typography from './Typography';
 
 const styles = theme => ({
   root: {

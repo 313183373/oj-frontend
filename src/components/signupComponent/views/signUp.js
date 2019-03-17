@@ -1,17 +1,18 @@
 import React from "react";
 import AppForm from '../../baseComponents/appForm';
-import * as Status from '../status';
-import {Typography} from '../../problemdescComponent/';
-import {email, required} from '../../../utils/validation';
+import Typography from "../../baseComponents/Typography";
 import {Link} from 'react-router-dom';
 import {Field, Form, FormSpy} from 'react-final-form';
-import RFTextField from '../../baseComponents/rfTextField';
-import FormFeedback from '../../baseComponents/formFeedback';
-import FormButton from '../../baseComponents/formButton';
-import {connect} from 'react-redux';
-import {withStyles} from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import RFTextField from "../../baseComponents/rfTextField";
+import * as Status from "../status";
+import FormFeedback from "../../baseComponents/formFeedback";
+import FormButton from "../../baseComponents/formButton";
 import {withRouter} from "react-router";
+import {connect} from "react-redux";
+import {withStyles} from "@material-ui/core";
 import * as Actions from "../actions";
+import {email, required} from "../../../utils/validation";
 
 const styles = theme => ({
   form: {
@@ -20,48 +21,61 @@ const styles = theme => ({
   button: {
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 2,
+    height: 60,
   },
   feedback: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing.unit * 2 ,
   },
 });
 
-const SignIn = (props) => {
-  const {classes, status, submitSignIn, validate, handleSignInSuccess, result} = props;
-  if (status === Status.SUCCESS) {
-    handleSignInSuccess(result);
-  } else {
-    let sent = status === Status.LOADING;
-    let submitBtnText;
-    if (status === Status.LOADING) {
-      submitBtnText = 'In progress…';
-    } else if (status === Status.FAILURE) {
-      submitBtnText = 'Try Again';
-    } else {
-      submitBtnText = 'Sign In';
-    }
-    return (
+const SignUp = (props) => {
+  const {classes, status, submitSignUp, validate, handleSignUpSuccess, result} = props;
+  let sent = status === Status.LOADING;
+  return (
+    <React.Fragment>
       <AppForm>
         <React.Fragment>
           <Typography variant="h3" gutterBottom marked="center" align="center">
-            Sign In
+            Sign Up
           </Typography>
           <Typography variant="body2" align="center">
-            {'Not a member yet? '}
-            <Link to="/sign-up">
-              Sign Up here
+            <Link to="/sign-in" >
+              Already have an account?
             </Link>
           </Typography>
         </React.Fragment>
         <Form
-          onSubmit={submitSignIn}
-          subscription={{submitting: true}}
-          validate={validate}>
-          {({handleSubmit, submitting}) => (
+          onSubmit={submitSignUp}
+          subscription={{ submitting: true }}
+          validate={validate}
+        >
+          {({ handleSubmit, submitting }) => (
             <form onSubmit={handleSubmit} className={classes.form} noValidate>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <Field
+                    autoFocus
+                    component={RFTextField}
+                    autoComplete="fname"
+                    fullWidth
+                    label="First name"
+                    name="firstName"
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Field
+                    component={RFTextField}
+                    autoComplete="lname"
+                    fullWidth
+                    label="Last name"
+                    name="lastName"
+                    required
+                  />
+                </Grid>
+              </Grid>
               <Field
                 autoComplete="email"
-                autoFocus
                 component={RFTextField}
                 disabled={submitting || sent}
                 fullWidth
@@ -69,11 +83,9 @@ const SignIn = (props) => {
                 margin="normal"
                 name="email"
                 required
-                size="large"
               />
               <Field
                 fullWidth
-                size="large"
                 component={RFTextField}
                 disabled={submitting || sent}
                 required
@@ -83,8 +95,8 @@ const SignIn = (props) => {
                 type="password"
                 margin="normal"
               />
-              <FormSpy subscription={{submitError: true}}>
-                {({submitError}) =>
+              <FormSpy subscription={{ submitError: true }}>
+                {({ submitError }) =>
                   submitError ? (
                     <FormFeedback className={classes.feedback} error>
                       {submitError}
@@ -95,41 +107,33 @@ const SignIn = (props) => {
               <FormButton
                 className={classes.button}
                 disabled={submitting || sent}
-                size="large"
                 color="secondary"
                 fullWidth
               >
-
-                {submitBtnText}
+                {submitting || sent ? 'In progress…' : 'Sign Up'}
               </FormButton>
             </form>
-
           )}
         </Form>
-        {/*<Typography align="center">*/}
-          {/*<Link to="/forgot-password">*/}
-            {/*Forgot password?*/}
-          {/*</Link>*/}
-        {/*</Typography>*/}
       </AppForm>
-    );
-  }
+    </React.Fragment>
+  );
 };
 
 const mapStateToProps = (state) => {
-  const signInState = state.signIn;
+  const signUpState = state.signUp;
   return {
-    status: signInState.status,
-    result: signInState.result
+    status: signUpState.status,
+    result: signUpState.result
   }
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    submitSignIn: (values) => {
-      dispatch(Actions.submitSignIn(values.email, values.password));
+    submitSignUp: (values) => {
+      dispatch(Actions.submitSignUp(values.email, values.password));
     },
-    handleSignInSuccess: (result) => {
+    handleSignUpSuccess: (result) => {
       // todo: save result to localstorage
       ownProps.history.goBack();
     },
@@ -147,4 +151,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SignIn)));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SignUp)));

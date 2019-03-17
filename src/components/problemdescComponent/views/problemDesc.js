@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/core/styles';
 import * as Actions from '../actions';
-import Typography from '../../sharedComponents/Typography';
+import Typography from '../../baseComponents/Typography';
 import Grid from '@material-ui/core/Grid';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
