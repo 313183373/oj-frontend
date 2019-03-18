@@ -15,7 +15,7 @@ export const signUpFailure = (error) => ({
 });
 
 let nextSeqId = 0;
-export const submitSignUp = (email, pwd) => {
+export const submitSignUp = (values) => {
 
     return  signUpFailure('gh');
     // const apiUrl = `/data/cityinfo/${page}.html`;

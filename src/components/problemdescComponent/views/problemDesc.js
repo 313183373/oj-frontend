@@ -10,7 +10,6 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ReactMarkdown from 'react-markdown';
 import MonacoEditor from '@uiw/react-monacoeditor';
 import { Radio, RadioGroup } from "@material-ui/core";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -136,7 +135,7 @@ class ProblemDesc extends React.Component {
                                             <Typography className={classes.heading}>Time Limit: {problemDesc.timeLimit},  Memory Limit: {problemDesc.memLimit}</Typography>
                                             </ExpansionPanelSummary>
                                             <ExpansionPanelDetails>
-                                                <ReactMarkdown source={problemDesc.content}/>
+                                                {problemDesc.content}
                                             </ExpansionPanelDetails>
                                         </ExpansionPanel>
                                         <ExpansionPanel expanded={true}>
