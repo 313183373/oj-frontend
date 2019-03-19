@@ -44,16 +44,13 @@ const styles = theme => ({
 class ProblemList extends React.Component {
 
     componentDidMount() {
-        console.log('did mount');
         this.props.fetchProblemList(this.props.page);
     }
 
     render() {
-        console.log('render');
         const {classes, status, problems, handleClickRow} = this.props;
         switch (status) {
             case Status.LOADING: {
-                console.log('render loading');
                 return (
                     <div>
                         <CircularProgress className={classes.progress}/>
@@ -61,10 +58,7 @@ class ProblemList extends React.Component {
                 );
             }
             case Status.SUCCESS: {
-                console.log('render success');
-                console.log(problems);
                 return (
-                    
                         <Table className={classes.table}>
                             <TableHead>
                                 <TableRow>
@@ -74,16 +68,17 @@ class ProblemList extends React.Component {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {problems.map(row => {
-                                    let ratio = `${(row.ac * 100.0 / row.all).toFixed(2)}%(${row.ac}/${row.all})`;
+                                {problems.map(problem => {
+                                    // let ratio = `${(problem.acceptCount * 100.0 / problem.submitCount).toFixed(2)}%(${problem.acceptCount}/${problem.submitCount})`;
+                                    let ratio = `(${problem.acceptCount}/${problem.submitCount})`;
                                     return (
-                                        <TableRow className={classes.row} key={row.id} hover={true}
-                                                onClick={() => handleClickRow(row.id)}>
+                                        <TableRow className={classes.row} key={problem._id} hover={true}
+                                                onClick={() => handleClickRow(problem.id)}>
                                             <CustomTableCell component="th" scope="row">
-                                                {row.id}
+                                                {problem._id}
                                             </CustomTableCell>
                                             <CustomTableCell>
-                                                {row.title}
+                                                {problem.title}
                                             </CustomTableCell>
                                             <CustomTableCell>
                                                 {ratio}
@@ -96,7 +91,6 @@ class ProblemList extends React.Component {
                 );
             }
             case Status.FAILURE: {
-                console.log('render failure');
                 return <div>题目列表获取失败，请刷新重试</div>
             }
             default: {
@@ -108,17 +102,14 @@ class ProblemList extends React.Component {
 
 const mapStateToProps = (state) => {
     const problemsData = state.problems;
-    console.log('mapStateToProps ');
-    console.log(state);
     return {
         status: problemsData.status,
         page: problemsData.page,
-        problems: problemsData.result,
+        problems: problemsData.problems,
     }
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-    console.log('mapDispatchToProps');
     return {
         fetchProblemList: (page) => {
             dispatch(Actions.fetchProblemList(page));
