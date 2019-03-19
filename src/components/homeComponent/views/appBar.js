@@ -10,7 +10,7 @@ const styles = theme => ({
 });
 
 const AppBar = (props) => {
-  return <MuiAppBar {...props} />;
+  return <MuiAppBar elevation={0} position="static" {...props} />;
 };
 
 AppBar.propTypes = {

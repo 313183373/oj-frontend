@@ -21,22 +21,20 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'flex-end',
     },
-    rightLink: {
-        color: '#ffffff',
-        textDecoration: 'none',
-        padding: 10
-    },
+    // rightLink: {
+    //     fontSize: 16,
+    //     color: theme.palette.common.white,
+    //     marginLeft: theme.spacing.unit * 3,
+    // },
     // linkSecondary: {
     //     color: theme.palette.secondary.main,
     // },
     titleLink: {
-        flex: 1,
         color: '#ffffff',
         textDecoration: 'none',
         padding: 10,
         fontSize: 24,
-        fontFamily: 'Work Sans',
-        textAlign: 'center'
+        fontFamily: 'Work Sans'
     }
 });
 
@@ -50,7 +48,7 @@ const TopAppBar = ({classes}) => {
                         Online Judge
                     </Link>
                     <div className={classes.right}>
-                        <Link to="/sign-in" className={classes.rightLink}>
+                        <Link to="/sign-in" style={{color: '#ffffff', textDecoration: 'none', padding: 10}}>
                             Sign In
                         </Link>
                         <Link to="/sign-up" style={{color: '#FFE57F', textDecoration: 'none', padding: 10}}>
