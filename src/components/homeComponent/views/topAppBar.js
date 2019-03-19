@@ -6,55 +6,55 @@ import {Link} from "react-router-dom";
 import clsx from 'clsx';
 
 const styles = theme => ({
-    title: {
-        fontSize: 24,
-    },
-    placeholder: toolbarStyles(theme).root,
-    toolbar: {
-        justifyContent: 'space-between',
-    },
+    // title: {
+    //     fontSize: 24,
+    // },
+    // placeholder: toolbarStyles(theme).root,
     left: {
         flex: 1,
     },
-    leftLinkActive: {
-        color: theme.palette.common.white,
-    },
+    // leftLinkActive: {
+    //     color: theme.palette.common.white,
+    // },
     right: {
         flex: 1,
         display: 'flex',
         justifyContent: 'flex-end',
     },
     rightLink: {
-        fontSize: 16,
-        color: theme.palette.common.white,
-        marginLeft: theme.spacing.unit * 3,
+        color: '#ffffff',
+        textDecoration: 'none',
+        padding: 10
     },
-    linkSecondary: {
-        color: theme.palette.secondary.main,
-    },
+    // linkSecondary: {
+    //     color: theme.palette.secondary.main,
+    // },
+    titleLink: {
+        flex: 1,
+        color: '#ffffff',
+        textDecoration: 'none',
+        padding: 10,
+        fontSize: 24,
+        fontFamily: 'Work Sans',
+        textAlign: 'center'
+    }
 });
 
 const TopAppBar = ({classes}) => {
     return (
         <div>
             <AppBar position="fixed">
-                <Toolbar className={classes.toolbar}>
+                <Toolbar>
                     <div className={classes.left}/>
-                    <Link to="/" style={{
-                        color: '#ffffff',
-                        textDecoration: 'none',
-                        padding: 10,
-                        fontSize: 24,
-                        fontFamily: 'Work Sans'
-                    }}>
-                        {'Online Judge'}
+                    <Link to="/" className={classes.titleLink}>
+                        Online Judge
                     </Link>
                     <div className={classes.right}>
-                        <Link to="/sign-in" style={{color: '#ffffff', textDecoration: 'none', padding: 10}}>
-                            {'Sign In'}
+                        <Link to="/sign-in" className={classes.rightLink}>
+                            Sign In
                         </Link>
                         <Link to="/sign-up" style={{color: '#FFE57F', textDecoration: 'none', padding: 10}}>
-                            {'Sign Up'}
+                            Sign Up
                         </Link>
                     </div>
                 </Toolbar>
