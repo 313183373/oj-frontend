@@ -3,13 +3,13 @@ import AppBar from './appBar';
 import Toolbar, {styles as toolbarStyles} from './toolBar';
 import {withStyles} from '@material-ui/core';
 import {Link} from "react-router-dom";
-import clsx from 'clsx';
+// import clsx from 'clsx';
 
 const styles = theme => ({
     // title: {
     //     fontSize: 24,
     // },
-    // placeholder: toolbarStyles(theme).root,
+    placeholder: toolbarStyles(theme).root,
     left: {
         flex: 1,
     },
