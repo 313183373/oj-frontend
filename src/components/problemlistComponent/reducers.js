@@ -17,7 +17,6 @@ export default (state = {status: Status.LOADING, problems: [], page: 0}, action)
       return {...state, page: action.page}
     }
     default: {
-      console.log('state does not change');
       return state;
     }
   }
