@@ -11,7 +11,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import * as Actions from '../actions';
 import {withRouter} from "react-router";
 
-const CustomTableCell = withStyles(theme => ({
+const CustomTableCell = withStyles(() => ({
     body: {
         fontSize: 14,
     },
@@ -73,7 +73,7 @@ class ProblemList extends React.Component {
                                     let ratio = `(${problem.acceptCount}/${problem.submitCount})`;
                                     return (
                                         <TableRow className={classes.row} key={problem._id} hover={true}
-                                                onClick={() => handleClickRow(problem.id)}>
+                                                onClick={() => handleClickRow(problem._id)}>
                                             <CustomTableCell component="th" scope="row">
                                                 {problem._id}
                                             </CustomTableCell>

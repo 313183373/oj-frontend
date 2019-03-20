@@ -22,7 +22,8 @@
     "redux-thunk": "^2.3.0",
     "rxjs": "^6.4.0",
     "typescript": "^3.3.3333",
-    "validator": "^10.11.0"
+    "validator": "^10.11.0",
+    "classnames": "latest"
   },
   "scripts": {
     "start": "react-scripts start",

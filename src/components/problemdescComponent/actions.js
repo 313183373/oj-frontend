@@ -1,25 +1,11 @@
-import { FETCH_PROBLEM_DESC_SUCCESS, FETCH_PROBLEM_DESC_FAILURE } from "./actionTypes";
-import { COMMIT_CODE_LOADING, COMMIT_CODE_SUCCESS, COMMIT_CODE_FAILURE } from "./actionTypes";
-import { CHANGE_LANGUAGE, FETCH_ALL_LANGUAGES } from "./actionTypes";
-import { WRITE_CODE} from "./actionTypes";
+import {FETCH_PROBLEM_DESC_SUCCESS, FETCH_PROBLEM_DESC_FAILURE, FETCH_PROBLEM_DESC_LOADING} from "./actionTypes";
+import {COMMIT_CODE_LOADING, COMMIT_CODE_SUCCESS, COMMIT_CODE_FAILURE} from "./actionTypes";
+import {CHANGE_LANGUAGE, FETCH_ALL_LANGUAGES} from "./actionTypes";
+import {WRITE_CODE} from "./actionTypes";
 
-export const fetchProblemDescSuccess = (result) => ({
+export const fetchProblemDescSuccess = (problem) => ({
     type: FETCH_PROBLEM_DESC_SUCCESS,
-    result: {
-        id: 1,
-        title: 'test',
-        ac: 20,
-        all: 103,
-        content: '# 我是一道题',
-        inputDesc: '我是输入',
-        outputDesc: '我是输出',
-        sampleInput: '我是输入样例',
-        sampleOutput: '我是输出样例',
-        hint: '我是提示',
-        origin: '我是作者',
-        timeLimit: '0.3s',
-        memLimit: '1M'
-    }
+    problem,
 });
 
 export const fetchProblemDescFailure = (error) => ({
@@ -27,9 +13,23 @@ export const fetchProblemDescFailure = (error) => ({
     error
 });
 
-export const fetchProblemDesc = (id) => {
-    console.log('id');
-    return fetchProblemDescSuccess('dsf');
+export const fetchProblemDescLoading = () => ({
+    type: FETCH_PROBLEM_DESC_LOADING,
+});
+
+export const fetchProblemDesc = id => dispatch => {
+    dispatch(fetchProblemDescLoading());
+    fetch(`/problems/${id}`).then(response => {
+        if (!response.ok) {
+            throw new Error();
+        }
+        return response.json();
+    }).then(problem => {
+        console.log(problem);
+        dispatch(fetchProblemDescSuccess(problem));
+    }).catch(() => {
+        dispatch(fetchProblemDescFailure());
+    });
 };
 
 export const changeLanguage = (language) => {
@@ -37,7 +37,7 @@ export const changeLanguage = (language) => {
         type: CHANGE_LANGUAGE,
         language: language
     }
-}
+};
 
 export const fetchAllLanguages = () => {
     return {
@@ -64,35 +64,35 @@ export const fetchAllLanguages = () => {
             disabled: true
         }]
     }
-}
+};
 
 export const writeCode = (newValue) => {
     return {
         type: WRITE_CODE,
         userWritingCode: newValue
     }
-}
+};
 
-export const commitCodeLoding = () => {
+export const commitCodeLoading = () => {
     return {
         type: COMMIT_CODE_LOADING
     }
-}
+};
 
 export const commitCodeSuccess = (result) => {
     return {
         type: COMMIT_CODE_SUCCESS,
         result: result
     }
-}
+};
 
 export const commitCodeFailure = (error) => {
     return {
         type: COMMIT_CODE_FAILURE,
         error
     }
-}
+};
 
 export const commitCode = () => {
-    return commitCodeLoding('xx');
-}
+    return commitCodeLoading('xx');
+};

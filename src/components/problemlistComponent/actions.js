@@ -20,8 +20,10 @@ export const fetchProblemList = (page) => dispatch => {
         if (response.ok) {
             return response.json();
         }
-        return dispatch(fetchProblemsFailure());
+        throw new Error();
     }).then(problems => {
         dispatch(fetchProblemsSuccess(problems));
+    }).catch(() => {
+        dispatch(fetchProblemsFailure());
     });
 };
