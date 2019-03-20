@@ -2,13 +2,13 @@ import {FETCH_PROBLEMS_STARTED, FETCH_PROBLEMS_SUCCESS, FETCH_PROBLEMS_FAILURE} 
 import {CHANGE_PAGE_TO} from "./actionTypes";
 import * as Status from './status';
 
-export default (state = {status: Status.LOADING, page: 0}, action) => {
+export default (state = {status: Status.LOADING, problems: [], page: 0}, action) => {
   switch (action.type) {
     case FETCH_PROBLEMS_STARTED: {
       return {...state, status: Status.LOADING}
     }
     case FETCH_PROBLEMS_SUCCESS: {
-      return {...state, status: Status.SUCCESS, problems: action.result};
+      return {...state, status: Status.SUCCESS, problems: action.problems};
     }
     case FETCH_PROBLEMS_FAILURE: {
       return {...state, status: Status.FAILURE}

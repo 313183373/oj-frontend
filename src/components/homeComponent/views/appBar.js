@@ -11,7 +11,7 @@ const styles = theme => ({
 
 const AppBar = (props) => {
   return <MuiAppBar elevation={0} position="static" {...props} />;
-}
+};
 
 AppBar.propTypes = {
   classes: PropTypes.object.isRequired,

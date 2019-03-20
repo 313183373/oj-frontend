@@ -2,8 +2,8 @@ import React from 'react';
 import {view as ProblemDesc} from '../components/problemdescComponent/';
 
 
-const Problem = (props) => {
-    const {id} = props;
+const Problem = ({match}) => {
+    const {id} = match.params;
     return (
         <div>
             <ProblemDesc id={id}/>

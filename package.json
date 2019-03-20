@@ -2,7 +2,7 @@
   "name": "online-judge",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://www.weather.com.cn/",
+  "proxy": "http://106.12.210.128:5000",
   "dependencies": {
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
@@ -22,7 +22,8 @@
     "redux-thunk": "^2.3.0",
     "rxjs": "^6.4.0",
     "typescript": "^3.3.3333",
-    "validator": "^10.11.0"
+    "validator": "^10.11.0",
+    "classnames": "latest"
   },
   "scripts": {
     "start": "react-scripts start",

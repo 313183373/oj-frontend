@@ -14,10 +14,10 @@ import TableFooter from "@material-ui/core/TableFooter";
 import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActionsWrapped from './tablePaginationActionsWrapped'
 
-const CustomTableCell = withStyles(theme => ({
-  body: {
-    fontSize: 14,
-  },
+const CustomTableCell = withStyles(() => ({
+    body: {
+        fontSize: 14,
+    },
 }))(TableCell);
 
 const styles = theme => ({
@@ -56,68 +56,69 @@ class ProblemList extends React.Component {
     }
   }
 
-  render() {
-    const {classes, status, problems, handleClickRow, page, changePageTo} = this.props;
-    switch (status) {
-      case Status.LOADING: {
-        return (
-          <div>
-            <CircularProgress className={classes.progress}/>
-          </div>
-        );
-      }
-      case Status.SUCCESS: {
-        return (
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                <CustomTableCell>ID</CustomTableCell>
-                <CustomTableCell>Title</CustomTableCell>
-                <CustomTableCell>Ratio(AC/ALL)</CustomTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {problems.map(row => {
-                let ratio = `${(row.ac * 100.0 / row.all).toFixed(2)}%(${row.ac}/${row.all})`;
+    render() {
+        const {classes, status, problems, handleClickRow, page, changePageTo} = this.props;
+        switch (status) {
+            case Status.LOADING: {
                 return (
-                  <TableRow className={classes.row} key={row.id} hover={true}
-                            onClick={() => handleClickRow(row.id)}>
-                    <CustomTableCell component="th" scope="row">
-                      {row.id}
-                    </CustomTableCell>
-                    <CustomTableCell>
-                      {row.title}
-                    </CustomTableCell>
-                    <CustomTableCell>
-                      {ratio}
-                    </CustomTableCell>
-                  </TableRow>
+                    <div>
+                        <CircularProgress className={classes.progress}/>
+                    </div>
                 );
-              })}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  colSpan={3}
-                  page={page}
-                  onChangePage={changePageTo}
-                  ActionsComponent={TablePaginationActionsWrapped}
-                  count={100}
-                  rowsPerPage={10}
-                  rowsPerPageOptions={[10]}/>
-              </TableRow>
-            </TableFooter>
-          </Table>
-        );
-      }
-      case Status.FAILURE: {
-        return <div>题目列表获取失败，请刷新重试</div>
-      }
-      default: {
-        throw new Error(`unexpected status ${status}`);
-      }
+            }
+            case Status.SUCCESS: {
+                return (
+                        <Table className={classes.table}>
+                            <TableHead>
+                                <TableRow>
+                                    <CustomTableCell>ID</CustomTableCell>
+                                    <CustomTableCell>Title</CustomTableCell>
+                                    <CustomTableCell>Ratio(AC/ALL)</CustomTableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {problems.map(problem => {
+                                    // let ratio = `${(problem.acceptCount * 100.0 / problem.submitCount).toFixed(2)}%(${problem.acceptCount}/${problem.submitCount})`;
+                                    let ratio = `(${problem.acceptCount}/${problem.submitCount})`;
+                                    return (
+                                        <TableRow className={classes.row} key={problem._id} hover={true}
+                                                onClick={() => handleClickRow(problem._id)}>
+                                            <CustomTableCell component="th" scope="row">
+                                                {problem._id}
+                                            </CustomTableCell>
+                                            <CustomTableCell>
+                                                {problem.title}
+                                            </CustomTableCell>
+                                            <CustomTableCell>
+                                                {ratio}
+                                            </CustomTableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                          <TableFooter>
+                            <TableRow>
+                              <TablePagination
+                                colSpan={3}
+                                page={page}
+                                onChangePage={changePageTo}
+                                ActionsComponent={TablePaginationActionsWrapped}
+                                count={100}
+                                rowsPerPage={10}
+                                rowsPerPageOptions={[10]}/>
+                            </TableRow>
+                          </TableFooter>
+                        </Table>
+                );
+            }
+            case Status.FAILURE: {
+                return <div>题目列表获取失败，请刷新重试</div>
+            }
+            default: {
+                throw new Error(`unexpected status ${status}`);
+            }
+        }
     }
-  }
 }
 
 const mapStateToProps = (state) => {
