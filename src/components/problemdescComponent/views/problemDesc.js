@@ -114,15 +114,19 @@ class ProblemDesc extends React.Component {
                                     className={classes.title}>
                             {problemDesc.title}
                         </Typography>
-                        <Grid container className={classes.root} spacing={24} justify="center">
+                        <Grid container className={classes.root} justify="center">
                             <Grid item xs={12} md={6}>
                                 <div className={classes.gridCell}>
                                     <DescriptionPanel content={problemDesc.content} title='Description' html/>
-                                    <DescriptionPanel content={problemDesc.inputDesc} title='Input Description' html/>
-                                    <DescriptionPanel content={problemDesc.outputDesc} title='Output Description' html/>
+                                    {problemDesc.inputDesc &&
+                                    <DescriptionPanel content={problemDesc.inputDesc} title='Input Description' html/>}
+                                    {problemDesc.outputDesc &&
+                                    <DescriptionPanel content={problemDesc.outputDesc} title='Output Description'
+                                                      html/>}
                                     <DescriptionPanel content={problemDesc.sampleInput} title='Input Example'/>
                                     <DescriptionPanel content={problemDesc.sampleOutput} title='Output Example'/>
-                                    <DescriptionPanel content={problemDesc.hint} title='Hint' defaultExpanded={false}/>
+                                    {problemDesc.hint &&
+                                    <DescriptionPanel content={problemDesc.hint} title='Hint' defaultExpanded={false}/>}
                                 </div>
                             </Grid>
                             <Grid item xs={12} md={6}>
