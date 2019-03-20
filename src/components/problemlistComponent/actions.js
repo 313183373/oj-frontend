@@ -1,4 +1,5 @@
 import {FETCH_PROBLEMS_STARTED, FETCH_PROBLEMS_SUCCESS, FETCH_PROBLEMS_FAILURE} from "./actionTypes";
+import {CHANGE_PAGE_TO} from "./actionTypes";
 
 export const fetchProblemsStarted = () => ({
     type: FETCH_PROBLEMS_STARTED
@@ -16,7 +17,8 @@ export const fetchProblemsFailure = (error) => ({
 
 let nextSeqId = 0;
 export const fetchProblemList = (page) => {
-    console.log('fetch');
+    page = page + 1;
+    console.log('fetch page:', page);
     return  fetchProblemsSuccess('gh');
     // const apiUrl = `/data/cityinfo/${page}.html`;
         // const seqId = ++nextSeqId;
@@ -43,3 +45,8 @@ export const fetchProblemList = (page) => {
         // });
 
 };
+
+export const changePageTo = (page) => ({
+  type: CHANGE_PAGE_TO,
+  page: page
+});

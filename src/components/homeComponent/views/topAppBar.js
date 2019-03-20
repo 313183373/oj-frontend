@@ -51,7 +51,7 @@ const TopAppBar = ({classes}) => {
                     </Link>
                     <div className={classes.right}>
                         <Link to="/sign-in" style={{color: '#ffffff', textDecoration: 'none', padding: 10}}>
-                            {'Sign In'}
+                              {'Sign In'}
                         </Link>
                         <Link to="/sign-up" style={{color: '#FFE57F', textDecoration: 'none', padding: 10}}>
                             {'Sign Up'}
