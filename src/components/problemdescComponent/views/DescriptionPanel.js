@@ -25,7 +25,7 @@ const ExpansionPanel = withStyles({
 
 const ExpansionPanelDetails = withStyles({
     root: {
-        display: 'block'
+        display: 'block',
     }
 })(MuiExpansionPanelDetails);
 
@@ -34,7 +34,6 @@ class DescriptionPanel extends Component {
         const {title, content, html: isHTML, defaultExpanded} = this.props;
         const isExpanded = defaultExpanded === undefined ? !!content : defaultExpanded;
         // the ExpansionPanelDetails Component need a children, but there is no, so there will be a red warning, not error
-        console.log(title, isExpanded);
         return (
             <ExpansionPanel defaultExpanded={isExpanded}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
@@ -42,7 +41,9 @@ class DescriptionPanel extends Component {
                 </ExpansionPanelSummary>
                 {isHTML ?
                     <ExpansionPanelDetails dangerouslySetInnerHTML={{__html: content}}/> :
-                    <ExpansionPanelDetails><pre>{content}</pre></ExpansionPanelDetails>}
+                    <ExpansionPanelDetails>
+                        <pre>{content}</pre>
+                    </ExpansionPanelDetails>}
             </ExpansionPanel>
         );
     }
