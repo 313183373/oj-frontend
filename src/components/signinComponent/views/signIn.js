@@ -112,7 +112,6 @@ const SignIn = (props) => {
               >
                 {submitBtnText}
               </FormButton>
-              <pre>{JSON.stringify(form.getState(), 0, 2)}</pre>
             </form>
           )}
         </Form>
