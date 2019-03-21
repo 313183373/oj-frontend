@@ -78,10 +78,9 @@ export const commitCodeLoading = () => {
   }
 };
 
-export const commitCodeSuccess = (result) => {
+export const commitCodeSuccess = () => {
   return {
-    type: COMMIT_CODE_SUCCESS,
-    result: result
+    type: COMMIT_CODE_SUCCESS
   }
 };
 
@@ -92,6 +91,19 @@ export const commitCodeFailure = (error) => {
   }
 };
 
-export const commitCode = () => {
-  return commitCodeLoading('xx');
+export const commitCode = (id, token, userCommit) => dispatch => {
+  dispatch(commitCodeLoading());
+  fetch(`/problems/${id}`,
+    {
+      method: 'post',
+      body: JSON.stringify(userCommit),
+      headers: {"x-access-token": token}
+    }).then(response => {
+    if (response.ok) {
+      return dispatch(commitCodeSuccess());
+    }
+    throw new Error(response.text());
+  }).catch((error) => {
+    dispatch(commitCodeFailure(error.message));
+  });
 };

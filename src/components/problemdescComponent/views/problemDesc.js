@@ -17,6 +17,9 @@ import ReplayIcon from '@material-ui/icons/Replay';
 import classNames from 'classnames';
 // import * as PropTypes from "prop-types";
 import DescriptionPanel from "./DescriptionPanel";
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import {withRouter} from "react-router";
 
 const styles = theme => ({
   root: {
@@ -91,11 +94,11 @@ class ProblemDesc extends React.Component {
 
   componentDidMount() {
     this.props.fetchProblemDesc(this.props.id);
-    this.props.fetchAllLangages();
+    this.props.fetchAllLanguages();
   }
 
   render() {
-    const {classes, fetchProblemStatus, problemDesc, language, commitCodeStatus, changeLanguage, allLanguages, commitCode, writeCode, userWritingCode} = this.props;
+    const {classes, fetchProblemStatus, problemDesc, token, language, commitCodeStatus, changeLanguage, allLanguages, commitCode, writeCode, userWritingCode, commitCodeMessage} = this.props;
     switch (fetchProblemStatus) {
       case Status.LOADING: {
         return (
@@ -162,16 +165,32 @@ class ProblemDesc extends React.Component {
                     onChange={writeCode}
                   />
                   <Tooltip title="Commit" aria-label="Commit" placement="top">
-                    <Fab color="secondary" className={fabClassName}
-                         onClick={() => commitCode(userWritingCode, commitCodeStatus)}>
+                    <Fab color="secondary"
+                         className={fabClassName}
+                         disabled={userWritingCode === ''}
+                         onClick={() => commitCode(problemDesc._id, token,
+                           {
+                             author: 'Tim',
+                             code: userWritingCode,
+                             language: language
+                           }, commitCodeStatus)}>
                       {
-                        commitCodeStatus === Status.SUCCESS || commitCodeStatus === Status.LOADING ?
-                          <CheckIcon/> : <ReplayIcon/>
+                        commitCodeStatus === Status.FAILURE ?
+                          <ReplayIcon/> : <CheckIcon/>
                       }
                     </Fab>
                   </Tooltip>
                   {commitCodeStatus === Status.LOADING &&
                   <CircularProgress size={68} className={classes.fabProgress}/>}
+                  <Snackbar
+                    open={commitCodeStatus === Status.FAILURE}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'right',
+                    }}
+                    autoHideDuration={2000}>
+                    <SnackbarContent message={commitCodeMessage}/>
+                  </Snackbar>
                 </div>
               </Grid>
             </Grid>
@@ -190,45 +209,43 @@ class ProblemDesc extends React.Component {
 
 const mapStateToProps = (state) => {
   const problemDescData = state.problemDesc;
+  const user = state.signIn.user;
   return {
     fetchProblemStatus: problemDescData.loadData.status,
     problemDesc: problemDescData.loadData.problem,
     language: problemDescData.language,
     allLanguages: problemDescData.allLanguages,
     userWritingCode: problemDescData.userWritingCode,
-    commitCodeStatus: problemDescData.commitCode.status
+    commitCodeStatus: problemDescData.commitCode.status,
+    commitCodeMessage: problemDescData.commitCode.message,
+    token: user.token
   }
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchProblemDesc: (id) => {
       dispatch(Actions.fetchProblemDesc(id));
     },
-    fetchAllLangages: () => {
+    fetchAllLanguages: () => {
       dispatch(Actions.fetchAllLanguages());
     },
     changeLanguage: (event) => {
       dispatch(Actions.changeLanguage(event.target.value));
     },
     writeCode: (newValue) => {
-      console.log('write code:', newValue);
       dispatch(Actions.writeCode(newValue));
     },
-    commitCode: (userWritingCode, curCommitCodeStatus) => {
-      console.log('commit code');
-      if (curCommitCodeStatus !== Status.LOADING && curCommitCodeStatus !== Status.SUCCESS) {
-        dispatch(Actions.commitCode(userWritingCode));
+    commitCode: (id, token, userCommit, curCommitCodeStatus) => {
+      if (token === '') {
+        ownProps.history.push(`/sign-in`);
+      } else {
+        if (curCommitCodeStatus !== Status.LOADING && curCommitCodeStatus !== Status.SUCCESS) {
+          dispatch(Actions.commitCode(id, token, userCommit));
+        }
       }
     },
   }
 };
 
-// $$T^{\mu\nu}=\begin{pmatrix}
-// \varepsilon&0&0&0\\
-// 0&\varepsilon/3&0&0\\
-// 0&0&\varepsilon/3&0\\
-// 0&0&0&\varepsilon/3
-// \end{pmatrix},$$
-
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ProblemDesc));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ProblemDesc)));
