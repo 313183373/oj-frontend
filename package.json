@@ -7,6 +7,7 @@
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
     "@uiw/react-monacoeditor": "^1.0.6",
+    "classnames": "latest",
     "clsx": "^1.0.3",
     "final-form": "^4.12.0",
     "react": "^16.8.2",
@@ -19,11 +20,11 @@
     "react-router-redux": "^4.0.8",
     "react-scripts": "2.1.5",
     "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "rxjs": "^6.4.0",
     "typescript": "^3.3.3333",
-    "validator": "^10.11.0",
-    "classnames": "latest"
+    "validator": "^10.11.0"
   },
   "scripts": {
     "start": "react-scripts start",

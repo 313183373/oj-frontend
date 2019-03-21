@@ -5,6 +5,8 @@ import {reducer as problemDescReducer} from './components/problemdescComponent';
 import {reducer as signInReducer} from './components/signinComponent';
 import {reducer as signUpReducer} from './components/signupComponent';
 import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
+
 
 const reducer = combineReducers({
     problems: problemListReducer,
@@ -13,4 +15,4 @@ const reducer = combineReducers({
     signUp: signUpReducer,
 });
 
-export default createStore(reducer, applyMiddleware(thunk));
+export default createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
