@@ -10,7 +10,7 @@ import FormFeedback from '../../baseComponents/formFeedback';
 import FormButton from '../../baseComponents/formButton';
 import {connect} from 'react-redux';
 import {withStyles} from '@material-ui/core/styles';
-import {withRouter} from "react-router";
+import {Redirect, withRouter} from "react-router";
 import * as Actions from "../actions";
 
 const styles = theme => ({
@@ -27,11 +27,12 @@ const styles = theme => ({
 });
 
 const SignIn = (props) => {
-  const {classes, status, submitSignIn, validate, handleSignInSuccess, result} = props;
+  const {classes, status, submitSignIn, validate, user} = props;
   if (status === Status.SUCCESS) {
-    handleSignInSuccess(result);
+    return <Redirect to='/'/>
+    // handleSignInSuccess(user);
   } else {
-    let sent = status === Status.LOADING;
+    const isLoading = status === Status.LOADING;
     let submitBtnText;
     if (status === Status.LOADING) {
       submitBtnText = 'In progress…';
@@ -63,7 +64,7 @@ const SignIn = (props) => {
                 autoComplete="email"
                 autoFocus
                 component={RFTextField}
-                disabled={submitting || sent}
+                disabled={submitting || isLoading}
                 fullWidth
                 label="Email"
                 margin="normal"
@@ -75,7 +76,7 @@ const SignIn = (props) => {
                 fullWidth
                 size="large"
                 component={RFTextField}
-                disabled={submitting || sent}
+                disabled={submitting || isLoading}
                 required
                 name="password"
                 autoComplete="current-password"
@@ -94,22 +95,20 @@ const SignIn = (props) => {
               </FormSpy>
               <FormButton
                 className={classes.button}
-                disabled={submitting || sent}
+                disabled={submitting || isLoading}
                 size="large"
                 color="secondary"
                 fullWidth
               >
-
                 {submitBtnText}
               </FormButton>
             </form>
-
           )}
         </Form>
         {/*<Typography align="center">*/}
-          {/*<Link to="/forgot-password">*/}
-            {/*Forgot password?*/}
-          {/*</Link>*/}
+        {/*<Link to="/forgot-password">*/}
+        {/*Forgot password?*/}
+        {/*</Link>*/}
         {/*</Typography>*/}
       </AppForm>
     );
@@ -120,7 +119,7 @@ const mapStateToProps = (state) => {
   const signInState = state.signIn;
   return {
     status: signInState.status,
-    result: signInState.result
+    user: signInState.user
   }
 };
 
@@ -128,10 +127,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     submitSignIn: (values) => {
       dispatch(Actions.submitSignIn(values.email, values.password));
-    },
-    handleSignInSuccess: (result) => {
-      // todo: save result to localstorage
-      ownProps.history.goBack();
     },
     validate: (values) => {
       const errors = required(['email', 'password'], values);
