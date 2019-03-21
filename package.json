@@ -10,6 +10,7 @@
     "classnames": "latest",
     "clsx": "^1.0.3",
     "final-form": "^4.12.0",
+    "password-validator": "^4.1.1",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-final-form": "^4.1.0",

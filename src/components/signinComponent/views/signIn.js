@@ -2,7 +2,7 @@ import React from "react";
 import AppForm from '../../baseComponents/appForm';
 import * as Status from '../status';
 import {Typography} from '../../problemdescComponent/';
-import {email, required} from '../../../utils/validation';
+import {emailValidator, required} from '../../../utils/validation';
 import {Link} from 'react-router-dom';
 import {Field, Form, FormSpy} from 'react-final-form';
 import RFTextField from '../../baseComponents/rfTextField';
@@ -12,6 +12,15 @@ import {connect} from 'react-redux';
 import {withStyles} from '@material-ui/core/styles';
 import {Redirect, withRouter} from "react-router";
 import * as Actions from "../actions";
+import PasswordValidator from "password-validator";
+import {signInStarted} from "../actions";
+import {signInSuccess} from "../actions";
+import {signInFailure} from "../actions";
+
+
+const passwordSchema = new PasswordValidator();
+
+passwordSchema.is().min(6).is().max(36).has().digits().has().letters().has().not().spaces();
 
 const styles = theme => ({
   form: {
@@ -27,7 +36,7 @@ const styles = theme => ({
 });
 
 const SignIn = (props) => {
-  const {classes, status, submitSignIn, validate, user} = props;
+  const {classes, status, submitSignIn, validate} = props;
   if (status === Status.SUCCESS) {
     return <Redirect to='/'/>
     // handleSignInSuccess(user);
@@ -56,14 +65,14 @@ const SignIn = (props) => {
         </React.Fragment>
         <Form
           onSubmit={submitSignIn}
-          subscription={{submitting: true}}
           validate={validate}>
-          {({handleSubmit, submitting}) => (
+          {({handleSubmit, submitting, form}) => (
             <form onSubmit={handleSubmit} className={classes.form} noValidate>
               <Field
                 autoComplete="email"
                 autoFocus
                 component={RFTextField}
+                showErrorWhen={meta => meta.touched && !meta.submitting && (!meta.dirtySinceLastSubmit || meta.error)}
                 disabled={submitting || isLoading}
                 fullWidth
                 label="Email"
@@ -76,6 +85,7 @@ const SignIn = (props) => {
                 fullWidth
                 size="large"
                 component={RFTextField}
+                showErrorWhen={meta => (meta.touched || meta.modified) && !meta.submitting && (!meta.dirtySinceLastSubmit || meta.error)}
                 disabled={submitting || isLoading}
                 required
                 name="password"
@@ -95,13 +105,14 @@ const SignIn = (props) => {
               </FormSpy>
               <FormButton
                 className={classes.button}
-                disabled={submitting || isLoading}
+                disabled={submitting || isLoading || form.getState().hasValidationErrors || (form.getState().hasSubmitErrors && !form.getState().dirtySinceLastSubmit)}
                 size="large"
                 color="secondary"
                 fullWidth
               >
                 {submitBtnText}
               </FormButton>
+              <pre>{JSON.stringify(form.getState(), 0, 2)}</pre>
             </form>
           )}
         </Form>
@@ -123,22 +134,59 @@ const mapStateToProps = (state) => {
   }
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = dispatch => {
   return {
-    submitSignIn: (values) => {
-      dispatch(Actions.submitSignIn(values.email, values.password));
+    submitSignIn: async (values) => {
+      dispatch(signInStarted());
+      const {email, password} = values;
+      const response = await fetch('/user/login', {
+        method: 'POST',
+        headers: {
+          'content-type': "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+      if (response.ok) {
+        const user = await response.json();
+        localStorage.token = user.token;
+        dispatch(signInSuccess(user));
+      } else {
+        switch (response.status) {
+          case 400: {
+            dispatch(signInFailure(await response.text()));
+            return {email: "Invalid email", password: "Invalid password"};
+          }
+          case 401: {
+            const error = await response.text();
+            dispatch(signInFailure(error));
+            return {password: error}
+          }
+          case 404: {
+            const error = await response.text();
+            dispatch(signInFailure(error));
+            return {email: error}
+          }
+        }
+      }
     },
-    validate: (values) => {
+    validate: values => {
       const errors = required(['email', 'password'], values);
-
       if (!errors.email) {
-        const emailError = email(values.email, values);
+        const emailError = emailValidator(values.email, values);
         if (emailError) {
-          errors.email = email(values.email, values);
+          errors.email = emailError;
+        }
+      }
+      if (!errors.password) {
+        if (!passwordSchema.validate(values.password)) {
+          errors.password = "Invalid password";
         }
       }
       return errors;
-    }
+    },
   }
 };
 

@@ -1,6 +1,6 @@
 import isEmail from 'validator/lib/isEmail'
 
-export function email(value) {
+export function emailValidator(value) {
   return value && !isEmail(value.trim()) ? 'Invalid email' : null;
 }
 

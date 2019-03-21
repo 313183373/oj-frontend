@@ -6,22 +6,25 @@ const RFTextField = (props) => {
     autoComplete,
     input,
     InputProps,
-    meta: { touched, error, submitError },
+    meta,
+    meta: {error, submitError},
+    showErrorWhen,
     ...other
   } = props;
-
+  const isShowError = showErrorWhen(meta);
+  console.log(meta);
   return (
     <TextField
-      error={Boolean(touched && (error || submitError))}
+      error={Boolean(isShowError && (error || submitError))}
       {...input}
-      {...other}
       InputProps={{
         inputProps: {
           autoComplete,
         },
         ...InputProps,
       }}
-      helperText={touched ? error || submitError : ''}
+      helperText={isShowError ? error || submitError : ''}
+      {...other}
     />
   );
 };

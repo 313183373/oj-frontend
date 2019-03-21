@@ -12,7 +12,7 @@ import {withRouter} from "react-router";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/core";
 import * as Actions from "../actions";
-import {email, required} from "../../../utils/validation";
+import {emailValidator, required} from "../../../utils/validation";
 
 const styles = theme => ({
   form: {
@@ -153,9 +153,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       const errors = required(['firstName', 'lastName', 'email', 'password'], values);
 
       if (!errors.email) {
-        const emailError = email(values.email, values);
+        const emailError = emailValidator(values.email, values);
         if (emailError) {
-          errors.email = email(values.email, values);
+          errors.email = emailValidator(values.email, values);
         }
       }
       return errors;

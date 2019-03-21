@@ -6,14 +6,11 @@ import Paper from '../signinComponent/views/paper';
 const styles = theme => ({
   root: {
     display: 'flex',
-    backgroundImage: 'url(/static/onepirate/appCurvyLines.png)',
-    backgroundRepeat: 'no-repeat',
+    // backgroundImage: 'url(/static/onepirate/appCurvyLines.png)',
+    // backgroundRepeat: 'no-repeat',
   },
   paper: {
-    padding: theme.spacing.unit * 4,
-    [theme.breakpoints.up('md')]: {
-      padding: theme.spacing.unit * 10,
-    },
+    padding: `0 ${theme.spacing.unit * 10}px`,
   },
 });
 
