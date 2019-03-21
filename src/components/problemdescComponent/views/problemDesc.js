@@ -130,7 +130,7 @@ class ProblemDesc extends React.Component {
                   <DescriptionPanel content={problemDesc.sampleInput} title='Input Example'/>
                   <DescriptionPanel content={problemDesc.sampleOutput} title='Output Example'/>
                   {problemDesc.hint &&
-                  <DescriptionPanel content={problemDesc.hint} title='Hint' defaultExpanded={false}/>}
+                  <DescriptionPanel content={problemDesc.hint} title='Hint' defaultExpanded={false} html/>}
                 </div>
               </Grid>
               <Grid item xs={12} md={6}>
