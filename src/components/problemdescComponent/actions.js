@@ -102,8 +102,8 @@ export const commitCode = (id, token, userCommit) => dispatch => {
     if (response.ok) {
       return dispatch(commitCodeSuccess());
     }
-    throw new Error(response.text());
-  }).catch((error) => {
-    dispatch(commitCodeFailure(error.message));
+    throw new Error();
+  }).catch(() => {
+    dispatch(commitCodeFailure('Something wrong, please try again.'));
   });
 };

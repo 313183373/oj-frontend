@@ -16,7 +16,11 @@ export default (state = {
       return {...state, loadData: {status: Status.LOADING}}
     }
     case FETCH_PROBLEM_DESC_SUCCESS: {
-      return {...state, loadData: {status: Status.SUCCESS, problem: action.problem}}
+      return {
+        ...state,
+        loadData: {status: Status.SUCCESS, problem: action.problem},
+        userWritingCode: ''
+      }
     }
     case FETCH_PROBLEM_DESC_FAILURE: {
       return {...state, loadData: {status: Status.FAILURE}}
