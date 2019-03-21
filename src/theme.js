@@ -23,6 +23,7 @@ export default createMuiTheme({
         },
     },
     typography: {
+        useNextVariants: true,
         fontFamily: "'Work Sans', sans-serif",
         fontSize: 14,
         fontWeightLight: 300, // Work Sans

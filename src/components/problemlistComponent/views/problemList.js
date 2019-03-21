@@ -57,7 +57,7 @@ class ProblemList extends React.Component {
   }
 
   render() {
-    const {classes, status, problems, handleClickRow, page, changePageTo} = this.props;
+    const {classes, status, problems, handleClickRow, page, changePageTo, totalProblemNumber} = this.props;
     switch (status) {
       case Status.LOADING: {
         return (
@@ -103,7 +103,7 @@ class ProblemList extends React.Component {
                   page={page}
                   onChangePage={changePageTo}
                   ActionsComponent={TablePaginationActionsWrapped}
-                  count={100}
+                  count={totalProblemNumber}
                   rowsPerPage={10}
                   rowsPerPageOptions={[10]}/>
               </TableRow>
@@ -128,6 +128,7 @@ const mapStateToProps = (state) => {
     // NOTE: page starts from 0 but +1 when sent to server.
     page: problemsData.page,
     problems: problemsData.problems,
+    totalProblemNumber: problemsData.totalProblemNumber,
   }
 };
 

@@ -1,5 +1,6 @@
 import {FETCH_PROBLEMS_STARTED, FETCH_PROBLEMS_SUCCESS, FETCH_PROBLEMS_FAILURE} from "./actionTypes";
 import {CHANGE_PAGE_TO} from "./actionTypes";
+import {SET_TOTAL_PROBLEM_NUMBER} from "./actionTypes";
 
 export const fetchProblemsStarted = () => ({
   type: FETCH_PROBLEMS_STARTED
@@ -15,6 +16,11 @@ export const fetchProblemsFailure = (error) => ({
   error
 });
 
+export const setTotalProblemNumber = (totalProblemNumber) => ({
+  type: SET_TOTAL_PROBLEM_NUMBER,
+  totalProblemNumber
+});
+
 export const fetchProblemList = (page) => dispatch => {
   page = page + 1;
   dispatch(fetchProblemsStarted());
@@ -24,6 +30,7 @@ export const fetchProblemList = (page) => dispatch => {
     }
     throw new Error();
   }).then(response => {
+    dispatch(setTotalProblemNumber(response.totalProblemNumber));
     dispatch(fetchProblemsSuccess(response.problems));
   }).catch(() => {
     dispatch(fetchProblemsFailure());
