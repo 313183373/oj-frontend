@@ -97,7 +97,7 @@ export const commitCode = (id, token, userCommit) => dispatch => {
     {
       method: 'post',
       body: JSON.stringify(userCommit),
-      headers: {"x-access-token": token}
+      headers: {"x-access-token": token, 'content-type': 'application/json'}
     }).then(response => {
     if (response.ok) {
       return dispatch(commitCodeSuccess());

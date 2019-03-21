@@ -170,7 +170,6 @@ class ProblemDesc extends React.Component {
                          disabled={userWritingCode === ''}
                          onClick={() => commitCode(problemDesc._id, token,
                            {
-                             author: 'Tim',
                              code: userWritingCode,
                              language: language
                            }, commitCodeStatus)}>
@@ -218,7 +217,7 @@ const mapStateToProps = (state) => {
     userWritingCode: problemDescData.userWritingCode,
     commitCodeStatus: problemDescData.commitCode.status,
     commitCodeMessage: problemDescData.commitCode.message,
-    token: user.token
+    token: user.token,
   }
 };
 
