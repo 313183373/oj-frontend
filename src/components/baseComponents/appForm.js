@@ -19,7 +19,7 @@ const AppForm = (props) => {
 
   return (
     <div className={classes.root}>
-      <LayoutBody margin marginBottom width="small">
+      <LayoutBody margin width="small">
         <Paper className={classes.paper}>{children}</Paper>
       </LayoutBody>
     </div>

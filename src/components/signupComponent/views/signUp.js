@@ -12,7 +12,7 @@ import {withRouter} from "react-router";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/core";
 import * as Actions from "../actions";
-import {emailValidator, required} from "../../../utils/validation";
+import {emailValidator, required, passwordValidator} from "../../../utils/validation";
 
 const styles = theme => ({
   form: {
@@ -27,6 +27,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 2,
   },
 });
+
 
 const SignUp = (props) => {
   const {classes, status, submitSignUp, validate, handleSignUpSuccess, result} = props;
@@ -57,37 +58,24 @@ const SignUp = (props) => {
           </React.Fragment>
           <Form
             onSubmit={submitSignUp}
-            subscription={{submitting: true}}
             validate={validate}
           >
-            {({handleSubmit, submitting}) => (
+            {({handleSubmit, submitting, form}) => (
               <form onSubmit={handleSubmit} className={classes.form} noValidate>
-                <Grid container spacing={8}>
-                  <Grid item xs={12} sm={6}>
-                    <Field
-                      autoFocus
-                      component={RFTextField}
-                      autoComplete="fname"
-                      fullWidth
-                      label="First name"
-                      name="firstName"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Field
-                      component={RFTextField}
-                      autoComplete="lname"
-                      fullWidth
-                      label="Last name"
-                      name="lastName"
-                      required
-                    />
-                  </Grid>
-                </Grid>
+                <Field
+                  autoFocus
+                  component={RFTextField}
+                  showErrorWhen={meta => meta.touched && !meta.submitting}
+                  autoComplete="username"
+                  fullWidth
+                  label="Username"
+                  name="username"
+                  required
+                />
                 <Field
                   autoComplete="email"
                   component={RFTextField}
+                  showErrorWhen={meta => meta.touched && !meta.submitting}
                   disabled={submitting || sent}
                   fullWidth
                   label="Email"
@@ -98,6 +86,7 @@ const SignUp = (props) => {
                 <Field
                   fullWidth
                   component={RFTextField}
+                  showErrorWhen={meta => (meta.touched || meta.modified) && !meta.submitting}
                   disabled={submitting || sent}
                   required
                   name="password"
@@ -107,17 +96,20 @@ const SignUp = (props) => {
                   margin="normal"
                 />
                 <FormSpy subscription={{submitError: true}}>
-                  {({submitError}) =>
-                    submitError ? (
-                      <FormFeedback className={classes.feedback} error>
-                        {submitError}
-                      </FormFeedback>
-                    ) : null
+                  {(props) => {
+                    console.log(props);
+                    return null;
+                    // return submitError ? (
+                    //   <FormFeedback className={classes.feedback} error>
+                    //     {submitError}
+                    //   </FormFeedback>
+                    // ) : null
+                  }
                   }
                 </FormSpy>
                 <FormButton
                   className={classes.button}
-                  disabled={submitting || sent}
+                  disabled={submitting || sent || form.getState().hasValidationErrors || (form.getState().hasSubmitErrors && !form.getState().dirtySinceLastSubmit)}
                   color="secondary"
                   fullWidth
                 >
@@ -144,18 +136,23 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     submitSignUp: (values) => {
       dispatch(Actions.submitSignUp(values));
+      return {SUBMIT_ERROR: "HELLO"}
     },
     handleSignUpSuccess: (result) => {
       // todo: save result to localstorage
       ownProps.history.goBack();
     },
     validate: (values) => {
-      const errors = required(['firstName', 'lastName', 'email', 'password'], values);
-
+      const errors = required(['username', 'email', 'password'], values);
       if (!errors.email) {
         const emailError = emailValidator(values.email, values);
         if (emailError) {
           errors.email = emailValidator(values.email, values);
+        }
+      }
+      if (!errors.password) {
+        if (!passwordValidator(values.password)) {
+          errors.password = 'Invalid password';
         }
       }
       return errors;

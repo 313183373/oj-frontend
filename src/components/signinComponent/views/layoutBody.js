@@ -10,6 +10,7 @@ function round(value) {
 const styles = theme => ({
   margin: {
     margin: theme.spacing.unit * 7,
+    marginBottom: 0,
   },
   marginBottom: {
     marginBottom: theme.spacing.unit * 12,
