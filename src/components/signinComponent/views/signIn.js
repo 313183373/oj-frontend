@@ -13,9 +13,7 @@ import {withStyles} from '@material-ui/core/styles';
 import {Redirect, withRouter} from "react-router";
 import * as Actions from "../actions";
 import PasswordValidator from "password-validator";
-import {signInStarted} from "../actions";
-import {signInSuccess} from "../actions";
-import {signInFailure} from "../actions";
+import {signInStarted, signInSuccess, signInFailure} from "../actions";
 
 
 const passwordSchema = new PasswordValidator();
