@@ -2,7 +2,7 @@ import React from "react";
 import AppForm from '../../baseComponents/appForm';
 import * as Status from '../status';
 import {Typography} from '../../problemdescComponent/';
-import {emailValidator, required} from '../../../utils/validation';
+import {emailValidator, required, passwordValidator} from '../../../utils/validation';
 import {Link} from 'react-router-dom';
 import {Field, Form, FormSpy} from 'react-final-form';
 import RFTextField from '../../baseComponents/rfTextField';
@@ -12,18 +12,13 @@ import {connect} from 'react-redux';
 import {withStyles} from '@material-ui/core/styles';
 import {Redirect, withRouter} from "react-router";
 import * as Actions from "../actions";
-import PasswordValidator from "password-validator";
 import {signInStarted, signInSuccess, signInFailure} from "../actions";
 import {setUser} from "../../../commonState/user/actions";
 
 
-const passwordSchema = new PasswordValidator();
-
-passwordSchema.is().min(6).is().max(36).has().digits().has().letters().has().not().spaces();
-
 const styles = theme => ({
   form: {
-    marginTop: theme.spacing.unit * 6,
+    marginTop: theme.spacing.unit * 4,
   },
   button: {
     marginTop: theme.spacing.unit * 3,
@@ -180,7 +175,7 @@ const mapDispatchToProps = dispatch => {
         }
       }
       if (!errors.password) {
-        if (!passwordSchema.validate(values.password)) {
+        if (!passwordValidator(values.password)) {
           errors.password = "Invalid password";
         }
       }
