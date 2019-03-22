@@ -208,7 +208,6 @@ class ProblemDesc extends React.Component {
 
 const mapStateToProps = (state) => {
   const problemDescData = state.problemDesc;
-  const user = state.signIn.user;
   return {
     fetchProblemStatus: problemDescData.loadData.status,
     problemDesc: problemDescData.loadData.problem,
@@ -217,7 +216,7 @@ const mapStateToProps = (state) => {
     userWritingCode: problemDescData.userWritingCode,
     commitCodeStatus: problemDescData.commitCode.status,
     commitCodeMessage: problemDescData.commitCode.message,
-    token: user.token,
+    token: state.user.token
   }
 };
 

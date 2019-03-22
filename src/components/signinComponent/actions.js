@@ -1,4 +1,5 @@
 import {SIGN_IN_STARTED, SIGN_IN_SUCCESS, SIGN_IN_FAILURE} from "./actionTypes";
+import {setUser} from "../../commonState/user/actions";
 
 export const signInStarted = () => ({
   type: SIGN_IN_STARTED
@@ -32,6 +33,7 @@ export const submitSignIn = (email, pwd) => dispatch => {
     throw new Error();
   }).then(user => {
     dispatch(signInSuccess(user));
+    dispatch(setUser(user));
   }).catch(err => {
     dispatch(signInFailure());
   });

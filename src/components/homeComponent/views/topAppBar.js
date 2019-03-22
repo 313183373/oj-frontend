@@ -1,11 +1,13 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import AppBar from './appBar';
 import Toolbar, {styles as toolbarStyles} from './toolBar';
 import {withStyles} from '@material-ui/core';
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import Typography from "../../baseComponents/Typography";
-import {signInSuccess} from '../../signinComponent/actions';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import {clearUser, setUser} from "../../../commonState/user/actions";
 // import clsx from 'clsx';
 
 const styles = theme => ({
@@ -55,30 +57,54 @@ const SignInOrSignUp = () => {
   )
 };
 
-const UserInfo = ({user}) => {
+const UserMenu = ({anchorEl, logOut, handleMenuClose}) => {
+  const isOpen = Boolean(anchorEl);
   return (
-    <Typography variant='subtitle1' style={{color: '#ffffff', padding: 10}}>
-      {user.username}
-    </Typography>
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+      transformOrigin={{vertical: 'top', horizontal: 'right'}}
+      open={isOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={logOut}>Log out</MenuItem>
+    </Menu>
   )
 };
 
-async function getUserInfo(token, dispatch) {
+const UserInfo = ({user, logOut}) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+  return (
+    <div>
+      <Typography variant='subtitle1' style={{color: '#ffffff', padding: 10}} onClick={event => {
+        setAnchorEl(event.currentTarget);
+      }}>
+        {user.username}
+      </Typography>
+      <UserMenu anchorEl={anchorEl} logOut={logOut} handleMenuClose={handleMenuClose}/>
+    </div>
+  )
+};
+
+async function getUserInfo(token, setUserInfo) {
   const response = await fetch('/user/me', {headers: {'x-access-token': token}});
   if (response.ok) {
-    const {user, token} = await response.json();
-    dispatch(signInSuccess({username: user.name, email: user.email, token,}));
+    const user = await response.json();
+    setUserInfo({...user, token,});
   }
 }
 
-const TopAppBar = ({classes, user, dispatch}) => {
+const TopAppBar = ({classes, user, setUserInfo, logOut}) => {
+
   useEffect(() => {
-    if (!user.token && localStorage.token) {
-      getUserInfo(localStorage.token, dispatch);
+    if (!user.isSignIn && localStorage.token) {
+      getUserInfo(localStorage.token, setUserInfo);
     }
   });
 
-  const isUserLoggedIn = !!user.token;
   return (
     <div>
       <AppBar position="fixed">
@@ -88,7 +114,7 @@ const TopAppBar = ({classes, user, dispatch}) => {
             Online Judge
           </Link>
           <div className={classes.right}>
-            {isUserLoggedIn ? <UserInfo user={user}/> : <SignInOrSignUp/>}
+            {user.isSignIn ? <UserInfo user={user} logOut={logOut}/> : <SignInOrSignUp/>}
           </div>
         </Toolbar>
       </AppBar>
@@ -97,8 +123,22 @@ const TopAppBar = ({classes, user, dispatch}) => {
   );
 };
 
-const mapStateToProps = state => ({
-  user: state.signIn.user
-});
+const mapStateToProps = state => {
+  return ({
+    user: state.user,
+  });
+};
 
-export default connect(mapStateToProps)(withStyles(styles)(TopAppBar));
+const mapDispatchToProps = dispatch => {
+  return {
+    setUserInfo: user => {
+      dispatch(setUser(user));
+    },
+    logOut: () => {
+      localStorage.removeItem('token');
+      dispatch(clearUser());
+    }
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(TopAppBar));

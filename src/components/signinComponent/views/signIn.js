@@ -14,6 +14,7 @@ import {Redirect, withRouter} from "react-router";
 import * as Actions from "../actions";
 import PasswordValidator from "password-validator";
 import {signInStarted, signInSuccess, signInFailure} from "../actions";
+import {setUser} from "../../../commonState/user/actions";
 
 
 const passwordSchema = new PasswordValidator();
@@ -34,9 +35,10 @@ const styles = theme => ({
 });
 
 const SignIn = (props) => {
-  const {classes, status, submitSignIn, validate} = props;
+  const {classes, status, submitSignIn, validate, history} = props;
   if (status === Status.SUCCESS) {
-    return <Redirect to='/'/>
+    const to = history.location.state ? history.location.state.from.pathname : '/';
+    return <Redirect to={to}/>
     // handleSignInSuccess(user);
   } else {
     const isLoading = status === Status.LOADING;
@@ -127,7 +129,6 @@ const mapStateToProps = (state) => {
   const signInState = state.signIn;
   return {
     status: signInState.status,
-    user: signInState.user
   }
 };
 
@@ -149,7 +150,8 @@ const mapDispatchToProps = dispatch => {
       if (response.ok) {
         const user = await response.json();
         localStorage.token = user.token;
-        dispatch(signInSuccess(user));
+        dispatch(signInSuccess());
+        dispatch(setUser(user));
       } else {
         switch (response.status) {
           case 400: {
