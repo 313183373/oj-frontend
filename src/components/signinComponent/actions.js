@@ -10,11 +10,13 @@ export const signInSuccess = (user) => ({
   user,
 });
 
+// todo: the error is not used in reducer, delete if it is useless
 export const signInFailure = (error) => ({
   type: SIGN_IN_FAILURE,
   error
 });
 
+// todo: the submitSignIn function is not used because a submit function should return a submit error object which can not be implemented here
 export const submitSignIn = (email, pwd) => dispatch => {
   dispatch(signInStarted());
   fetch('/user/login', {

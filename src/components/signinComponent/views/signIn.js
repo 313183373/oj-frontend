@@ -14,7 +14,10 @@ import {Redirect, withRouter} from "react-router";
 import * as Actions from "../actions";
 import {signInStarted, signInSuccess, signInFailure} from "../actions";
 import {setUser} from "../../../commonState/user/actions";
+import {FORM_ERROR} from "final-form";
+import createDecorator from 'final-form-focus';
 
+const focusOnErrors = createDecorator();
 
 const styles = theme => ({
   form: {
@@ -30,8 +33,8 @@ const styles = theme => ({
 });
 
 const SignIn = (props) => {
-  const {classes, status, submitSignIn, validate, history} = props;
-  if (status === Status.SUCCESS) {
+  const {classes, status, submitSignIn, validate, history, isSignIn} = props;
+  if (isSignIn) {
     const to = history.location.state ? history.location.state.from.pathname : '/';
     return <Redirect to={to}/>
     // handleSignInSuccess(user);
@@ -60,8 +63,11 @@ const SignIn = (props) => {
         </React.Fragment>
         <Form
           onSubmit={submitSignIn}
-          validate={validate}>
-          {({handleSubmit, submitting, form}) => (
+          validate={validate}
+          subscription={{submitting: true}}
+          decorators={[focusOnErrors]}
+        >
+          {({handleSubmit, submitting}) => (
             <form onSubmit={handleSubmit} className={classes.form} noValidate>
               <Field
                 autoComplete="email"
@@ -89,24 +95,30 @@ const SignIn = (props) => {
                 type="password"
                 margin="normal"
               />
-              <FormSpy subscription={{submitError: true}}>
-                {({submitError}) =>
-                  submitError ? (
+              <FormSpy subscription={{submitError: true, dirtySinceLastSubmit: true}}>
+                {({submitError, dirtySinceLastSubmit}) =>
+                  submitError && !dirtySinceLastSubmit ? (
                     <FormFeedback className={classes.feedback} error>
                       {submitError}
                     </FormFeedback>
                   ) : null
                 }
               </FormSpy>
-              <FormButton
-                className={classes.button}
-                disabled={submitting || isLoading || form.getState().hasValidationErrors || (form.getState().hasSubmitErrors && !form.getState().dirtySinceLastSubmit)}
-                size="large"
-                color="secondary"
-                fullWidth
-              >
-                {submitBtnText}
-              </FormButton>
+              <FormSpy subscription={{hasValidationErrors: true, hasSubmitErrors: true, dirtySinceLastSubmit: true}}>
+                {({hasValidationErrors, hasSubmitErrors, dirtySinceLastSubmit}) => {
+                  return (
+                    <FormButton
+                      className={classes.button}
+                      disabled={submitting || isLoading || hasValidationErrors || (hasSubmitErrors && !dirtySinceLastSubmit)}
+                      size="large"
+                      color="secondary"
+                      fullWidth
+                    >
+                      {submitBtnText}
+                    </FormButton>
+                  )
+                }}
+              </FormSpy>
             </form>
           )}
         </Form>
@@ -124,6 +136,7 @@ const mapStateToProps = (state) => {
   const signInState = state.signIn;
   return {
     status: signInState.status,
+    isSignIn: state.user.isSignIn,
   }
 };
 
@@ -151,7 +164,7 @@ const mapDispatchToProps = dispatch => {
         switch (response.status) {
           case 400: {
             dispatch(signInFailure(await response.text()));
-            return {email: "Invalid email", password: "Invalid password"};
+            return {[FORM_ERROR]: 'Invalid email or password'};
           }
           case 401: {
             const error = await response.text();
