@@ -35,21 +35,21 @@ const styles = theme => ({
   },
 });
 
-const variantMapping = {
-  h1: 'h1',
-  h2: 'h1',
-  h3: 'h1',
-  h4: 'h1',
-  h5: 'h3',
-  h6: 'h2',
-  subtitle1: 'h3',
-};
+// const variantMapping = {
+//   h1: 'h1',
+//   h2: 'h1',
+//   h3: 'h1',
+//   h4: 'h1',
+//   h5: 'h3',
+//   h6: 'h2',
+//   subtitle1: 'h3',
+// };
 
 const Typography = (props) => {
   const { children, classes, marked, variant, ...other } = props;
 
   return (
-    <MuiTypography variantmapping={variantMapping} variant={variant} {...other}>
+    <MuiTypography variant={variant} {...other}>
       {children}
       {marked ? (
         <span className={classes[`marked${capitalize(variant) + capitalize(marked)}`]} />
