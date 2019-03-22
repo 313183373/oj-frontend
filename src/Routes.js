@@ -1,12 +1,11 @@
 import React from 'react';
-import {HashRouter, Route, Switch} from 'react-router-dom';
-import Problem from './pages/problemPage';
+import {BrowserRouter} from 'react-router-dom';
 import Home from './pages/homePage';
 
 const Routes = () => (
-    <HashRouter>
+    <BrowserRouter>
         <Home/>
-    </HashRouter>
+    </BrowserRouter>
 );
 
 export default Routes;

@@ -236,7 +236,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     commitCode: (id, token, userCommit, curCommitCodeStatus) => {
       if (token === '') {
-        ownProps.history.push(`/sign-in`);
+        ownProps.history.push(`/sign-in`, {from: ownProps.history.location});
       } else {
         if (curCommitCodeStatus !== Status.LOADING && curCommitCodeStatus !== Status.SUCCESS) {
           dispatch(Actions.commitCode(id, token, userCommit));
