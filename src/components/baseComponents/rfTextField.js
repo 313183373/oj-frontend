@@ -12,7 +12,6 @@ const RFTextField = (props) => {
     ...other
   } = props;
   const isShowError = showErrorWhen(meta);
-  console.log(meta);
   return (
     <TextField
       error={Boolean(isShowError && (error || submitError))}
