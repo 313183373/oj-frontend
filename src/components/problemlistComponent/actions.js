@@ -21,20 +21,17 @@ export const setTotalProblemNumber = (totalProblemNumber) => ({
   totalProblemNumber
 });
 
-export const fetchProblemList = (page) => dispatch => {
+export const fetchProblemList = (page) => async dispatch => {
   page = page + 1;
   dispatch(fetchProblemsStarted());
-  fetch(`/problems?page=${page}`).then(response => {
-    if (response.ok) {
-      return response.json();
-    }
-    throw new Error();
-  }).then(response => {
-    dispatch(setTotalProblemNumber(response.totalProblemNumber));
-    dispatch(fetchProblemsSuccess(response.problems));
-  }).catch(() => {
+  const response = await fetch(`/problems?page=${page}`);
+  if (response.ok) {
+    const {problems, totalProblemNumber} = await response.json();
+    dispatch(setTotalProblemNumber(totalProblemNumber));
+    dispatch(fetchProblemsSuccess(problems));
+  } else {
     dispatch(fetchProblemsFailure());
-  });
+  }
 };
 
 export const changePageTo = (page) => ({

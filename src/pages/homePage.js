@@ -8,7 +8,7 @@ import SignUp from './signUpPage';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import theme from '../theme';
 
-
+//todo: add a no match route
 const Home = () => {
     return (
         <MuiThemeProvider theme={theme}>
