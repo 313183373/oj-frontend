@@ -34,6 +34,7 @@ const styles = theme => ({
 
 const SignIn = (props) => {
   const {classes, status, submitSignIn, validate, history, isSignIn} = props;
+  const fromLocation = history.location.state && history.location.state.from;
   if (isSignIn) {
     const to = history.location.state ? history.location.state.from.pathname : '/';
     return <Redirect to={to}/>
@@ -56,7 +57,7 @@ const SignIn = (props) => {
           </Typography>
           <Typography variant="body2" align="center">
             {'Not a member yet? '}
-            <Link to="/sign-up">
+            <Link to={fromLocation ? {pathname: '/sign-up', state: {from: fromLocation}} : '/sign-up'}>
               Sign Up here
             </Link>
           </Typography>

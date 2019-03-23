@@ -149,7 +149,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     submitSignUp: async (values) => {
       // dispatch(Actions.submitSignUp(values));
-      console.log(values);
       dispatch(Actions.signUpStarted());
       try {
         const response = await fetch('/user', {
