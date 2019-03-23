@@ -4,9 +4,8 @@ export const signUpStarted = () => ({
     type: SIGN_UP_STARTED
 });
 
-export const signUpSuccess = (result) => ({
+export const signUpSuccess = () => ({
     type: SIGN_UP_SUCCESS,
-    result: {email: '131237289@qq.com', username: 'Tim'}
 });
 
 export const signUpFailure = (error) => ({

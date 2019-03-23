@@ -4,13 +4,13 @@ import * as Status from './status';
 export default (state = {status: ''}, action) => {
   switch (action.type) {
     case SIGN_UP_STARTED: {
-      return {...state, status: Status.LOADING}
+      return {...state, status: Status.LOADING};
     }
     case SIGN_UP_SUCCESS: {
-      return {...state, status: Status.SUCCESS, result: action.result};
+      return {...state, status: Status.SUCCESS};
     }
     case SIGN_UP_FAILURE: {
-      return {...state, status: Status.FAILURE}
+      return {...state, status: Status.FAILURE};
     }
     default: {
       return state;

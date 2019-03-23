@@ -3,16 +3,20 @@ import AppForm from '../../baseComponents/appForm';
 import Typography from "../../baseComponents/Typography";
 import {Link} from 'react-router-dom';
 import {Field, Form, FormSpy} from 'react-final-form';
-import Grid from '@material-ui/core/Grid';
 import RFTextField from "../../baseComponents/rfTextField";
 import * as Status from "../status";
 import FormFeedback from "../../baseComponents/formFeedback";
 import FormButton from "../../baseComponents/formButton";
-import {withRouter} from "react-router";
+import {Redirect, withRouter} from "react-router";
 import {connect} from "react-redux";
 import {withStyles} from "@material-ui/core";
 import * as Actions from "../actions";
-import {emailValidator, required, passwordValidator} from "../../../utils/validation";
+import {emailValidator, required, passwordValidator, usernameValidator} from "../../../utils/validation";
+import {FORM_ERROR} from "final-form";
+import createDecorator from 'final-form-focus';
+import {setUser} from "../../../commonState/user/actions";
+
+const focusOnErrors = createDecorator();
 
 const styles = theme => ({
   form: {
@@ -30,9 +34,12 @@ const styles = theme => ({
 
 
 const SignUp = (props) => {
-  const {classes, status, submitSignUp, validate, handleSignUpSuccess, result} = props;
-  if (status === Status.SUCCESS) {
-    handleSignUpSuccess(result);
+  const {classes, status, submitSignUp, validate, isSignIn, history} = props;
+  if (isSignIn) {
+    const to = history.location.state ? history.location.state.from.pathname : '/';
+    return (
+      <Redirect to={to}/>
+    )
   } else {
     let sent = status === Status.LOADING;
     let submitBtnText;
@@ -59,23 +66,16 @@ const SignUp = (props) => {
           <Form
             onSubmit={submitSignUp}
             validate={validate}
+            subscription={{submitting: true}}
+            decorators={[focusOnErrors]}
           >
-            {({handleSubmit, submitting, form}) => (
+            {({handleSubmit, submitting}) => (
               <form onSubmit={handleSubmit} className={classes.form} noValidate>
                 <Field
                   autoFocus
-                  component={RFTextField}
-                  showErrorWhen={meta => meta.touched && !meta.submitting}
-                  autoComplete="username"
-                  fullWidth
-                  label="Username"
-                  name="username"
-                  required
-                />
-                <Field
                   autoComplete="email"
                   component={RFTextField}
-                  showErrorWhen={meta => meta.touched && !meta.submitting}
+                  showErrorWhen={meta => meta.touched && !meta.submitting && (!meta.dirtySinceLastSubmit || meta.error)}
                   disabled={submitting || sent}
                   fullWidth
                   label="Email"
@@ -84,9 +84,18 @@ const SignUp = (props) => {
                   required
                 />
                 <Field
+                  component={RFTextField}
+                  showErrorWhen={meta => meta.touched && !meta.submitting && (!meta.dirtySinceLastSubmit || meta.error)}
+                  autoComplete="username"
+                  fullWidth
+                  label="Username"
+                  name="username"
+                  required
+                />
+                <Field
                   fullWidth
                   component={RFTextField}
-                  showErrorWhen={meta => (meta.touched || meta.modified) && !meta.submitting}
+                  showErrorWhen={meta => (meta.touched || meta.modified) && !meta.submitting && (!meta.dirtySinceLastSubmit || meta.error)}
                   disabled={submitting || sent}
                   required
                   name="password"
@@ -96,25 +105,29 @@ const SignUp = (props) => {
                   margin="normal"
                 />
                 <FormSpy subscription={{submitError: true}}>
-                  {(props) => {
-                    console.log(props);
-                    return null;
-                    // return submitError ? (
-                    //   <FormFeedback className={classes.feedback} error>
-                    //     {submitError}
-                    //   </FormFeedback>
-                    // ) : null
+                  {({submitError}) => {
+                    return submitError ? (
+                      <FormFeedback className={classes.feedback} error>
+                        {submitError}
+                      </FormFeedback>
+                    ) : null
                   }
                   }
                 </FormSpy>
-                <FormButton
-                  className={classes.button}
-                  disabled={submitting || sent || form.getState().hasValidationErrors || (form.getState().hasSubmitErrors && !form.getState().dirtySinceLastSubmit)}
-                  color="secondary"
-                  fullWidth
-                >
-                  {submitBtnText}
-                </FormButton>
+                <FormSpy subscription={{hasValidationErrors: true, hasSubmitErrors: true, dirtySinceLastSubmit: true}}>
+                  {({hasValidationErrors, hasSubmitErrors, dirtySinceLastSubmit}) => {
+                    return (
+                      <FormButton
+                        className={classes.button}
+                        disabled={submitting || sent || hasValidationErrors || (hasSubmitErrors && !dirtySinceLastSubmit)}
+                        color="secondary"
+                        fullWidth
+                      >
+                        {submitBtnText}
+                      </FormButton>
+                    )
+                  }}
+                </FormSpy>
               </form>
             )}
           </Form>
@@ -128,19 +141,51 @@ const mapStateToProps = (state) => {
   const signUpState = state.signUp;
   return {
     status: signUpState.status,
-    result: signUpState.result
+    isSignIn: state.user.isSignIn,
   }
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    submitSignUp: (values) => {
-      dispatch(Actions.submitSignUp(values));
-      return {SUBMIT_ERROR: "HELLO"}
-    },
-    handleSignUpSuccess: (result) => {
-      // todo: save result to localstorage
-      ownProps.history.goBack();
+    submitSignUp: async (values) => {
+      // dispatch(Actions.submitSignUp(values));
+      console.log(values);
+      dispatch(Actions.signUpStarted());
+      try {
+        const response = await fetch('/user', {
+          method: 'post',
+          headers: {'content-type': 'application/json'},
+          body: JSON.stringify(values),
+        });
+        if (response.ok) {
+          const token = await response.text();
+          dispatch(Actions.signUpSuccess());
+          localStorage.token = token;
+          dispatch(setUser({token, username: values.username, email: values.email}));
+        } else {
+          const message = await response.text();
+          dispatch(Actions.signUpFailure(message));
+          let errorKey = '';
+          switch (message) {
+            case 'Server error':
+            case 'Invalid parameters': {
+              errorKey = FORM_ERROR;
+              break;
+            }
+            case "Email already used": {
+              errorKey = 'email';
+              break;
+            }
+            case 'Username already used': {
+              errorKey = 'username';
+              break;
+            }
+          }
+          return {[errorKey]: message}
+        }
+      } catch (e) {
+        dispatch(Actions.signUpFailure(e));
+      }
     },
     validate: (values) => {
       const errors = required(['username', 'email', 'password'], values);
@@ -153,6 +198,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       if (!errors.password) {
         if (!passwordValidator(values.password)) {
           errors.password = 'Invalid password';
+        }
+      }
+      if (!errors.username) {
+        if (!usernameValidator(values.username)) {
+          errors.username = 'Invalid username';
         }
       }
       return errors;
