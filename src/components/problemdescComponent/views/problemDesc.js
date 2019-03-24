@@ -20,6 +20,7 @@ import DescriptionPanel from "./DescriptionPanel";
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import {withRouter} from "react-router";
+import io from 'socket.io-client';
 
 const styles = theme => ({
   root: {
@@ -239,6 +240,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         ownProps.history.push(`/sign-in`, {from: ownProps.history.location});
       } else {
         if (curCommitCodeStatus !== Status.LOADING && curCommitCodeStatus !== Status.SUCCESS) {
+          const socket = io('http://106.12.210.128:5000');
           dispatch(Actions.commitCode(id, token, userCommit));
         }
       }
