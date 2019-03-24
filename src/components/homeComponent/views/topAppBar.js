@@ -8,6 +8,7 @@ import Typography from "../../baseComponents/Typography";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import {clearUser, setUser} from "../../../commonState/user/actions";
+import io from "socket.io-client";
 // import clsx from 'clsx';
 
 const styles = theme => ({
@@ -92,8 +93,11 @@ const UserInfo = ({user, logOut}) => {
 async function getUserInfo(token, setUserInfo) {
   const response = await fetch('/user/me', {headers: {'x-access-token': token}});
   if (response.ok) {
-    const user = await response.json();
-    setUserInfo({...user, token,});
+    try {
+      const user = await response.json();
+      setUserInfo({...user, token,});
+    } catch (e) {
+    }
   }
 }
 

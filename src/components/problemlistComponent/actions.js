@@ -26,9 +26,13 @@ export const fetchProblemList = (page) => async dispatch => {
   dispatch(fetchProblemsStarted());
   const response = await fetch(`/problems?page=${page}`);
   if (response.ok) {
-    const {problems, totalProblemNumber} = await response.json();
-    dispatch(setTotalProblemNumber(totalProblemNumber));
-    dispatch(fetchProblemsSuccess(problems));
+    try {
+      const {problems, totalProblemNumber} = await response.json();
+      dispatch(setTotalProblemNumber(totalProblemNumber));
+      dispatch(fetchProblemsSuccess(problems));
+    } catch (e) {
+      dispatch(fetchProblemsFailure());
+    }
   } else {
     dispatch(fetchProblemsFailure());
   }
