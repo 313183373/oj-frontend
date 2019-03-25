@@ -3,12 +3,10 @@ import {view as ProblemDesc} from '../components/problemdescComponent/';
 
 
 const Problem = ({match}) => {
-    const {id} = match.params;
-    return (
-        <div>
-            <ProblemDesc id={id}/>
-        </div>
-    );
+  const {id} = match.params;
+  return (
+    <ProblemDesc id={id}/>
+  );
 };
 
 export default Problem;

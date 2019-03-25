@@ -4,13 +4,14 @@ import {Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import Routes from './Routes';
 import store from './Store';
+import './style.css';
 
 
 ReactDOM.render(
-    <Provider store={store}>
-        <Routes />
-    </Provider>,
-    document.getElementById('root')
+  <Provider store={store}>
+    <Routes/>
+  </Provider>,
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

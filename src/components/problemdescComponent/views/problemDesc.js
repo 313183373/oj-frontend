@@ -20,11 +20,13 @@ import DescriptionPanel from "./DescriptionPanel";
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import {withRouter} from "react-router";
-import io from 'socket.io-client';
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
+    minWidth: 700,
+    overflow: 'hidden',
+    height: '100%',
   },
   app_bar: {
     color: theme.palette.common.black
@@ -43,7 +45,7 @@ const styles = theme => ({
   gridCell: {
     padding: theme.spacing.unit * 2,
     color: theme.palette.text.black,
-    maxHeight: 550,
+    height: '100%',
     overflow: 'auto',
   },
   fab: {
@@ -88,6 +90,16 @@ const styles = theme => ({
   radioGroup: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    flexWrap: 'no-wrap'
+  },
+  editor: {
+    overflow: 'auto'
+  },
+  item: {
+    height: '100%',
+  },
+  container: {
+    height: 'calc(100% - 99px)'
   }
 });
 
@@ -122,8 +134,8 @@ class ProblemDesc extends React.Component {
                         className={classes.title}>
               {problemDesc.title}
             </Typography>
-            <Grid container className={classes.root} justify="center">
-              <Grid item xs={12} md={6}>
+            <Grid container className={classes.container} justify="center">
+              <Grid item xs={6} className={classes.item}>
                 <div className={classes.gridCell}>
                   <DescriptionPanel content={problemDesc.content} title='Description' html/>
                   {problemDesc.inputDesc &&
@@ -137,7 +149,7 @@ class ProblemDesc extends React.Component {
                   <DescriptionPanel content={problemDesc.hint} title='Hint' defaultExpanded={false} html/>}
                 </div>
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={6} className={classes.item}>
                 <div className={classes.gridCell}>
                   <RadioGroup className={classes.radioGroup} value={language}>
                     {
@@ -158,12 +170,13 @@ class ProblemDesc extends React.Component {
                   </RadioGroup>
                   <MonacoEditor
                     language={language}
-                    height={540}
+                    height='calc(100% - 48px)'
                     defaultValue=""
                     options={{
                       theme: 'vs-dark',
                     }}
                     onChange={writeCode}
+                    className={classes.editor}
                   />
                   <Tooltip title="Commit" aria-label="Commit" placement="top">
                     <Fab color="secondary"
@@ -240,7 +253,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         ownProps.history.push(`/sign-in`, {from: ownProps.history.location});
       } else {
         if (curCommitCodeStatus !== Status.LOADING && curCommitCodeStatus !== Status.SUCCESS) {
-          const socket = io('http://106.12.210.128:5000');
           dispatch(Actions.commitCode(id, token, userCommit));
         }
       }

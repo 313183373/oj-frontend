@@ -3,11 +3,9 @@ import {view as ProblemList} from '../components/problemlistComponent/';
 
 
 const Problems = () => {
-    return (
-        <div>
-            <ProblemList />
-        </div>
-    );
+  return (
+    <ProblemList/>
+  );
 };
 
 export default Problems;
