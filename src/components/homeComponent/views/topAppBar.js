@@ -9,6 +9,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import {clearUser, setUser} from "../../../commonState/user/actions";
 import io from "socket.io-client";
+import Button from "@material-ui/core/Button";
 // import clsx from 'clsx';
 
 const styles = theme => ({
@@ -42,6 +43,15 @@ const styles = theme => ({
     fontSize: 24,
     fontFamily: 'Work Sans'
   },
+  link: {
+    color: '#ffffff',
+    textDecoration: 'none',
+  },
+  button: {
+    color: '#ffffff',
+    padding: 10,
+    textTransform: 'none',
+  }
 });
 
 
@@ -73,22 +83,22 @@ const UserMenu = ({anchorEl, logOut, handleMenuClose}) => {
   )
 };
 
-const UserInfo = ({user, logOut}) => {
+const UserInfo = withStyles(styles)(({user, logOut, classes}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
   return (
     <div>
-      <Typography variant='subtitle1' style={{color: '#ffffff', padding: 10}} onClick={event => {
+      <Button className={classes.button} onClick={event => {
         setAnchorEl(event.currentTarget);
       }}>
         {user.username}
-      </Typography>
+      </Button>
       <UserMenu anchorEl={anchorEl} logOut={logOut} handleMenuClose={handleMenuClose}/>
     </div>
   )
-};
+});
 
 async function getUserInfo(token, setUserInfo) {
   const response = await fetch('/user/me', {headers: {'x-access-token': token}});
@@ -109,11 +119,23 @@ const TopAppBar = ({classes, user, setUserInfo, logOut}) => {
     }
   });
 
+  useEffect(() => {
+    const socket = io('http://106.12.210.128:5000');
+    socket.on('updateJudgeResult', () => {
+      console.log('get update');
+    });
+    return () => {
+      socket.disconnect();
+    }
+  }, []);
+
   return (
     <div>
-      <AppBar position="fixed">
+      <AppBar>
         <Toolbar>
-          <div className={classes.left}/>
+          <div className={classes.left}>
+            <Link to="/status" className={classes.link}><Button className={classes.button}>Status</Button></Link>
+          </div>
           <Link to="/" className={classes.titleLink}>
             Online Judge
           </Link>
@@ -122,7 +144,7 @@ const TopAppBar = ({classes, user, setUserInfo, logOut}) => {
           </div>
         </Toolbar>
       </AppBar>
-      <div className={classes.placeholder}/>
+      {/*<div className={classes.placeholder}/>*/}
     </div>
   );
 };
