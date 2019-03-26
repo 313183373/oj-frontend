@@ -21,10 +21,11 @@ export const setTotalProblemNumber = (totalProblemNumber) => ({
   totalProblemNumber
 });
 
-export const fetchProblemList = (page) => async dispatch => {
+export const fetchProblemList = (page, user) => async dispatch => {
   page = page + 1;
   dispatch(fetchProblemsStarted());
-  const response = await fetch(`/problems?page=${page}`);
+  const header = user.token ? {headers: {'x-access-token': user.token}} : {};
+  const response = await fetch(`/problems?page=${page}`, header);
   if (response.ok) {
     try {
       const {problems, totalProblemNumber} = await response.json();

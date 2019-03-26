@@ -13,6 +13,7 @@ import {withRouter} from "react-router";
 import TableFooter from "@material-ui/core/TableFooter";
 import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActionsWrapped from './tablePaginationActionsWrapped'
+import classnames from 'classnames';
 
 const CustomTableCell = withStyles(() => ({
   body: {
@@ -43,17 +44,23 @@ const styles = theme => ({
     marginTop: -12,
     marginLeft: -12,
   },
+  accepted: {
+    backgroundColor: 'rgba(0,255,0,0.3)'
+  },
+  submitted: {
+    backgroundColor: 'rgba(255, 255, 0, 0.3)'
+  }
 });
 
 class ProblemList extends React.Component {
 
   componentDidMount() {
-    this.props.fetchProblemList(this.props.page);
+    this.props.fetchProblemList(this.props.page, this.props.user);
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.page !== this.props.page) {
-      this.props.fetchProblemList(this.props.page);
+    if (prevProps.page !== this.props.page || prevProps.user.token !== this.props.user.token) {
+      this.props.fetchProblemList(this.props.page, this.props.user);
     }
   }
 
@@ -72,20 +79,26 @@ class ProblemList extends React.Component {
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
-                <CustomTableCell>ID</CustomTableCell>
+                <CustomTableCell>#</CustomTableCell>
                 <CustomTableCell>Title</CustomTableCell>
                 <CustomTableCell>Ratio(AC/ALL)</CustomTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {problems.map(problem => {
+              {problems.map((problem, index) => {
                 // let ratio = `${(problem.acceptCount * 100.0 / problem.submitCount).toFixed(2)}%(${problem.acceptCount}/${problem.submitCount})`;
                 let ratio = `(${problem.acceptCount}/${problem.submitCount})`;
+                const number = index + (page * 10) + 1;
+                console.log(problem.isAccepted);
                 return (
-                  <TableRow className={classes.row} key={problem._id} hover={true}
+                  <TableRow className={classnames({
+                    [classes.accepted]: problem.isAccepted,
+                    [classes.submitted]: problem.isSubmitted && !problem.isAccepted,
+                    [classes.row]: !problem.isSubmitted && !problem.isAccepted,
+                  })} key={problem._id} hover={true}
                             onClick={() => handleClickRow(problem._id)}>
                     <CustomTableCell component="th" scope="row">
-                      {problem._id}
+                      {number}
                     </CustomTableCell>
                     <CustomTableCell>
                       {problem.title}
@@ -130,14 +143,15 @@ const mapStateToProps = (state) => {
     page: problemsData.page,
     problems: problemsData.problems,
     totalProblemNumber: problemsData.totalProblemNumber,
+    user: state.user,
   }
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
 
   return {
-    fetchProblemList: (page) => {
-      dispatch(Actions.fetchProblemList(page));
+    fetchProblemList: (page, user) => {
+      dispatch(Actions.fetchProblemList(page, user));
     },
     handleClickRow: (id) => {
       ownProps.history.push(`/problem/${id}`);
