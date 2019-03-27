@@ -15,7 +15,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import CheckIcon from '@material-ui/icons/Check';
 import ReplayIcon from '@material-ui/icons/Replay';
 import classNames from 'classnames';
-// import * as PropTypes from "prop-types";
+import SwipeableViews from 'react-swipeable-views';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import DescriptionPanel from "./DescriptionPanel";
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
@@ -27,6 +30,12 @@ const styles = theme => ({
     minWidth: 700,
     overflow: 'hidden',
     height: '100%',
+  },
+  tabAppBar: {
+    boxShadow: 'none'
+  },
+  tab:{
+    textTransform: 'none'
   },
   app_bar: {
     color: theme.palette.common.black
@@ -103,6 +112,14 @@ const styles = theme => ({
   }
 });
 
+function TabContainer({children, dir}) {
+  return (
+    <div dir={dir}>
+      {children}
+    </div>
+  );
+}
+
 class ProblemDesc extends React.Component {
 
   componentDidMount() {
@@ -111,7 +128,11 @@ class ProblemDesc extends React.Component {
   }
 
   render() {
-    const {classes, fetchProblemStatus, problemDesc, token, language, commitCodeStatus, changeLanguage, allLanguages, commitCode, writeCode, userWritingCode, commitCodeMessage} = this.props;
+    const {
+      classes, fetchProblemStatus, problemDesc, token, language,
+      commitCodeStatus, changeLanguage, allLanguages, commitCode,
+      writeCode, userWritingCode, commitCodeMessage, curTabIndex, changeTab
+    } = this.props;
     switch (fetchProblemStatus) {
       case Status.LOADING: {
         return (
@@ -126,7 +147,8 @@ class ProblemDesc extends React.Component {
         const fabClassName = classNames({
           [classes.fabSuccess]: commitCodeStatus === Status.SUCCESS,
           [classes.fabFailure]: commitCodeStatus === Status.FAILURE,
-          [classes.fab]: commitCodeStatus !== Status.SUCCESS && commitCodeStatus !== Status.FAILURE
+          [classes.fab]: commitCodeStatus !== Status.SUCCESS
+          && commitCodeStatus !== Status.FAILURE
         });
         return (
           <div className={classes.root}>
@@ -137,16 +159,35 @@ class ProblemDesc extends React.Component {
             <Grid container className={classes.container} justify="center">
               <Grid item xs={6} className={classes.item}>
                 <div className={classes.gridCell}>
-                  <DescriptionPanel content={problemDesc.content} title='Description' html/>
-                  {problemDesc.inputDesc &&
-                  <DescriptionPanel content={problemDesc.inputDesc} title='Input Description' html/>}
-                  {problemDesc.outputDesc &&
-                  <DescriptionPanel content={problemDesc.outputDesc} title='Output Description'
-                                    html/>}
-                  <DescriptionPanel content={problemDesc.sampleInput} title='Input Example'/>
-                  <DescriptionPanel content={problemDesc.sampleOutput} title='Output Example'/>
-                  {problemDesc.hint &&
-                  <DescriptionPanel content={problemDesc.hint} title='Hint' defaultExpanded={false} html/>}
+                  <AppBar className={classes.tabAppBar} position="static" color="default">
+                    <Tabs
+                      value={curTabIndex}
+                      onChange={changeTab}
+                      indicatorColor="primary"
+                      textColor="primary"
+                      variant="fullWidth"
+                    >
+                      <Tab className={classes.tab} label="Problem"/>
+                      <Tab className={classes.tab} label="Submissions"/>
+                    </Tabs>
+                  </AppBar>
+                  <SwipeableViews
+                    index={curTabIndex}
+                    onChangeIndex={changeTab}>
+                    <TabContainer>
+                      <DescriptionPanel content={problemDesc.content} title='Description' html/>
+                      {problemDesc.inputDesc &&
+                      <DescriptionPanel content={problemDesc.inputDesc} title='Input Description' html/>}
+                      {problemDesc.outputDesc &&
+                      <DescriptionPanel content={problemDesc.outputDesc} title='Output Description'
+                                        html/>}
+                      <DescriptionPanel content={problemDesc.sampleInput} title='Input Example'/>
+                      <DescriptionPanel content={problemDesc.sampleOutput} title='Output Example'/>
+                      {problemDesc.hint &&
+                      <DescriptionPanel content={problemDesc.hint} title='Hint' defaultExpanded={false} html/>}
+                    </TabContainer>
+                    <TabContainer>I'm your submissions</TabContainer>
+                  </SwipeableViews>
                 </div>
               </Grid>
               <Grid item xs={6} className={classes.item}>
@@ -231,6 +272,7 @@ const mapStateToProps = (state) => {
     userWritingCode: problemDescData.userWritingCode,
     commitCodeStatus: problemDescData.commitCode.status,
     commitCodeMessage: problemDescData.commitCode.message,
+    curTabIndex: problemDescData.curTabIndex,
     token: state.user.token
   }
 };
@@ -245,6 +287,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     changeLanguage: (event) => {
       dispatch(Actions.changeLanguage(event.target.value));
+    },
+    changeTab: (event, value) => {
+      dispatch(Actions.changeTab(value));
     },
     writeCode: (newValue) => {
       dispatch(Actions.writeCode(newValue));

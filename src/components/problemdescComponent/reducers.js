@@ -1,6 +1,6 @@
 import {FETCH_PROBLEM_DESC_LOADING, FETCH_PROBLEM_DESC_SUCCESS, FETCH_PROBLEM_DESC_FAILURE} from "./actionTypes";
 import {COMMIT_CODE_LOADING, COMMIT_CODE_SUCCESS, COMMIT_CODE_FAILURE} from "./actionTypes";
-import {CHANGE_LANGUAGE, FETCH_ALL_LANGUAGES} from './actionTypes';
+import {CHANGE_LANGUAGE, CHANGE_TAB, FETCH_ALL_LANGUAGES} from './actionTypes';
 import {WRITE_CODE} from './actionTypes';
 import * as Status from './status';
 
@@ -9,7 +9,8 @@ export default (state = {
   commitCode: {status: Status.NOTHING, message: ''},
   userWritingCode: '',
   allLanguages: [],
-  language: 'cpp'
+  language: 'cpp',
+  curTabIndex: 0
 }, action) => {
   switch (action.type) {
     case FETCH_PROBLEM_DESC_LOADING: {
@@ -21,7 +22,8 @@ export default (state = {
         loadData: {status: Status.SUCCESS, problem: action.problem},
         userWritingCode: localStorage.getItem(`${action.problem._id}-${state.language}`)
           || '',
-        commitCode: {status: Status.NOTHING, message: ''}
+        commitCode: {status: Status.NOTHING, message: ''},
+        curTabIndex: 0
       }
     }
     case FETCH_PROBLEM_DESC_FAILURE: {
@@ -33,6 +35,12 @@ export default (state = {
         language: action.language,
         userWritingCode: localStorage.getItem(`${state.loadData.problem._id}-${action.language}`)
           || ''
+      }
+    }
+    case CHANGE_TAB: {
+      return {
+        ...state,
+        curTabIndex: action.curTabIndex
       }
     }
     case FETCH_ALL_LANGUAGES: {

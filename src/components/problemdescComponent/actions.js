@@ -1,6 +1,6 @@
 import {FETCH_PROBLEM_DESC_SUCCESS, FETCH_PROBLEM_DESC_FAILURE, FETCH_PROBLEM_DESC_LOADING} from "./actionTypes";
 import {COMMIT_CODE_LOADING, COMMIT_CODE_SUCCESS, COMMIT_CODE_FAILURE} from "./actionTypes";
-import {CHANGE_LANGUAGE, FETCH_ALL_LANGUAGES} from "./actionTypes";
+import {CHANGE_LANGUAGE, CHANGE_TAB, FETCH_ALL_LANGUAGES} from "./actionTypes";
 import {WRITE_CODE} from "./actionTypes";
 
 export const fetchProblemDescSuccess = (problem) => ({
@@ -35,6 +35,13 @@ export const changeLanguage = (language) => {
   return {
     type: CHANGE_LANGUAGE,
     language: language
+  }
+};
+
+export const changeTab = (tabIndex) => {
+  return {
+    type: CHANGE_TAB,
+    curTabIndex: tabIndex
   }
 };
 
