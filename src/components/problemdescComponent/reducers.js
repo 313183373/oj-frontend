@@ -20,7 +20,8 @@ export default (state = {
         ...state,
         loadData: {status: Status.SUCCESS, problem: action.problem},
         userWritingCode: localStorage.getItem(`${action.problem._id}-${state.language}`)
-          || ''
+          || '',
+        commitCode: {status: Status.NOTHING, message: ''}
       }
     }
     case FETCH_PROBLEM_DESC_FAILURE: {
