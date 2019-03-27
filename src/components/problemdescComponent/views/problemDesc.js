@@ -171,10 +171,11 @@ class ProblemDesc extends React.Component {
                   <MonacoEditor
                     language={language}
                     height='calc(100% - 48px)'
-                    defaultValue=""
+                    defaultValue={userWritingCode}
                     options={{
                       theme: 'vs-dark',
                     }}
+                    value={userWritingCode}
                     onChange={writeCode}
                     className={classes.editor}
                   />

@@ -9,7 +9,7 @@ export default (state = {
   commitCode: {status: Status.NOTHING, message: ''},
   userWritingCode: '',
   allLanguages: [],
-  language: ''
+  language: 'cpp'
 }, action) => {
   switch (action.type) {
     case FETCH_PROBLEM_DESC_LOADING: {
@@ -19,33 +19,47 @@ export default (state = {
       return {
         ...state,
         loadData: {status: Status.SUCCESS, problem: action.problem},
-        userWritingCode: ''
+        userWritingCode: localStorage.getItem(`${action.problem._id}-${state.language}`)
+          || ''
       }
     }
     case FETCH_PROBLEM_DESC_FAILURE: {
       return {...state, loadData: {status: Status.FAILURE}}
     }
     case CHANGE_LANGUAGE: {
-      return {...state, language: action.language}
+      return {
+        ...state,
+        language: action.language,
+        userWritingCode: localStorage.getItem(`${state.loadData.problem._id}-${action.language}`)
+          || ''
+      }
     }
     case FETCH_ALL_LANGUAGES: {
-      return {...state, allLanguages: action.allLanguages, language: action.allLanguages[0].value}
+      return {
+        ...state,
+        allLanguages: action.allLanguages
+      }
     }
-    case WRITE_CODE: {
+    case
+    WRITE_CODE: {
       localStorage.setItem(`${state.loadData.problem._id}-${state.language}`, action.userWritingCode);
       return {...state, userWritingCode: action.userWritingCode}
     }
-    case COMMIT_CODE_LOADING: {
+    case
+    COMMIT_CODE_LOADING: {
       return {...state, commitCode: {status: Status.LOADING, message: ''}}
     }
-    case COMMIT_CODE_SUCCESS: {
+    case
+    COMMIT_CODE_SUCCESS: {
       return {...state, commitCode: {status: Status.SUCCESS, message: ''}}
     }
-    case COMMIT_CODE_FAILURE: {
+    case
+    COMMIT_CODE_FAILURE: {
       return {...state, commitCode: {status: Status.FAILURE, message: action.error}}
     }
     default: {
       return state;
     }
   }
-};
+}
+;
