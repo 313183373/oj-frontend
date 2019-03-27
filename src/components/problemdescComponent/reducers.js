@@ -32,6 +32,7 @@ export default (state = {
       return {...state, allLanguages: action.allLanguages, language: action.allLanguages[0].value}
     }
     case WRITE_CODE: {
+      localStorage.setItem(`${state.loadData.problem._id}-${state.language}`, action.userWritingCode);
       return {...state, userWritingCode: action.userWritingCode}
     }
     case COMMIT_CODE_LOADING: {
