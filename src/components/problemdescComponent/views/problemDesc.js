@@ -32,7 +32,8 @@ const styles = theme => ({
     height: '100%',
   },
   tabAppBar: {
-    boxShadow: 'none'
+    boxShadow: 'none',
+    backgroundColor: '#ffffff'
   },
   tab:{
     textTransform: 'none'
