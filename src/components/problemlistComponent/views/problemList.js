@@ -89,7 +89,6 @@ class ProblemList extends React.Component {
                 // let ratio = `${(problem.acceptCount * 100.0 / problem.submitCount).toFixed(2)}%(${problem.acceptCount}/${problem.submitCount})`;
                 let ratio = `(${problem.acceptCount}/${problem.submitCount})`;
                 const number = index + (page * 10) + 1;
-                console.log(problem.isAccepted);
                 return (
                   <TableRow className={classnames({
                     [classes.accepted]: problem.isAccepted,
