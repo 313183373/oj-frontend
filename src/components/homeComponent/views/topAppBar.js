@@ -10,6 +10,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {clearUser, setUser} from "../../../commonState/user/actions";
 import io from "socket.io-client";
 import Button from "@material-ui/core/Button";
+import {clearSocket, setSocket} from "../../../commonState/socket/actions";
 // import clsx from 'clsx';
 
 const styles = theme => ({
@@ -111,7 +112,7 @@ async function getUserInfo(token, setUserInfo) {
   }
 }
 
-const TopAppBar = ({classes, user, setUserInfo, logOut}) => {
+const TopAppBar = ({classes, user, setUserInfo, logOut, clearSocketInfo, setSocketInfo}) => {
 
   useEffect(() => {
     if (!user.isSignIn && localStorage.token) {
@@ -121,10 +122,13 @@ const TopAppBar = ({classes, user, setUserInfo, logOut}) => {
 
   useEffect(() => {
     const socket = io('http://106.12.210.128:5000');
-    socket.on('updateJudgeResult', () => {
-      console.log('get update');
+    setSocketInfo(socket);
+    socket.on('result', submit => {
+      console.log('get a judge result');
+      console.log(JSON.parse(submit));
     });
     return () => {
+      clearSocketInfo();
       socket.disconnect();
     }
   }, []);
@@ -159,6 +163,12 @@ const mapDispatchToProps = dispatch => {
   return {
     setUserInfo: user => {
       dispatch(setUser(user));
+    },
+    setSocketInfo: socket => {
+      dispatch(setSocket(socket));
+    },
+    clearSocketInfo: () => {
+      dispatch(clearSocket());
     },
     logOut: () => {
       localStorage.removeItem('token');

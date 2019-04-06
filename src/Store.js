@@ -5,6 +5,7 @@ import {reducer as problemDescReducer} from './components/problemdescComponent';
 import {reducer as signInReducer} from './components/signinComponent';
 import {reducer as signUpReducer} from './components/signupComponent';
 import {reducer as userReducer} from './commonState/user';
+import {reducer as socketReducer} from './commonState/socket';
 import thunk from "redux-thunk";
 import {composeWithDevTools} from "redux-devtools-extension";
 
@@ -15,6 +16,7 @@ const reducer = combineReducers({
   signIn: signInReducer,
   signUp: signUpReducer,
   user: userReducer,
+  socket: socketReducer,
 });
 
 export default createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
