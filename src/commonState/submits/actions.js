@@ -1,7 +1,7 @@
 import {ADD_SUBMIT} from "./actionTypes";
 
 
-export const addStudent = submit => {
+export const addSubmit = submit => {
   return {
     type: ADD_SUBMIT,
     submit,

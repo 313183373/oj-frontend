@@ -135,7 +135,7 @@ class ProblemDesc extends React.Component {
     const {
       classes, fetchProblemStatus, problemDesc, token, language,
       commitCodeStatus, changeLanguage, allLanguages, commitCode,
-      writeCode, userWritingCode, commitCodeMessage, curTabIndex, changeTab, socket
+      writeCode, userWritingCode, commitCodeMessage, curTabIndex, changeTab, socket, submits
     } = this.props;
     switch (fetchProblemStatus) {
       case Status.LOADING: {
@@ -192,7 +192,7 @@ class ProblemDesc extends React.Component {
                       {problemDesc.hint &&
                       <DescriptionPanel content={problemDesc.hint} title='Hint' defaultExpanded={false} html/>}
                     </TabContainer>
-                    <TabContainer>I'm your submissions</TabContainer>
+                    <TabContainer>{submits ? submits.map(submit => JSON.stringify(submit)).join('\n') : ''}</TabContainer>
                   </SwipeableViews>
                 </div>
               </Grid>
@@ -268,8 +268,9 @@ class ProblemDesc extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   const problemDescData = state.problemDesc;
+  const submitsToThisProblem = state.submits[ownProps.id];
   return {
     fetchProblemStatus: problemDescData.loadData.status,
     problemDesc: problemDescData.loadData.problem,
@@ -280,7 +281,8 @@ const mapStateToProps = (state) => {
     commitCodeMessage: problemDescData.commitCode.message,
     curTabIndex: problemDescData.curTabIndex,
     token: state.user.token,
-    socket: state.socket
+    socket: state.socket,
+    submits: submitsToThisProblem,
   }
 };
 
