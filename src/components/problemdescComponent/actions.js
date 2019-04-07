@@ -98,19 +98,25 @@ export const commitCodeFailure = (error) => {
   }
 };
 
-export const commitCode = (id, token, userCommit) => dispatch => {
+export const commitCode = (id, token, userCommit, socket) => async dispatch => {
   dispatch(commitCodeLoading());
-  fetch(`/problems/${id}`,
-    {
-      method: 'post',
-      body: JSON.stringify(userCommit),
-      headers: {"x-access-token": token, 'content-type': 'application/json'}
-    }).then(response => {
-    if (response.ok) {
-      return dispatch(commitCodeSuccess());
-    }
-    throw new Error();
-  }).catch(() => {
-    dispatch(commitCodeFailure('Something wrong, please try again.'));
+  const response = await fetch(`/problems/${id}`, {
+    method: 'post',
+    body: JSON.stringify(userCommit),
+    headers: {"x-access-token": token, 'content-type': 'application/json'}
   });
+  if (response.ok) {
+    try {
+      const res = await response.json();
+      if(socket) {
+        socket.emit('listenToSubmit', res.submitId);
+      }
+      dispatch(commitCodeSuccess());
+    } catch (e) {
+      console.error(e);
+      dispatch(commitCodeFailure('Something wrong, please try again.'));
+    }
+  } else {
+    dispatch(commitCodeFailure('Something wrong, please try again.'));
+  }
 };

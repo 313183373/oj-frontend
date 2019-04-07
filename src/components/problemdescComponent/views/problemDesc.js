@@ -35,7 +35,7 @@ const styles = theme => ({
     boxShadow: 'none',
     backgroundColor: '#ffffff'
   },
-  tab:{
+  tab: {
     textTransform: 'none'
   },
   app_bar: {
@@ -109,7 +109,10 @@ const styles = theme => ({
     height: '100%',
   },
   container: {
-    height: 'calc(100% - 99px)'
+    height: 'calc(100% - 99px)',
+  },
+  left: {
+    height: 'calc(100% - 48px)',
   }
 });
 
@@ -132,7 +135,7 @@ class ProblemDesc extends React.Component {
     const {
       classes, fetchProblemStatus, problemDesc, token, language,
       commitCodeStatus, changeLanguage, allLanguages, commitCode,
-      writeCode, userWritingCode, commitCodeMessage, curTabIndex, changeTab
+      writeCode, userWritingCode, commitCodeMessage, curTabIndex, changeTab, socket
     } = this.props;
     switch (fetchProblemStatus) {
       case Status.LOADING: {
@@ -151,11 +154,12 @@ class ProblemDesc extends React.Component {
           [classes.fab]: commitCodeStatus !== Status.SUCCESS
           && commitCodeStatus !== Status.FAILURE
         });
+        const title = commitCodeStatus === Status.NOTHING ? problemDesc.title : problemDesc.title + " " + commitCodeStatus;
         return (
           <div className={classes.root}>
             <Typography variant="h4" marked="center" align="center" component="h2"
                         className={classes.title}>
-              {problemDesc.title}
+              {title}
             </Typography>
             <Grid container className={classes.container} justify="center">
               <Grid item xs={6} className={classes.item}>
@@ -173,6 +177,7 @@ class ProblemDesc extends React.Component {
                     </Tabs>
                   </AppBar>
                   <SwipeableViews
+                    className={classes.left}
                     index={curTabIndex}
                     onChangeIndex={changeTab}>
                     <TabContainer>
@@ -229,7 +234,7 @@ class ProblemDesc extends React.Component {
                            {
                              code: userWritingCode,
                              language: language
-                           }, commitCodeStatus)}>
+                           }, commitCodeStatus, socket)}>
                       {
                         commitCodeStatus === Status.FAILURE ?
                           <ReplayIcon/> : <CheckIcon/>
@@ -274,7 +279,8 @@ const mapStateToProps = (state) => {
     commitCodeStatus: problemDescData.commitCode.status,
     commitCodeMessage: problemDescData.commitCode.message,
     curTabIndex: problemDescData.curTabIndex,
-    token: state.user.token
+    token: state.user.token,
+    socket: state.socket
   }
 };
 
@@ -295,12 +301,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     writeCode: (newValue) => {
       dispatch(Actions.writeCode(newValue));
     },
-    commitCode: (id, token, userCommit, curCommitCodeStatus) => {
+    commitCode: (id, token, userCommit, curCommitCodeStatus, socket) => {
       if (token === '') {
         ownProps.history.push(`/sign-in`, {from: ownProps.history.location});
       } else {
         if (curCommitCodeStatus !== Status.LOADING && curCommitCodeStatus !== Status.SUCCESS) {
-          dispatch(Actions.commitCode(id, token, userCommit));
+          dispatch(Actions.commitCode(id, token, userCommit, socket));
         }
       }
     },
