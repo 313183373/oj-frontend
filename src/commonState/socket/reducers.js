@@ -1,5 +1,4 @@
-import {SET_SOCKET} from "./actionTypes";
-import {CLEAR_SOCKET} from "./actionTypes";
+import {SET_SOCKET, CLEAR_SOCKET} from "./actionTypes";
 
 export default (state = null, action) => {
   switch (action.type) {
