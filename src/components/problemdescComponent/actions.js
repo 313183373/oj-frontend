@@ -1,7 +1,13 @@
-import {FETCH_PROBLEM_DESC_SUCCESS, FETCH_PROBLEM_DESC_FAILURE, FETCH_PROBLEM_DESC_LOADING} from "./actionTypes";
+import {
+  FETCH_PROBLEM_DESC_SUCCESS,
+  FETCH_PROBLEM_DESC_FAILURE,
+  FETCH_PROBLEM_DESC_LOADING,
+  FETCH_SUBMITS_START, FETCH_SUBMITS_FAILURE, FETCH_SUBMITS_SUCCESS
+} from "./actionTypes";
 import {COMMIT_CODE_LOADING, COMMIT_CODE_SUCCESS, COMMIT_CODE_FAILURE} from "./actionTypes";
 import {CHANGE_LANGUAGE, CHANGE_TAB, FETCH_ALL_LANGUAGES} from "./actionTypes";
 import {WRITE_CODE} from "./actionTypes";
+import {initSubmits} from "../../commonState/submits/actions";
 
 export const fetchProblemDescSuccess = (problem) => ({
   type: FETCH_PROBLEM_DESC_SUCCESS,
@@ -108,7 +114,7 @@ export const commitCode = (id, token, userCommit, socket) => async dispatch => {
   if (response.ok) {
     try {
       const res = await response.json();
-      if(socket) {
+      if (socket) {
         socket.emit('listenToSubmit', res.submitId);
       }
       dispatch(commitCodeSuccess());
@@ -118,5 +124,34 @@ export const commitCode = (id, token, userCommit, socket) => async dispatch => {
     }
   } else {
     dispatch(commitCodeFailure('Something wrong, please try again.'));
+  }
+};
+
+export const fetchSubmitsStart = () => ({
+  type: FETCH_SUBMITS_START,
+});
+
+export const fetchSubmitsFailure = () => ({
+  type: FETCH_SUBMITS_FAILURE,
+});
+
+export const fetchSubmitsSuccess = () => ({
+  type: FETCH_SUBMITS_SUCCESS,
+});
+
+export const fetchSubmitsByProblemId = (problemId, token) => async dispatch => {
+  dispatch(fetchSubmitsStart());
+  const response = await fetch(`/problems/${problemId}/submits`, {
+    headers: {"x-access-token": token}
+  });
+  if (response.ok) {
+    try {
+      const submits = await response.json();
+      dispatch(initSubmits(problemId, submits));
+      dispatch(fetchSubmitsSuccess());
+    } catch (e) {
+      console.error(e);
+      dispatch(fetchSubmitsFailure());
+    }
   }
 };

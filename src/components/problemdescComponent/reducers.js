@@ -1,4 +1,10 @@
-import {FETCH_PROBLEM_DESC_LOADING, FETCH_PROBLEM_DESC_SUCCESS, FETCH_PROBLEM_DESC_FAILURE} from "./actionTypes";
+import {
+  FETCH_PROBLEM_DESC_LOADING,
+  FETCH_PROBLEM_DESC_SUCCESS,
+  FETCH_PROBLEM_DESC_FAILURE,
+  FETCH_SUBMITS_BY_PROBLEM_ID,
+  FETCH_SUBMITS_START, FETCH_SUBMITS_FAILURE, FETCH_SUBMITS_SUCCESS,
+} from "./actionTypes";
 import {COMMIT_CODE_LOADING, COMMIT_CODE_SUCCESS, COMMIT_CODE_FAILURE} from "./actionTypes";
 import {CHANGE_LANGUAGE, CHANGE_TAB, FETCH_ALL_LANGUAGES} from './actionTypes';
 import {WRITE_CODE} from './actionTypes';
@@ -10,7 +16,8 @@ export default (state = {
   userWritingCode: '',
   allLanguages: [],
   language: 'cpp',
-  curTabIndex: 0
+  curTabIndex: 0,
+  fetchSubmitsStatus: Status.NOTHING,
 }, action) => {
   switch (action.type) {
     case FETCH_PROBLEM_DESC_LOADING: {
@@ -65,6 +72,15 @@ export default (state = {
     case
     COMMIT_CODE_FAILURE: {
       return {...state, commitCode: {status: Status.FAILURE, message: action.error}}
+    }
+    case FETCH_SUBMITS_START: {
+      return {...state, fetchSubmitsStatus: Status.LOADING}
+    }
+    case FETCH_SUBMITS_FAILURE: {
+      return {...state, fetchSubmitsStatus: Status.FAILURE}
+    }
+    case FETCH_SUBMITS_SUCCESS: {
+      return {...state, fetchSubmitsStatus: Status.SUCCESS}
     }
     default: {
       return state;

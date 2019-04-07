@@ -11,7 +11,7 @@ import {clearUser, setUser} from "../../../commonState/user/actions";
 import io from "socket.io-client";
 import Button from "@material-ui/core/Button";
 import {clearSocket, setSocket} from "../../../commonState/socket/actions";
-import {addSubmit} from '../../../commonState/submits/actions';
+import {addSubmit, clearSubmits} from '../../../commonState/submits/actions';
 // import clsx from 'clsx';
 
 const styles = theme => ({
@@ -173,6 +173,7 @@ const mapDispatchToProps = dispatch => {
     logOut: () => {
       localStorage.removeItem('token');
       dispatch(clearUser());
+      dispatch(clearSubmits());
     },
     addSubmit: submit => {
       dispatch(addSubmit(submit));

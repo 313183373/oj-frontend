@@ -22,6 +22,7 @@ import Tab from '@material-ui/core/Tab';
 import DescriptionPanel from "./DescriptionPanel";
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
+import SubmitList from './submitList';
 import {withRouter} from "react-router";
 
 const styles = theme => ({
@@ -129,13 +130,22 @@ class ProblemDesc extends React.Component {
   componentDidMount() {
     this.props.fetchProblemDesc(this.props.id);
     this.props.fetchAllLanguages();
+    if (this.props.token) {
+      this.props.fetchSubmitsByProblemId(this.props.id, this.props.token);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.token !== this.props.token && this.props.token !== '') {
+      this.props.fetchSubmitsByProblemId(this.props.id, this.props.token);
+    }
   }
 
   render() {
     const {
       classes, fetchProblemStatus, problemDesc, token, language,
       commitCodeStatus, changeLanguage, allLanguages, commitCode,
-      writeCode, userWritingCode, commitCodeMessage, curTabIndex, changeTab, socket, submits
+      writeCode, userWritingCode, commitCodeMessage, curTabIndex, changeTab, socket, submits, fetchSubmitsStatus
     } = this.props;
     switch (fetchProblemStatus) {
       case Status.LOADING: {
@@ -155,6 +165,28 @@ class ProblemDesc extends React.Component {
           && commitCodeStatus !== Status.FAILURE
         });
         const title = commitCodeStatus === Status.NOTHING ? problemDesc.title : problemDesc.title + " " + commitCodeStatus;
+        let Submissions;
+        switch (fetchSubmitsStatus) {
+          case Status.NOTHING: {
+            Submissions = '';
+            break;
+          }
+
+          case Status.LOADING: {
+            Submissions = 'loading the submit history...';
+            break;
+          }
+
+          case Status.SUCCESS: {
+            Submissions = submits ? <SubmitList submits={submits}/> : '';
+            break;
+          }
+
+          case Status.FAILURE: {
+            Submissions = 'Error';
+            break;
+          }
+        }
         return (
           <div className={classes.root}>
             <Typography variant="h4" marked="center" align="center" component="h2"
@@ -192,7 +224,7 @@ class ProblemDesc extends React.Component {
                       {problemDesc.hint &&
                       <DescriptionPanel content={problemDesc.hint} title='Hint' defaultExpanded={false} html/>}
                     </TabContainer>
-                    <TabContainer>{submits ? submits.map(submit => JSON.stringify(submit)).join('\n') : ''}</TabContainer>
+                    <TabContainer>{Submissions}</TabContainer>
                   </SwipeableViews>
                 </div>
               </Grid>
@@ -283,6 +315,7 @@ const mapStateToProps = (state, ownProps) => {
     token: state.user.token,
     socket: state.socket,
     submits: submitsToThisProblem,
+    fetchSubmitsStatus: problemDescData.fetchSubmitsStatus,
   }
 };
 
@@ -312,6 +345,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         }
       }
     },
+    fetchSubmitsByProblemId: (problemId, token) => {
+      dispatch(Actions.fetchSubmitsByProblemId(problemId, token));
+    }
   }
 };
 

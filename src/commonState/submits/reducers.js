@@ -1,4 +1,4 @@
-import {ADD_SUBMIT} from './actionTypes';
+import {ADD_SUBMIT, CLEAR_SUBMITS, INIT_SUBMITS} from './actionTypes';
 
 const initState = {};
 
@@ -10,10 +10,17 @@ export default (state = initState, action) => {
         const oldSubmits = state[submit.problem];
         return {
           ...state,
-          [submit.problem]: [...oldSubmits, submit],
+          [submit.problem]: [submit, ...oldSubmits],
         }
       }
       return {...state, [submit.problem]: [submit]}
+    }
+    case INIT_SUBMITS: {
+      const {submits, problemId} = action;
+      return {...state, [problemId]: submits}
+    }
+    case CLEAR_SUBMITS: {
+      return {};
     }
     default: {
       return state;
