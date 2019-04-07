@@ -91,9 +91,9 @@ class ProblemList extends React.Component {
                 const number = index + (page * 10) + 1;
                 return (
                   <TableRow className={classnames({
-                    [classes.accepted]: problem.isAccepted,
-                    [classes.submitted]: problem.isSubmitted && !problem.isAccepted,
-                    [classes.row]: !problem.isSubmitted && !problem.isAccepted,
+                    [classes.accepted]: problem.status === 'accepted',
+                    [classes.submitted]: problem.status === 'submitted',
+                    [classes.row]: problem.status === 'none',
                   })} key={problem._id} hover={true}
                             onClick={() => handleClickRow(problem._id)}>
                     <CustomTableCell component="th" scope="row">
