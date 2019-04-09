@@ -115,6 +115,7 @@ const styles = theme => ({
     height: 'calc(100% - 48px)',
     overflow: 'auto',
     paddingBottom: theme.spacing.unit * 3,
+    boxSizing: 'border-box',
   },
 });
 
@@ -211,18 +212,22 @@ class ProblemDesc extends React.Component {
                       <Tab className={classes.tab} label="Submissions"/>
                     </Tabs>
                   </AppBar>
-                  {curTabIndex === 0 && (<TabContainer>
-                    <DescriptionPanel content={problemDesc.content} title='Description' html/>
-                    {problemDesc.inputDesc &&
-                    <DescriptionPanel content={problemDesc.inputDesc} title='Input Description' html/>}
-                    {problemDesc.outputDesc &&
-                    <DescriptionPanel content={problemDesc.outputDesc} title='Output Description'
-                                      html/>}
-                    <DescriptionPanel content={problemDesc.sampleInput} title='Input Example'/>
-                    <DescriptionPanel content={problemDesc.sampleOutput} title='Output Example'/>
-                    {problemDesc.hint &&
-                    <DescriptionPanel content={problemDesc.hint} title='Hint' defaultExpanded={false} html/>}
-                  </TabContainer>)}
+                  {
+                    curTabIndex === 0 && (
+                      <TabContainer>
+                        <DescriptionPanel content={problemDesc.content} title='Description' html/>
+                        {problemDesc.inputDesc &&
+                        <DescriptionPanel content={problemDesc.inputDesc} title='Input Description' html/>}
+                        {problemDesc.outputDesc &&
+                        <DescriptionPanel content={problemDesc.outputDesc} title='Output Description'
+                                          html/>}
+                        <DescriptionPanel content={problemDesc.sampleInput} title='Input Example'/>
+                        <DescriptionPanel content={problemDesc.sampleOutput} title='Output Example'/>
+                        {problemDesc.hint &&
+                        <DescriptionPanel content={problemDesc.hint} title='Hint' defaultExpanded={false} html/>}
+                      </TabContainer>
+                    )
+                  }
                   {curTabIndex === 1 && <TabContainer>{Submissions}</TabContainer>}
                 </div>
               </Grid>
