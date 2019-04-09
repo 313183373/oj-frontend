@@ -23,6 +23,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import SubmitList from './submitList';
 import {withRouter} from "react-router";
+import Link from "@material-ui/core/Link";
 
 const styles = theme => ({
   root: {
@@ -119,15 +120,13 @@ const styles = theme => ({
   },
 });
 
-function MyTabContainer({children, classes}) {
+const TabContainer = withStyles(styles)(function ({children, classes}) {
   return (
     <div className={classes.tabContainer}>
       {children}
     </div>
   );
-}
-
-const TabContainer = withStyles(styles)(MyTabContainer);
+});
 
 class ProblemDesc extends React.Component {
 
@@ -170,26 +169,30 @@ class ProblemDesc extends React.Component {
         });
         const title = commitCodeStatus === Status.NOTHING ? problemDesc.title : problemDesc.title + " " + commitCodeStatus;
         let Submissions;
-        switch (fetchSubmitsStatus) {
-          case Status.NOTHING: {
-            Submissions = '';
-            break;
-          }
+        if (token !== '') {
+          switch (fetchSubmitsStatus) {
+            case Status.NOTHING: {
+              Submissions = '';
+              break;
+            }
 
-          case Status.LOADING: {
-            Submissions = 'loading the submit history...';
-            break;
-          }
+            case Status.LOADING: {
+              Submissions = 'loading the submit history...';
+              break;
+            }
 
-          case Status.SUCCESS: {
-            Submissions = submits ? <SubmitList submits={submits}/> : '';
-            break;
-          }
+            case Status.SUCCESS: {
+              Submissions = submits ? <SubmitList submits={submits}/> : '';
+              break;
+            }
 
-          case Status.FAILURE: {
-            Submissions = 'Error';
-            break;
+            case Status.FAILURE: {
+              Submissions = 'Error';
+              break;
+            }
           }
+        } else {
+          Submissions = 'you are not log in, please ' + (<Link href='/log-in'>log in</Link>) + ' first'
         }
         return (
           <div className={classes.root}>
