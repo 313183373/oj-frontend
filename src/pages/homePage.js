@@ -7,8 +7,8 @@ import SignIn from './signInPage';
 import SignUp from './signUpPage';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import theme from '../theme';
+import {NoMatch} from "./NoMatchPage";
 
-//todo: add a no match route
 const Home = () => {
   return (
     <MuiThemeProvider theme={theme}>
@@ -19,6 +19,7 @@ const Home = () => {
           <Route path='/problem/:id' component={Problem}/>
           <Route path='/sign-in' component={SignIn}/>
           <Route path='/sign-up' component={SignUp}/>
+          <Route component={NoMatch}/>
           {/*<Route path='/status' component={Status}></Route>*/}
         </Switch>
       </div>
