@@ -86,8 +86,7 @@ class ProblemList extends React.Component {
             </TableHead>
             <TableBody>
               {problems.map((problem, index) => {
-                // let ratio = `${(problem.acceptCount * 100.0 / problem.submitCount).toFixed(2)}%(${problem.acceptCount}/${problem.submitCount})`;
-                let ratio = `(${problem.acceptCount}/${problem.submitCount})`;
+                const ratio = problem.submitCount === 0 ? `(${problem.acceptCount}/${problem.submitCount})` : `${(problem.acceptCount * 100.0 / problem.submitCount).toFixed(2)}%(${problem.acceptCount}/${problem.submitCount})`;
                 const number = index + (page * 10) + 1;
                 return (
                   <TableRow className={classnames({
