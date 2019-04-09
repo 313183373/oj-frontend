@@ -19,6 +19,12 @@ const styles = theme => ({
   table: {
     minWidth: 400,
   },
+  wrong: {
+    backgroundColor: 'rgba(255,0,0,0.3)',
+  },
+  ok: {
+    backgroundColor: 'rgba(0,255,0,0.3)',
+  }
 });
 
 function SubmitList(props) {
@@ -42,7 +48,7 @@ function SubmitList(props) {
         </TableHead>
         <TableBody>
           {submits.map(submit => (
-            <TableRow key={submit._id}>
+            <TableRow key={submit._id} className={submit.status === 'AC' ? classes.ok : classes.wrong}>
               <TableCell component="th" scope="row">
                 {submit.created}
               </TableCell>
