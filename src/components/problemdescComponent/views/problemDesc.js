@@ -111,15 +111,22 @@ const styles = theme => ({
   container: {
     height: 'calc(100% - 99px)',
   },
+  tabContainer: {
+    height: 'calc(100% - 48px)',
+    overflow: 'auto',
+    paddingBottom: theme.spacing.unit * 3,
+  },
 });
 
-function TabContainer({children}) {
+function MyTabContainer({children, classes}) {
   return (
-    <div style={{height: 'calc(100% - 48px)', overflow: 'auto'}}>
+    <div className={classes.tabContainer}>
       {children}
     </div>
   );
 }
+
+const TabContainer = withStyles(styles)(MyTabContainer);
 
 class ProblemDesc extends React.Component {
 
