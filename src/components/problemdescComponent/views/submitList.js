@@ -48,7 +48,7 @@ function SubmitList(props) {
         </TableHead>
         <TableBody>
           {submits.map(submit => (
-            <TableRow key={submit._id} className={submit.status === 'AC' ? classes.ok : classes.wrong}>
+            <TableRow key={submit._id} className={submit.status === 'AC' ? classes.ok : classes.wrong} hover>
               <TableCell component="th" scope="row">
                 {submit.created}
               </TableCell>
