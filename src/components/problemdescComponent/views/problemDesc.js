@@ -23,7 +23,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import SubmitList from './submitList';
 import {withRouter} from "react-router";
-import Link from "@material-ui/core/Link";
+import Button from "@material-ui/core/Button";
+import {Link} from "react-router-dom";
 
 const styles = theme => ({
   root: {
@@ -192,7 +193,8 @@ class ProblemDesc extends React.Component {
             }
           }
         } else {
-          Submissions = 'you are not log in, please ' + (<Link href='/log-in'>log in</Link>) + ' first'
+          Submissions =
+            <h1>Please <Link to={{pathname: '/sign-in', state: {from: this.props.location}}}>sign in</Link> first</h1>;
         }
         return (
           <div className={classes.root}>
