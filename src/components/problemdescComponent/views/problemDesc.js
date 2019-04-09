@@ -15,7 +15,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import CheckIcon from '@material-ui/icons/Check';
 import ReplayIcon from '@material-ui/icons/Replay';
 import classNames from 'classnames';
-import SwipeableViews from 'react-swipeable-views';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -112,14 +111,11 @@ const styles = theme => ({
   container: {
     height: 'calc(100% - 99px)',
   },
-  left: {
-    height: 'calc(100% - 48px)',
-  }
 });
 
-function TabContainer({children, dir}) {
+function TabContainer({children}) {
   return (
-    <div dir={dir}>
+    <div style={{height: 'calc(100% - 48px)', overflow: 'auto'}}>
       {children}
     </div>
   );
@@ -208,24 +204,19 @@ class ProblemDesc extends React.Component {
                       <Tab className={classes.tab} label="Submissions"/>
                     </Tabs>
                   </AppBar>
-                  <SwipeableViews
-                    className={classes.left}
-                    index={curTabIndex}
-                    onChangeIndex={changeTab}>
-                    <TabContainer>
-                      <DescriptionPanel content={problemDesc.content} title='Description' html/>
-                      {problemDesc.inputDesc &&
-                      <DescriptionPanel content={problemDesc.inputDesc} title='Input Description' html/>}
-                      {problemDesc.outputDesc &&
-                      <DescriptionPanel content={problemDesc.outputDesc} title='Output Description'
-                                        html/>}
-                      <DescriptionPanel content={problemDesc.sampleInput} title='Input Example'/>
-                      <DescriptionPanel content={problemDesc.sampleOutput} title='Output Example'/>
-                      {problemDesc.hint &&
-                      <DescriptionPanel content={problemDesc.hint} title='Hint' defaultExpanded={false} html/>}
-                    </TabContainer>
-                    <TabContainer>{Submissions}</TabContainer>
-                  </SwipeableViews>
+                  {curTabIndex === 0 && (<TabContainer>
+                    <DescriptionPanel content={problemDesc.content} title='Description' html/>
+                    {problemDesc.inputDesc &&
+                    <DescriptionPanel content={problemDesc.inputDesc} title='Input Description' html/>}
+                    {problemDesc.outputDesc &&
+                    <DescriptionPanel content={problemDesc.outputDesc} title='Output Description'
+                                      html/>}
+                    <DescriptionPanel content={problemDesc.sampleInput} title='Input Example'/>
+                    <DescriptionPanel content={problemDesc.sampleOutput} title='Output Example'/>
+                    {problemDesc.hint &&
+                    <DescriptionPanel content={problemDesc.hint} title='Hint' defaultExpanded={false} html/>}
+                  </TabContainer>)}
+                  {curTabIndex === 1 && <TabContainer>{Submissions}</TabContainer>}
                 </div>
               </Grid>
               <Grid item xs={6} className={classes.item}>
