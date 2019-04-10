@@ -4,7 +4,6 @@ import Toolbar, {styles as toolbarStyles} from './toolBar';
 import {withStyles} from '@material-ui/core';
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
-import Typography from "../../baseComponents/Typography";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import {clearUser, setUser} from "../../../commonState/user/actions";
@@ -12,6 +11,7 @@ import io from "socket.io-client";
 import Button from "@material-ui/core/Button";
 import {clearSocket, setSocket} from "../../../commonState/socket/actions";
 import {addSubmit, clearSubmits} from '../../../commonState/submits/actions';
+import {endWaitingForResult, showSubmit} from "../../problemdescComponent/actions";
 // import clsx from 'clsx';
 
 const styles = theme => ({
@@ -113,7 +113,7 @@ async function getUserInfo(token, setUserInfo) {
   }
 }
 
-const TopAppBar = ({classes, user, setUserInfo, logOut, clearSocketInfo, setSocketInfo, addSubmit}) => {
+const TopAppBar = ({classes, user, setUserInfo, logOut, clearSocketInfo, setSocketInfo, addSubmit, endWaitingForResult}) => {
 
   useEffect(() => {
     if (!user.isSignIn && localStorage.token) {
@@ -125,7 +125,9 @@ const TopAppBar = ({classes, user, setUserInfo, logOut, clearSocketInfo, setSock
     const socket = io('http://106.12.210.128:5000');
     setSocketInfo(socket);
     socket.on('result', submit => {
-      addSubmit(JSON.parse(submit));
+      const submitObject = JSON.parse(submit);
+      addSubmit(submitObject);
+      endWaitingForResult(submitObject.problem);
     });
     return () => {
       clearSocketInfo();
@@ -177,6 +179,10 @@ const mapDispatchToProps = dispatch => {
     },
     addSubmit: submit => {
       dispatch(addSubmit(submit));
+      dispatch(showSubmit(submit));
+    },
+    endWaitingForResult: problemId => {
+      dispatch(endWaitingForResult(problemId))
     }
   }
 };

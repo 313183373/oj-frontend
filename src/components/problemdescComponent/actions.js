@@ -2,7 +2,12 @@ import {
   FETCH_PROBLEM_DESC_SUCCESS,
   FETCH_PROBLEM_DESC_FAILURE,
   FETCH_PROBLEM_DESC_LOADING,
-  FETCH_SUBMITS_START, FETCH_SUBMITS_FAILURE, FETCH_SUBMITS_SUCCESS
+  FETCH_SUBMITS_START,
+  FETCH_SUBMITS_FAILURE,
+  FETCH_SUBMITS_SUCCESS,
+  START_WAITING_FOR_RESULT,
+  END_WAITING_FOR_RESULT,
+  SHOW_SUBMIT, CLEAR_SHOW_SUBMIT
 } from "./actionTypes";
 import {COMMIT_CODE_LOADING, COMMIT_CODE_SUCCESS, COMMIT_CODE_FAILURE} from "./actionTypes";
 import {CHANGE_LANGUAGE, CHANGE_TAB, FETCH_ALL_LANGUAGES} from "./actionTypes";
@@ -118,6 +123,8 @@ export const commitCode = (id, token, userCommit, socket) => async dispatch => {
         socket.emit('listenToSubmit', res.submitId);
       }
       dispatch(commitCodeSuccess());
+      dispatch(changeTab(1));
+      dispatch(startWaitingForResult(id));
     } catch (e) {
       console.error(e);
       dispatch(commitCodeFailure('Something wrong, please try again.'));
@@ -137,6 +144,26 @@ export const fetchSubmitsFailure = () => ({
 
 export const fetchSubmitsSuccess = () => ({
   type: FETCH_SUBMITS_SUCCESS,
+});
+
+export const startWaitingForResult = problemId => ({
+  type: START_WAITING_FOR_RESULT,
+  problemId,
+});
+
+export const endWaitingForResult = problemId => ({
+  type: END_WAITING_FOR_RESULT,
+  problemId,
+});
+
+export const showSubmit = submit => ({
+  type: SHOW_SUBMIT,
+  submit,
+});
+
+export const clearShowSubmit = submit => ({
+  type: CLEAR_SHOW_SUBMIT,
+  submit,
 });
 
 export const fetchSubmitsByProblemId = (problemId, token) => async dispatch => {

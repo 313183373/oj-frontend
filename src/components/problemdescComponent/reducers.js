@@ -3,7 +3,12 @@ import {
   FETCH_PROBLEM_DESC_SUCCESS,
   FETCH_PROBLEM_DESC_FAILURE,
   FETCH_SUBMITS_BY_PROBLEM_ID,
-  FETCH_SUBMITS_START, FETCH_SUBMITS_FAILURE, FETCH_SUBMITS_SUCCESS,
+  FETCH_SUBMITS_START,
+  FETCH_SUBMITS_FAILURE,
+  FETCH_SUBMITS_SUCCESS,
+  START_WAITING_FOR_RESULT,
+  END_WAITING_FOR_RESULT,
+  SHOW_SUBMIT, CLEAR_SHOW_SUBMIT,
 } from "./actionTypes";
 import {COMMIT_CODE_LOADING, COMMIT_CODE_SUCCESS, COMMIT_CODE_FAILURE} from "./actionTypes";
 import {CHANGE_LANGUAGE, CHANGE_TAB, FETCH_ALL_LANGUAGES} from './actionTypes';
@@ -18,6 +23,8 @@ export default (state = {
   language: 'cpp',
   curTabIndex: 0,
   fetchSubmitsStatus: Status.NOTHING,
+  waitingForResult: [],
+  showSubmit: [],
 }, action) => {
   switch (action.type) {
     case FETCH_PROBLEM_DESC_LOADING: {
@@ -81,6 +88,20 @@ export default (state = {
     }
     case FETCH_SUBMITS_SUCCESS: {
       return {...state, fetchSubmitsStatus: Status.SUCCESS}
+    }
+    case START_WAITING_FOR_RESULT: {
+      const oldWaitingForResult = state.waitingForResult;
+      return {...state, waitingForResult: [action.problemId, ...oldWaitingForResult]}
+    }
+    case END_WAITING_FOR_RESULT: {
+      const oldWaitingForResult = state.waitingForResult;
+      return {...state, waitingForResult: oldWaitingForResult.filter(submit => submit !== action.problemId)}
+    }
+    case SHOW_SUBMIT: {
+      return {...state, showSubmit: [...state.showSubmit, action.submit]}
+    }
+    case CLEAR_SHOW_SUBMIT: {
+      return {...state, showSubmit: state.showSubmit.filter(submit => submit !== action.submit)}
     }
     default: {
       return state;

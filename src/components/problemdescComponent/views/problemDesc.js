@@ -18,13 +18,14 @@ import classNames from 'classnames';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import DescriptionPanel from "./DescriptionPanel";
+import DescriptionPanel from "./descriptionPanel";
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import SubmitList from './submitList';
 import {withRouter} from "react-router";
-import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
+import {WaitingIndicator} from "./waitingIndicator";
+import {ResultInfo} from "./resultInfo";
 
 const styles = theme => ({
   root: {
@@ -118,6 +119,7 @@ const styles = theme => ({
     overflow: 'auto',
     paddingBottom: theme.spacing.unit * 3,
     boxSizing: 'border-box',
+    paddingTop: theme.spacing.unit * 3,
   },
 });
 
@@ -145,11 +147,15 @@ class ProblemDesc extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.clearShowSubmit(this.props.showSubmit);
+  }
+
   render() {
     const {
       classes, fetchProblemStatus, problemDesc, token, language,
       commitCodeStatus, changeLanguage, allLanguages, commitCode,
-      writeCode, userWritingCode, commitCodeMessage, curTabIndex, changeTab, socket, submits, fetchSubmitsStatus
+      writeCode, userWritingCode, commitCodeMessage, curTabIndex, changeTab, socket, submits, fetchSubmitsStatus, isWaitingForResult, showSubmit
     } = this.props;
     switch (fetchProblemStatus) {
       case Status.LOADING: {
@@ -168,7 +174,7 @@ class ProblemDesc extends React.Component {
           [classes.fab]: commitCodeStatus !== Status.SUCCESS
           && commitCodeStatus !== Status.FAILURE
         });
-        const title = commitCodeStatus === Status.NOTHING ? problemDesc.title : problemDesc.title + " " + commitCodeStatus;
+        const title = commitCodeStatus === Status.NOTHING ? problemDesc.title + "   " + problemDesc.origin : problemDesc.title + " " + commitCodeStatus;
         let Submissions;
         if (token !== '') {
           switch (fetchSubmitsStatus) {
@@ -233,7 +239,14 @@ class ProblemDesc extends React.Component {
                       </TabContainer>
                     )
                   }
-                  {curTabIndex === 1 && <TabContainer>{Submissions}</TabContainer>}
+                  {
+                    curTabIndex === 1 &&
+                    <TabContainer>
+                      {showSubmit && <ResultInfo submit={showSubmit}/>}
+                      {isWaitingForResult && <WaitingIndicator/>}
+                      {Submissions}
+                    </TabContainer>
+                  }
                 </div>
               </Grid>
               <Grid item xs={6} className={classes.item}>
@@ -324,6 +337,8 @@ const mapStateToProps = (state, ownProps) => {
     socket: state.socket,
     submits: submitsToThisProblem,
     fetchSubmitsStatus: problemDescData.fetchSubmitsStatus,
+    isWaitingForResult: !!problemDescData.waitingForResult.includes(ownProps.id),
+    showSubmit: problemDescData.showSubmit.find(submit => submit.problem === ownProps.id),
   }
 };
 
@@ -355,6 +370,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     fetchSubmitsByProblemId: (problemId, token) => {
       dispatch(Actions.fetchSubmitsByProblemId(problemId, token));
+    },
+    clearShowSubmit: submit => {
+      dispatch(Actions.clearShowSubmit(submit));
     }
   }
 };
