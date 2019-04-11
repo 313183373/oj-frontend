@@ -140,7 +140,6 @@ const TopAppBar = ({classes, user, setUserInfo, logOut, clearSocketInfo, setSock
       <AppBar>
         <Toolbar>
           <div className={classes.left}>
-            <Link to="/status" className={classes.link}><Button className={classes.button}>Status</Button></Link>
           </div>
           <Link to="/" className={classes.titleLink}>
             Online Judge
