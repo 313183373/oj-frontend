@@ -30,6 +30,7 @@ const styles = theme => ({
   table: {
     height: '100%',
     minWidth: 700,
+    tableLayout: 'fixed',
   },
   row: {
     '&:nth-of-type(odd)': {
