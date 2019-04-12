@@ -179,6 +179,9 @@ const mapDispatchToProps = (dispatch) => {
               errorKey = 'username';
               break;
             }
+            default: {
+              break;
+            }
           }
           return {[errorKey]: message}
         }

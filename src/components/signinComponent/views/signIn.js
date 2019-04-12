@@ -11,7 +11,6 @@ import FormButton from '../../baseComponents/formButton';
 import {connect} from 'react-redux';
 import {withStyles} from '@material-ui/core/styles';
 import {Redirect, withRouter} from "react-router";
-import * as Actions from "../actions";
 import {signInStarted, signInSuccess, signInFailure} from "../actions";
 import {setUser} from "../../../commonState/user/actions";
 import {FORM_ERROR} from "final-form";
@@ -176,6 +175,9 @@ const mapDispatchToProps = dispatch => {
             const error = await response.text();
             dispatch(signInFailure(error));
             return {email: error}
+          }
+          default: {
+            return
           }
         }
       }

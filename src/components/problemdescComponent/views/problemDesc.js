@@ -187,6 +187,9 @@ class ProblemDesc extends React.Component {
               Submissions = 'Error';
               break;
             }
+            default: {
+              break;
+            }
           }
         } else {
           Submissions =
