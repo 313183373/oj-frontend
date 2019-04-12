@@ -20,7 +20,6 @@ const styles = theme => ({
 //   return status === 'CE' || status === "WA" || status === 'TLE' || status === 'MLE' || status === "RE" || status === "OLE";
 // }
 
-// todo the MLE and OLE situations are not happened.
 export const ResultInfo = withStyles(styles)(({submit, classes}) => {
   if (submit.status === 'AC') {
     return <AcceptInfo submit={submit} classes={classes}/>;
@@ -59,10 +58,9 @@ function AcceptInfo({submit, classes}) {
 }
 
 function WrongAnswerInfo({submit, classes}) {
-  const reg = /^input: (.+)expected: (.+)real: (.+)$/s; // the s flag means allow dot(.) to match newlines
+  const reg = /^input: (.+)expected: (.+)real: (.*)$/s; // the s flag means allow dot(.) to match newlines
   const result = reg.exec(submit.message);
-  console.log(result.length);
-  if (result.length < 4) {
+  if (!result || result.length < 4) {
     return <p>parse wrong answer information failed</p>;
   }
   const [message, input, expected, real] = reg.exec(submit.message);

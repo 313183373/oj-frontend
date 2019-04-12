@@ -69,7 +69,6 @@ const styles = theme => ({
     '&:focus': {
       color: '#bab6b6',
       backgroundColor: '#ededed',
-      cursor: 'not-allowed',
     }
   },
   fabProgress: {
@@ -77,13 +76,6 @@ const styles = theme => ({
     position: 'absolute',
     bottom: theme.spacing.unit * 1.25,
     right: theme.spacing.unit * 4.25,
-  },
-  fabSuccess: {
-    backgroundColor: '#84d68a',
-    position: 'absolute',
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 5,
-    zIndex: 1,
     '&:hover': {
       cursor: 'not-allowed',
     }
@@ -169,12 +161,10 @@ class ProblemDesc extends React.Component {
       }
       case Status.SUCCESS: {
         const fabClassName = classNames({
-          [classes.fabSuccess]: commitCodeStatus === Status.SUCCESS,
           [classes.fabFailure]: commitCodeStatus === Status.FAILURE,
-          [classes.fab]: commitCodeStatus !== Status.SUCCESS
-          && commitCodeStatus !== Status.FAILURE
+          [classes.fab]: commitCodeStatus !== Status.FAILURE,
         });
-        const title = commitCodeStatus === Status.NOTHING ? problemDesc.title + "   " + problemDesc.origin : problemDesc.title + " " + commitCodeStatus;
+        const title = problemDesc.title + "   " + problemDesc.origin;
         let Submissions;
         if (token !== '') {
           switch (fetchSubmitsStatus) {
@@ -282,19 +272,19 @@ class ProblemDesc extends React.Component {
                   <Tooltip title="Commit" aria-label="Commit" placement="top">
                     <Fab color="secondary"
                          className={fabClassName}
-                         disabled={userWritingCode === ''}
+                         disabled={userWritingCode === '' || isWaitingForResult || commitCodeStatus === Status.LOADING}
                          onClick={() => commitCode(problemDesc._id, token,
                            {
                              code: userWritingCode,
                              language: language
-                           }, commitCodeStatus, socket)}>
+                           }, commitCodeStatus, isWaitingForResult, showSubmit, socket)}>
                       {
                         commitCodeStatus === Status.FAILURE ?
                           <ReplayIcon/> : <CheckIcon/>
                       }
                     </Fab>
                   </Tooltip>
-                  {commitCodeStatus === Status.LOADING &&
+                  {(commitCodeStatus === Status.LOADING || isWaitingForResult) &&
                   <CircularProgress size={68} className={classes.fabProgress}/>}
                   <Snackbar
                     open={commitCodeStatus === Status.FAILURE}
@@ -359,11 +349,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     writeCode: (newValue) => {
       dispatch(Actions.writeCode(newValue));
     },
-    commitCode: (id, token, userCommit, curCommitCodeStatus, socket) => {
+    commitCode: (id, token, userCommit, curCommitCodeStatus, isWaitingForResult, showSubmit, socket) => {
       if (token === '') {
-        ownProps.history.push(`/sign-in`, {from: ownProps.history.location});
+        ownProps.history.push('/sign-in', {from: ownProps.history.location});
       } else {
-        if (curCommitCodeStatus !== Status.LOADING && curCommitCodeStatus !== Status.SUCCESS) {
+        if (curCommitCodeStatus !== Status.LOADING && !isWaitingForResult) {
+          dispatch(Actions.clearShowSubmit(showSubmit));
           dispatch(Actions.commitCode(id, token, userCommit, socket));
         }
       }
