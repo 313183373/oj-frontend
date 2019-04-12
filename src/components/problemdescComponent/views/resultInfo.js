@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import * as util from 'util';
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import ReactDiffViewer from 'react-diff-viewer';
+import {withRouter} from "react-router";
 
 const styles = theme => ({
   card: {
@@ -36,6 +37,18 @@ export const ResultInfo = withStyles(styles)(({submit, classes}) => {
   return <pre>{util.inspect(submit, false, null)}</pre>;
 });
 
+const MyCardActions = withRouter(({submitId, history}) => {
+  return (
+    <CardActions>
+      <Button size="small" onClick={() => {
+        history.push(`/submits/${submitId}`)
+      }}>
+        Detail
+      </Button>
+    </CardActions>
+  )
+});
+
 function AcceptInfo({submit, classes}) {
   return (
     <Card className={classes.card}>
@@ -50,9 +63,7 @@ function AcceptInfo({submit, classes}) {
           内存消耗：{submit.memory} kb
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Detail</Button>
-      </CardActions>
+      <MyCardActions submitId={submit._id}/>
     </Card>
   );
 }
@@ -77,11 +88,10 @@ function WrongAnswerInfo({submit, classes}) {
         <Typography variant='h5' color='textSecondary'>
           输出对比：(左侧是期待输出，右侧是实际输出)
         </Typography>
-        <ReactDiffViewer oldValue={expected} newValue={real} splitView={true}/>
+        <ReactDiffViewer oldValue={expected} newValue={real} splitView={true}
+                         styles={{diffContainer: {'table-layout': 'fixed'}}}/>
       </CardContent>
-      <CardActions>
-        <Button size="small">Detail</Button>
-      </CardActions>
+      <MyCardActions submitId={submit._id}/>
     </Card>
   )
 }
@@ -97,9 +107,7 @@ function RuntimeErrorInfo({submit, classes}) {
           错误信息：{submit.message}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Detail</Button>
-      </CardActions>
+      <MyCardActions submitId={submit._id}/>
     </Card>
   );
 }
@@ -112,9 +120,7 @@ function TimeLimitExceededInfo({submit, classes}) {
           {submit.status}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Detail</Button>
-      </CardActions>
+      <MyCardActions submitId={submit._id}/>
     </Card>
   );
 }

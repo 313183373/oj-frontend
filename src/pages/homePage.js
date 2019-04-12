@@ -5,6 +5,7 @@ import Problem from './problemPage';
 import Problems from './problemsPage';
 import SignIn from './signInPage';
 import SignUp from './signUpPage';
+import Submits from './submitsPage';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import theme from '../theme';
 import {NoMatch} from "./NoMatchPage";
@@ -19,6 +20,7 @@ const Home = () => {
           <Route path='/problem/:id' component={Problem}/>
           <Route path='/sign-in' component={SignIn}/>
           <Route path='/sign-up' component={SignUp}/>
+          <Route path='/submits/:submitId' component={Submits}/>
           <Route component={NoMatch}/>
           {/*<Route path='/status' component={Status}></Route>*/}
         </Switch>
