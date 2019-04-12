@@ -148,7 +148,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     submitSignUp: async (values) => {
-      // dispatch(Actions.submitSignUp(values));
       dispatch(Actions.signUpStarted());
       try {
         const response = await fetch('/user', {
