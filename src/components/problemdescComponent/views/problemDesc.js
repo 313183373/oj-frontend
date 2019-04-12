@@ -164,7 +164,7 @@ class ProblemDesc extends React.Component {
           [classes.fabFailure]: commitCodeStatus === Status.FAILURE,
           [classes.fab]: commitCodeStatus !== Status.FAILURE,
         });
-        const title = problemDesc.title + "   " + problemDesc.origin;
+        const title = problemDesc.title;
         let Submissions;
         if (token !== '') {
           switch (fetchSubmitsStatus) {
@@ -194,10 +194,24 @@ class ProblemDesc extends React.Component {
         }
         return (
           <div className={classes.root}>
-            <Typography variant="h4" marked="center" align="center" component="h2"
-                        className={classes.title}>
-              {title}
-            </Typography>
+            <Grid container>
+              <Grid container item xs={4} alignItems='center' justify='center'>
+                <Typography variant="body2" align="right">{problemDesc.origin}</Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant="h4" marked="center" align="center"
+                            component="h2"
+                            className={classes.title}>
+                  {title}
+                </Typography>
+              </Grid>
+              <Grid container item xs={4} alignContent='center' justify='center' direction="column">
+                <Typography variant="body2"
+                            align="left">时间限制：{problemDesc.timeLimit} ms</Typography>
+                <Typography variant="body2" align="left">内存限制：{problemDesc.memLimit} kb</Typography>
+              </Grid>
+            </Grid>
+
             <Grid container className={classes.container} justify="center">
               <Grid item xs={6} className={classes.item}>
                 <div className={classes.gridCell}>
