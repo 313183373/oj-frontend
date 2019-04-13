@@ -19,7 +19,7 @@ export const signInFailure = (error) => ({
 // todo: the submitSignIn function is not used because a submit function should return a submit error object which can not be implemented here
 export const submitSignIn = (email, pwd) => dispatch => {
   dispatch(signInStarted());
-  fetch('/user/login', {
+  fetch('/api/user/login', {
     method: 'POST',
     headers: {
       'content-type': "application/json",

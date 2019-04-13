@@ -150,7 +150,7 @@ const mapDispatchToProps = (dispatch) => {
     submitSignUp: async (values) => {
       dispatch(Actions.signUpStarted());
       try {
-        const response = await fetch('/user', {
+        const response = await fetch('/api/user', {
           method: 'post',
           headers: {'content-type': 'application/json'},
           body: JSON.stringify(values),
