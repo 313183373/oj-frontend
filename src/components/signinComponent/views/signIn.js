@@ -145,7 +145,7 @@ const mapDispatchToProps = dispatch => {
     submitSignIn: async (values) => {
       dispatch(signInStarted());
       const {email, password} = values;
-      const response = await fetch('/api/user/login', {
+      const response = await fetch('/user/login', {
         method: 'POST',
         headers: {
           'content-type': "application/json",
