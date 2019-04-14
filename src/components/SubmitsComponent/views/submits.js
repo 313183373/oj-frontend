@@ -84,7 +84,8 @@ function submits({submitId, token, classes}) {
   const problem = submit.problem;
   const isError = submit.status !== 'AC';
   const isShowDiff = submit.status === 'WA';
-  let ShowDiff = null;
+  const isShowMessage = (submit.status === 'RE' || submit.status === 'CE') && submit.message;
+  let ShowDiff = null, showMessage = null;
   if (isShowDiff) {
     const reg = /^input: (.+)expected: (.+)real: (.*)$/s; // the s flag means allow dot(.) to match newlines
     const result = reg.exec(submit.message);
@@ -105,6 +106,15 @@ function submits({submitId, token, classes}) {
       </div>
     )
   }
+  if (isShowMessage) {
+    showMessage = (
+      <div>
+        <Typography variant='h6'>信息：
+          <span className={classes.red}>{submit.message}</span>
+        </Typography>
+      </div>
+    )
+  }
 
 
   return (
@@ -121,6 +131,7 @@ function submits({submitId, token, classes}) {
         <Typography variant='h6'>内存限制：{problem.memLimit} kb</Typography>
       </div>
       {isShowDiff && ShowDiff}
+      {isShowMessage && showMessage}
       <SyntaxHighlighter language={submit.language} style={xonokai} showLineNumbers>
         {submit.code}
       </SyntaxHighlighter>
