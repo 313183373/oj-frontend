@@ -52,7 +52,7 @@ const styles = theme => ({
 });
 
 const getSubmitById = async (submitId, token, setSubmit, setState) => {
-  const res = await fetch(`/submits/${submitId}`, {headers: {'x-access-token': token}});
+  const res = await fetch(`/api/submits/${submitId}`, {headers: {'x-access-token': token}});
   if (res.ok) {
     const submit = await res.json();
     setSubmit(submit);

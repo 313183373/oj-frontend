@@ -103,7 +103,7 @@ const UserInfo = withStyles(styles)(({user, logOut, classes}) => {
 });
 
 async function getUserInfo(token, setUserInfo) {
-  const response = await fetch('/user/me', {headers: {'x-access-token': token}});
+  const response = await fetch('/api/user/me', {headers: {'x-access-token': token}});
   if (response.ok) {
     try {
       const user = await response.json();
