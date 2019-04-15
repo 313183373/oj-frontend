@@ -12,6 +12,8 @@ import Button from "@material-ui/core/Button";
 import {clearSocket, setSocket} from "../../../commonState/socket/actions";
 import {addSubmit, clearSubmits} from '../../../commonState/submits/actions';
 import {endWaitingForResult, showSubmit} from "../../problemdescComponent/actions";
+import {urlCreator} from "../../../../urls/urlCreator";
+import {GET_ME} from "../../../../urls/urls";
 // import clsx from 'clsx';
 
 const styles = theme => ({
@@ -103,7 +105,7 @@ const UserInfo = withStyles(styles)(({user, logOut, classes}) => {
 });
 
 async function getUserInfo(token, setUserInfo) {
-  const response = await fetch('/api/user/me', {headers: {'x-access-token': token}});
+  const response = await fetch(urlCreator({type: GET_ME}), {headers: {'x-access-token': token}});
   if (response.ok) {
     try {
       const user = await response.json();

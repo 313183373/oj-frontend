@@ -13,6 +13,8 @@ import {COMMIT_CODE_LOADING, COMMIT_CODE_SUCCESS, COMMIT_CODE_FAILURE} from "./a
 import {CHANGE_LANGUAGE, CHANGE_TAB, FETCH_ALL_LANGUAGES} from "./actionTypes";
 import {WRITE_CODE} from "./actionTypes";
 import {initSubmits} from "../../commonState/submits/actions";
+import {urlCreator} from "../../../urls/urlCreator";
+import {GET_PROBLEM_BY_ID, GET_SUBMITS_BY_PROBLEM_ID, POST_SUBMIT_TO_PROBLEM} from "../../../urls/urls";
 
 export const fetchProblemDescSuccess = (problem) => ({
   type: FETCH_PROBLEM_DESC_SUCCESS,
@@ -30,7 +32,7 @@ export const fetchProblemDescLoading = () => ({
 
 export const fetchProblemDesc = id => dispatch => {
   dispatch(fetchProblemDescLoading());
-  fetch(`/api/problems/${id}`).then(response => {
+  fetch(urlCreator({type: GET_PROBLEM_BY_ID, problemId: id})).then(response => {
     if (!response.ok) {
       throw new Error();
     }
@@ -111,7 +113,7 @@ export const commitCodeFailure = (error) => {
 
 export const commitCode = (id, token, userCommit, socket) => async dispatch => {
   dispatch(commitCodeLoading());
-  const response = await fetch(`/api/problems/${id}`, {
+  const response = await fetch(urlCreator({type: POST_SUBMIT_TO_PROBLEM, problemId: id}), {
     method: 'post',
     body: JSON.stringify(userCommit),
     headers: {"x-access-token": token, 'content-type': 'application/json'}
@@ -168,7 +170,7 @@ export const clearShowSubmit = submit => ({
 
 export const fetchSubmitsByProblemId = (problemId, token) => async dispatch => {
   dispatch(fetchSubmitsStart());
-  const response = await fetch(`/api/problems/${problemId}/submits`, {
+  const response = await fetch(urlCreator({type: GET_SUBMITS_BY_PROBLEM_ID, problemId,}), {
     headers: {"x-access-token": token}
   });
   if (response.ok) {

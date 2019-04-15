@@ -1,6 +1,8 @@
 import {FETCH_PROBLEMS_STARTED, FETCH_PROBLEMS_SUCCESS, FETCH_PROBLEMS_FAILURE} from "./actionTypes";
 import {CHANGE_PAGE_TO} from "./actionTypes";
 import {SET_TOTAL_PROBLEM_NUMBER} from "./actionTypes";
+import {urlCreator} from "../../../urls/urlCreator";
+import {GET_PROBLEM_AT_PAGE} from "../../../urls/urls";
 
 export const fetchProblemsStarted = () => ({
   type: FETCH_PROBLEMS_STARTED
@@ -25,7 +27,7 @@ export const fetchProblemList = (page, user) => async dispatch => {
   page = page + 1;
   dispatch(fetchProblemsStarted());
   const header = user.token ? {headers: {'x-access-token': user.token}} : {};
-  const response = await fetch(`/api/problems?page=${page}`, header);
+  const response = await fetch(urlCreator({type: GET_PROBLEM_AT_PAGE, page: page}), header);
   if (response.ok) {
     try {
       const {problems, totalProblemNumber} = await response.json();
