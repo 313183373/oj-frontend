@@ -6,8 +6,9 @@ import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import * as util from 'util';
 import withStyles from "@material-ui/core/es/styles/withStyles";
-import ReactDiffViewer from 'react-diff-viewer';
 import {withRouter} from "react-router";
+import {diffAsText} from 'unidiff';
+import {DiffView} from "../../baseComponents/DiffView";
 
 const styles = theme => ({
   card: {
@@ -75,6 +76,7 @@ function WrongAnswerInfo({submit, classes}) {
     return <p>parse wrong answer information failed</p>;
   }
   const [message, input, expected, real] = reg.exec(submit.message);
+  const diffText = diffAsText(expected, real, {context: 2});
   return (
     <Card className={classes.card}>
       <CardContent>
@@ -88,8 +90,7 @@ function WrongAnswerInfo({submit, classes}) {
         <Typography variant='h5' color='textSecondary'>
           输出对比：(左侧是期待输出，右侧是实际输出)
         </Typography>
-        <ReactDiffViewer oldValue={expected} newValue={real} splitView={true}
-                         styles={{diffContainer: {'table-layout': 'fixed'}}}/>
+        <DiffView diffText={diffText}/>
       </CardContent>
       <MyCardActions submitId={submit._id}/>
     </Card>

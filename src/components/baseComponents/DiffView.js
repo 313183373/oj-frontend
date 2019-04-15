@@ -22,17 +22,6 @@ export const DiffView = ({diffText}) => {
       }
       return result;
     }, {});
-    /*
-    * 1: (2) ["34", "68"]
-2: (2) ["26", "52"]
-3: (2) ["30", "61"]
-4: (2) ["40", "81"]
-5: (2) ["25", "51"]
-6: (2) ["34", "69"]
-7: (2) ["29", "59"]
-8: (2) ["47", "95"]
-9: (2) ["47", "94"]
-10: (2) ["5", "10"]*/
     let hasReturnInLine = {};
     for (const [lineNumber, line] of Object.entries(compareLine)) {
       if (line.length === 2) {

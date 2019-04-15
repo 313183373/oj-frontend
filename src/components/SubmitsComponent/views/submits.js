@@ -12,7 +12,7 @@ import {xonokai} from 'react-syntax-highlighter/dist/esm/styles/prism';
 import {urlCreator} from "../../../urls/urlCreator";
 import {GET_SUBMIT_BY_ID} from "../../../urls/urls";
 import {diffAsText} from 'unidiff';
-import {DiffView} from "./DiffView";
+import {DiffView} from "../../baseComponents/DiffView";
 
 const styles = theme => ({
   container: {
