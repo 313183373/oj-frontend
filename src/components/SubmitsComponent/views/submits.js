@@ -48,6 +48,11 @@ const styles = theme => ({
   diffView: {
     maxHeight: '400px',
     overflow: 'auto',
+  },
+  messageBox: {
+    backgroundColor: 'yellow',
+    borderRadius: '4px',
+    marginTop: '14px',
   }
 });
 
@@ -108,8 +113,8 @@ function submits({submitId, token, classes}) {
   }
   if (isShowMessage) {
     showMessage = (
-      <div>
-        <Typography variant='h6'>信息：
+      <div className={classes.messageBox}>
+        <Typography variant='h6'>错误信息：
           <span className={classes.red}>{submit.message}</span>
         </Typography>
       </div>
