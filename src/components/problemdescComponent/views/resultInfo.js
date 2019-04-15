@@ -19,6 +19,7 @@ const styles = theme => ({
   input: {
     maxHeight: '400px',
     overflow: 'auto',
+    margin: 0,
   },
   highLight: {
     backgroundColor: '#fdb8c0',
