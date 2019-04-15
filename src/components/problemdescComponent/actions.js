@@ -13,8 +13,8 @@ import {COMMIT_CODE_LOADING, COMMIT_CODE_SUCCESS, COMMIT_CODE_FAILURE} from "./a
 import {CHANGE_LANGUAGE, CHANGE_TAB, FETCH_ALL_LANGUAGES} from "./actionTypes";
 import {WRITE_CODE} from "./actionTypes";
 import {initSubmits} from "../../commonState/submits/actions";
-import {urlCreator} from "../../../urls/urlCreator";
-import {GET_PROBLEM_BY_ID, GET_SUBMITS_BY_PROBLEM_ID, POST_SUBMIT_TO_PROBLEM} from "../../../urls/urls";
+import {urlCreator} from "../../urls/urlCreator";
+import {GET_PROBLEM_BY_ID, GET_SUBMITS_BY_PROBLEM_ID, POST_SUBMIT_TO_PROBLEM} from "../../urls/urls";
 
 export const fetchProblemDescSuccess = (problem) => ({
   type: FETCH_PROBLEM_DESC_SUCCESS,

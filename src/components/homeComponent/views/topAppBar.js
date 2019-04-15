@@ -12,8 +12,8 @@ import Button from "@material-ui/core/Button";
 import {clearSocket, setSocket} from "../../../commonState/socket/actions";
 import {addSubmit, clearSubmits} from '../../../commonState/submits/actions';
 import {endWaitingForResult, showSubmit} from "../../problemdescComponent/actions";
-import {urlCreator} from "../../../../urls/urlCreator";
-import {GET_ME} from "../../../../urls/urls";
+import {urlCreator} from "../../../urls/urlCreator";
+import {GET_ME} from "../../../urls/urls";
 // import clsx from 'clsx';
 
 const styles = theme => ({

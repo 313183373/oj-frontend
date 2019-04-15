@@ -1,8 +1,8 @@
 import {FETCH_PROBLEMS_STARTED, FETCH_PROBLEMS_SUCCESS, FETCH_PROBLEMS_FAILURE} from "./actionTypes";
 import {CHANGE_PAGE_TO} from "./actionTypes";
 import {SET_TOTAL_PROBLEM_NUMBER} from "./actionTypes";
-import {urlCreator} from "../../../urls/urlCreator";
-import {GET_PROBLEM_AT_PAGE} from "../../../urls/urls";
+import {urlCreator} from "../../urls/urlCreator";
+import {GET_PROBLEM_AT_PAGE} from "../../urls/urls";
 
 export const fetchProblemsStarted = () => ({
   type: FETCH_PROBLEMS_STARTED

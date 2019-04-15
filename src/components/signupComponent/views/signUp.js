@@ -15,8 +15,8 @@ import {emailValidator, required, passwordValidator, usernameValidator} from "..
 import {FORM_ERROR} from "final-form";
 import createDecorator from 'final-form-focus';
 import {setUser} from "../../../commonState/user/actions";
-import {urlCreator} from "../../../../urls/urlCreator";
-import {LOG_IN} from "../../../../urls/urls";
+import {urlCreator} from "../../../urls/urlCreator";
+import {LOG_IN} from "../../../urls/urls";
 
 const focusOnErrors = createDecorator();
 

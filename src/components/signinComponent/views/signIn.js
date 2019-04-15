@@ -15,8 +15,8 @@ import {signInStarted, signInSuccess, signInFailure} from "../actions";
 import {setUser} from "../../../commonState/user/actions";
 import {FORM_ERROR} from "final-form";
 import createDecorator from 'final-form-focus';
-import {urlCreator} from "../../../../urls/urlCreator";
-import {LOG_IN} from "../../../../urls/urls";
+import {urlCreator} from "../../../urls/urlCreator";
+import {LOG_IN} from "../../../urls/urls";
 
 const focusOnErrors = createDecorator();
 
