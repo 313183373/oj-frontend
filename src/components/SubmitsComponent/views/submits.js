@@ -7,11 +7,12 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import moment from "moment";
 import 'moment/locale/zh-cn';
 import classnames from "classnames";
-import ReactDiffViewer from 'react-diff-viewer';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 import {xonokai} from 'react-syntax-highlighter/dist/esm/styles/prism';
-import {urlCreator} from "../../../../urls/urlCreator";
-import {GET_SUBMIT_BY_ID} from "../../../../urls/urls";
+import {urlCreator} from "../../../urls/urlCreator";
+import {GET_SUBMIT_BY_ID} from "../../../urls/urls";
+import {diffAsText, diffLines} from 'unidiff';
+import {DiffView} from "./DiffView";
 
 const styles = theme => ({
   container: {
@@ -100,6 +101,7 @@ function submits({submitId, token, classes}) {
       return <p>parse wrong answer information failed</p>;
     }
     const [message, input, expected, real] = reg.exec(submit.message);
+    const diffText = diffAsText(expected, real, {context: 2});
     ShowDiff = (
       <div>
         <Typography variant='h6'>输入：
@@ -107,8 +109,7 @@ function submits({submitId, token, classes}) {
         </Typography>
         <Typography variant='h6'>输出对比：(左侧是期待输出，右侧是实际输出)</Typography>
         <div className={classes.diffView}>
-          <ReactDiffViewer oldValue={expected} newValue={real} splitView={true}
-                           styles={{diffContainer: {'table-layout': 'fixed'}}}/>
+          <DiffView diffText={diffText}/>
         </div>
       </div>
     )
