@@ -15,7 +15,18 @@ const styles = theme => ({
     width: '98%',
     margin: 'auto',
     marginBottom: theme.spacing.unit * 2,
-  }
+  },
+  input: {
+    maxHeight: '400px',
+    overflow: 'auto',
+  },
+  highLight: {
+    backgroundColor: '#fdb8c0',
+  },
+  diffBox: {
+    maxHeight: '400px',
+    overflow: 'auto'
+  },
 });
 
 // function isErrorStatus(status) {
@@ -85,12 +96,14 @@ function WrongAnswerInfo({submit, classes}) {
         </Typography>
         <Typography variant="h5" component="h2" color="textSecondary">
           输入：
-          <pre>{input}</pre>
+          <pre className={classes.input}><span className={classes.highLight}>{input}</span></pre>
         </Typography>
         <Typography variant='h5' color='textSecondary'>
           输出对比：(左侧是期待输出，右侧是实际输出)
         </Typography>
-        <DiffView diffText={diffText}/>
+        <div className={classes.diffBox}>
+          <DiffView diffText={diffText}/>
+        </div>
       </CardContent>
       <MyCardActions submitId={submit._id}/>
     </Card>
