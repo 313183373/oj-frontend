@@ -11,7 +11,7 @@ import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 import {xonokai} from 'react-syntax-highlighter/dist/esm/styles/prism';
 import {urlCreator} from "../../../urls/urlCreator";
 import {GET_SUBMIT_BY_ID} from "../../../urls/urls";
-import {diffAsText, diffLines} from 'unidiff';
+import {diffAsText} from 'unidiff';
 import {DiffView} from "./DiffView";
 
 const styles = theme => ({
@@ -81,7 +81,7 @@ function submits({submitId, token, classes}) {
     getSubmitById(submitId, token, setSubmit, setState);
   }, [submitId]);
 
-  if (state === 'loading' || !submit) {
+  if (state === 'loading') {
     return <LinearProgress/>;
   }
 
