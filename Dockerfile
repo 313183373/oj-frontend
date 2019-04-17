@@ -1,6 +1,6 @@
 #Stage 1 build
 FROM node as build
-COPY package.json package-lock.json ./
+COPY package*.json ./
 RUN npm install
 COPY . ./
 RUN npm run build
