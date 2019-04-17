@@ -3,9 +3,9 @@ FROM node as build
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . ./
+RUN npm run build
 
 #Stage 2 product
-RUN npm run build
 FROM nginx
 COPY --from=build build /usr/share/nginx/html
 COPY frontend.conf /etc/nginx/conf.d/default.conf
