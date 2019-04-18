@@ -16,7 +16,7 @@ import {setUser} from "../../../commonState/user/actions";
 import {FORM_ERROR} from "final-form";
 import createDecorator from 'final-form-focus';
 import {urlCreator} from "../../../urls/urlCreator";
-import {LOG_IN} from "../../../urls/urls";
+import {SIGN_IN} from "../../../urls/urls";
 
 const focusOnErrors = createDecorator();
 
@@ -147,7 +147,7 @@ const mapDispatchToProps = dispatch => {
     submitSignIn: async (values) => {
       dispatch(signInStarted());
       const {email, password} = values;
-      const response = await fetch(urlCreator({type: LOG_IN}), {
+      const response = await fetch(urlCreator({type: SIGN_IN}), {
         method: 'POST',
         headers: {
           'content-type': "application/json",

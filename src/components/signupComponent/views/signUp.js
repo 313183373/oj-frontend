@@ -16,7 +16,7 @@ import {FORM_ERROR} from "final-form";
 import createDecorator from 'final-form-focus';
 import {setUser} from "../../../commonState/user/actions";
 import {urlCreator} from "../../../urls/urlCreator";
-import {LOG_IN} from "../../../urls/urls";
+import {SIGN_UP} from "../../../urls/urls";
 
 const focusOnErrors = createDecorator();
 
@@ -152,7 +152,7 @@ const mapDispatchToProps = (dispatch) => {
     submitSignUp: async (values) => {
       dispatch(Actions.signUpStarted());
       try {
-        const response = await fetch(urlCreator({type:LOG_IN}), {
+        const response = await fetch(urlCreator({type: SIGN_UP}), {
           method: 'post',
           headers: {'content-type': 'application/json'},
           body: JSON.stringify(values),
