@@ -124,7 +124,7 @@ const TopAppBar = ({classes, user, setUserInfo, logOut, clearSocketInfo, setSock
   });
 
   useEffect(() => {
-    const socket = io('http://106.12.210.128:5000');
+    const socket = io('http://backend:5000');
     setSocketInfo(socket);
     socket.on('result', submit => {
       const submitObject = JSON.parse(submit);
