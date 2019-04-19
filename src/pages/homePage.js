@@ -1,14 +1,15 @@
 import React from 'react';
 import {view as TopAppBar} from '../components/homeComponent/';
 import {Switch, Route} from 'react-router-dom';
-import Problem from './problemPage';
-import Problems from './problemsPage';
-import SignIn from './signInPage';
-import SignUp from './signUpPage';
-import Submits from './submitsPage';
+import asyncComponent from '../components/baseComponents/AsyncComponent';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import theme from '../theme';
 import {NoMatch} from "./NoMatchPage";
+const Problem = asyncComponent(() => import('./problemPage'));
+const Problems = asyncComponent(() => import('./problemsPage'));
+const SignIn = asyncComponent(() => import('./signInPage'));
+const SignUp = asyncComponent(() => import('./signUpPage'));
+const Submits = asyncComponent(() => import('./submitsPage'));
 
 const Home = () => {
   return (
