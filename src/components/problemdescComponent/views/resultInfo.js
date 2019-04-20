@@ -88,7 +88,6 @@ function WrongAnswerInfo({submit, classes}) {
     return <p>parse wrong answer information failed</p>;
   }
   const [message, input, expected, real] = reg.exec(submit.message);
-  const diffText = diffAsText(expected, real, {context: 2});
   return (
     <Card className={classes.card}>
       <CardContent>
@@ -103,7 +102,7 @@ function WrongAnswerInfo({submit, classes}) {
           输出对比：(左侧是期待输出，右侧是实际输出)
         </Typography>
         <div className={classes.diffBox}>
-          <DiffView diffText={diffText}/>
+          <DiffView expected={expected} real={real}/>
         </div>
       </CardContent>
       <MyCardActions submitId={submit._id}/>

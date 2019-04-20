@@ -101,7 +101,6 @@ function submits({submitId, token, classes}) {
       return <p>parse wrong answer information failed</p>;
     }
     const [message, input, expected, real] = reg.exec(submit.message);
-    const diffText = diffAsText(expected, real, {context: 2});
     ShowDiff = (
       <div>
         <Typography variant='h6'>输入：
@@ -109,7 +108,7 @@ function submits({submitId, token, classes}) {
         </Typography>
         <Typography variant='h6'>输出对比：(左侧是期待输出，右侧是实际输出)</Typography>
         <div className={classes.diffView}>
-          <DiffView diffText={diffText}/>
+          <DiffView expected={expected} real={real} />
         </div>
       </div>
     )

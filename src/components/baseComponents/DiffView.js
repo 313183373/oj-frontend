@@ -1,69 +1,9 @@
-import { Diff, Hunk, parseDiff } from "react-diff-view";
-import 'react-diff-view/style/index.css';
+import {ReactGhLikeDiff} from "react-gh-like-diff";
+import 'react-gh-like-diff/lib/diff2html.min.css';
 import React from "react";
 
-// function getChangeKey(lineNumber) {
-//   return `I${lineNumber}`;
-// }
-
-const stringifyContent = hunks => {
-  return hunks.map(hunk => {
-    hunk.changes.forEach(change => {
-      console.log(change.content);
-      console.log(JSON.stringify(change.content))
-    });
-    return {
-      ...hunk,
-      changes: hunk.changes.map(change => ({ ...change, content: JSON.stringify(change.content).slice(1, -1) })),
-    }
-  })
-};
-
-const getStringifyFiles = files => {
-  return files.map(file => ({
-    ...file,
-    hunks: stringifyContent(file.hunks),
-  }))
-};
-
-export const DiffView = ({ diffText }) => {
-  const files = parseDiff(diffText, { nearbySequences: 'zip' });
-  // const getWidgets = (hunks) => {
-  //   const changes = hunks.flatMap(hunk => {
-  //     return [...hunk.changes];
-  //   }).filter(change => change.type !== 'normal');
-  //   const compareLine = changes.reduce((result, change) => {
-  //     const line = change.lineNumber;
-  //     if (result[line]) {
-  //       result[line].push(change.content);
-  //     } else {
-  //       result[line] = [change.content];
-  //     }
-  //     return result;
-  //   }, {});
-  //   let hasReturnInLine = {};
-  //   for (const [lineNumber, line] of Object.entries(compareLine)) {
-  //     if (line.length === 2) {
-  //       console.log(JSON.stringify(line[0]), JSON.stringify(line[1]));
-  //       if (line[0] === line[1] || line[0].trim() === line[1].trim()) {
-  //         hasReturnInLine[getChangeKey(lineNumber)] = <span style={{color: 'red'}}>maybe a '\n' or '\r' difference</span>;
-  //       }
-  //     }
-  //   }
-  //   return hasReturnInLine;
-  // };
-  console.log(files);
-  console.log(getStringifyFiles(files));
-
-  const renderFile = ({ oldRevision, newRevision, type, hunks }) => (
-    <Diff key={oldRevision + '-' + newRevision} viewType="split" diffType={type} hunks={hunks}>
-      {hunks => hunks.map(hunk => <Hunk key={hunk.content} hunk={hunk} />)}
-    </Diff>
-  );
-
+export const DiffView = ({expected, real}) => {
   return (
-    <div>
-      {getStringifyFiles(files).map(renderFile)}
-    </div>
+    <ReactGhLikeDiff past={expected} current={real} options={{originalFileName: 'output', updatedFileName: 'output'}}/>
   );
 };
