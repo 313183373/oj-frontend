@@ -1,4 +1,4 @@
-import {Diff, Hunk, parseDiff} from "react-diff-view";
+import { Diff, Hunk, parseDiff } from "react-diff-view";
 import 'react-diff-view/style/index.css';
 import React from "react";
 
@@ -8,9 +8,13 @@ import React from "react";
 
 const stringifyContent = hunks => {
   return hunks.map(hunk => {
+    hunk.changes.forEach(change => {
+      console.log(change.content);
+      console.log(JSON.stringify(change.content))
+    });
     return {
       ...hunk,
-      changes: hunk.changes.map(change => ({...change, content: JSON.stringify(change.content).slice(1, -1)})),
+      changes: hunk.changes.map(change => ({ ...change, content: JSON.stringify(change.content).slice(1, -1) })),
     }
   })
 };
@@ -22,8 +26,8 @@ const getStringifyFiles = files => {
   }))
 };
 
-export const DiffView = ({diffText}) => {
-  const files = parseDiff(diffText, {nearbySequences: 'zip'});
+export const DiffView = ({ diffText }) => {
+  const files = parseDiff(diffText, { nearbySequences: 'zip' });
   // const getWidgets = (hunks) => {
   //   const changes = hunks.flatMap(hunk => {
   //     return [...hunk.changes];
@@ -48,10 +52,12 @@ export const DiffView = ({diffText}) => {
   //   }
   //   return hasReturnInLine;
   // };
+  console.log(files);
+  console.log(getStringifyFiles(files));
 
-  const renderFile = ({oldRevision, newRevision, type, hunks}) => (
+  const renderFile = ({ oldRevision, newRevision, type, hunks }) => (
     <Diff key={oldRevision + '-' + newRevision} viewType="split" diffType={type} hunks={hunks}>
-      {hunks => hunks.map(hunk => <Hunk key={hunk.content} hunk={hunk}/>)}
+      {hunks => hunks.map(hunk => <Hunk key={hunk.content} hunk={hunk} />)}
     </Diff>
   );
 
