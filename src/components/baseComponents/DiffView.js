@@ -13,14 +13,14 @@ const stringifyContent = hunks => {
       changes: hunk.changes.map(change => ({...change, content: JSON.stringify(change.content).slice(1, -1)})),
     }
   })
-}
+};
 
-const getStringifiedFiles = files => {
+const getStringifyFiles = files => {
   return files.map(file => ({
     ...file,
     hunks: stringifyContent(file.hunks),
   }))
-}
+};
 
 export const DiffView = ({diffText}) => {
   const files = parseDiff(diffText, {nearbySequences: 'zip'});
@@ -57,7 +57,7 @@ export const DiffView = ({diffText}) => {
 
   return (
     <div>
-      {getStringifiedFiles(files).map(renderFile)}
+      {getStringifyFiles(files).map(renderFile)}
     </div>
   );
 };
