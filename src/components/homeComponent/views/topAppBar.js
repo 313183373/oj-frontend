@@ -124,7 +124,7 @@ const TopAppBar = ({classes, user, setUserInfo, logOut, clearSocketInfo, setSock
   });
 
   useEffect(() => {
-    const isDocker = process.env.DOCKER === 'true';
+    const isDocker = process.env.REACT_APP_DOCKER === 'true';
     const socket = isDocker ? io('http://localhost:5000') : io('http://106.12.210.128:5000');
     setSocketInfo(socket);
     socket.on('result', submit => {

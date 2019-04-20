@@ -3,7 +3,7 @@ FROM node as build
 COPY package*.json ./
 RUN npm install
 COPY . ./
-RUN npm run build
+RUN REACT_APP_DOCKER=true npm run build
 
 #Stage 2 product
 FROM nginx
