@@ -1,68 +1,45 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# OJ-FRONTEND
 
-## Available Scripts
+## 简介
 
-In the project directory, you can run:
+这是OJ的前端，使用了React+Redux+React Router+Material UI+Socket
 
-### `npm start`
+所有的组件都在`src/components/`中，每个组件的标准目录格式都是
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+![image-20190421201255470](https://ws4.sinaimg.cn/large/006tNc79ly1g2aim7xwd4j30ck0ciq3z.jpg)
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+views目录下基本是Dumb Components（尽量是，有些不是，因为必须有生命周期方法）
 
-### `npm test`
+然后其他文件学过redux的同学应该都能一眼看出来，包括action的类型，以及reducer，以及actionCreators
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+commonState中定义了一些全局的状态（比如用户的信息），目录格式跟组件类似，只是没有views目录。
 
-### `npm run build`
+pages目录中存放包装页面，处理一些简单的路由参数逻辑，以供Router使用
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+urls目录是url的生成器，主要是为了统一管理前端用到的所有的URL，以及根据当前的环境自动切换URL
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+utils目录存放输入验证工具。
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 如何运行？
 
-### `npm run eject`
+1. 在Docker中运行（推荐）
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+   目录下有Dockerfile文件，可以自己构建image，也可以直接从Docker Hub上拉取已经制作好的image
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   `docker pull 313183373/oj-frontend`
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+   当然只有前端肯定是不够的，需要拉取后端、数据库、以及判题机
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+   详情请看的[在Docker中运行](https://github.com/313183373/oj-backend)
 
-## Learn More
+2. 本地运行
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   clone下本仓库后，在项目目录下用终端运行
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   `npm install`
 
-### Code Splitting
+   然后`npm start`，就可以看到页面，但是现在还没有部署后端，所以不会看到任何数据
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+   再部署后端，及数据库和下载好313183373/oj-judge的镜像就可以完整运行了。请看[本地运行部分](https://github.com/313183373/oj-backend)
 
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+   
