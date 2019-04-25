@@ -63,8 +63,8 @@ const styles = theme => ({
   },
   fab: {
     position: 'absolute',
-    bottom: theme.spacing.unit * 3,
-    right: theme.spacing.unit * 5,
+    bottom: theme.spacing.unit * 3.75,
+    right: theme.spacing.unit * 5.75,
     zIndex: 1,
     '&:focus': {
       color: '#bab6b6',
