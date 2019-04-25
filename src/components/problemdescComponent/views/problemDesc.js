@@ -63,7 +63,7 @@ const styles = theme => ({
   },
   fab: {
     position: 'absolute',
-    bottom: theme.spacing.unit * 2,
+    bottom: theme.spacing.unit * 3,
     right: theme.spacing.unit * 5,
     zIndex: 1,
     '&:focus': {
@@ -74,8 +74,8 @@ const styles = theme => ({
   fabProgress: {
     color: '#FF5252',
     position: 'absolute',
-    bottom: theme.spacing.unit * 1.25,
-    right: theme.spacing.unit * 4.25,
+    bottom: theme.spacing.unit * 3,
+    right: theme.spacing.unit * 5,
     '&:hover': {
       cursor: 'not-allowed',
     }
