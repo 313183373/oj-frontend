@@ -16,7 +16,7 @@ const style = {
   appBar: {
     height: 'calc(100vh-64px)',
     [theme.breakpoints.up('sm')]: {
-      height: 'calc(100vh-70vh)',
+      height: 'calc(100vh-70px)',
     },
   }
 };
