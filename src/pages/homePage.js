@@ -14,9 +14,9 @@ const Submits = asyncComponent(() => import('./submitsPage'));
 
 const style = {
   appBar: {
-    height: 'calc(100vh-64px)',
+    height: 'calc(100vh - 64px)',
     [theme.breakpoints.up('sm')]: {
-      height: 'calc(100vh-70px)',
+      height: 'calc(100vh - 70px)',
     },
   }
 };
